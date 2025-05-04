@@ -35,24 +35,42 @@ function App() {
 
   // Load audio elements
   useEffect(() => {
-    const backgroundMusic = new Audio("/sounds/background.mp3");
-    backgroundMusic.loop = true;
-    backgroundMusic.volume = 0.3;
+    async function setupAudio() {
+      try {
+        // Create audio elements
+        const backgroundMusic = new Audio("/sounds/background.mp3");
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.5;
+        await backgroundMusic.load();
+        
+        const hitSound = new Audio("/sounds/hit.mp3");
+        hitSound.volume = 0.6;
+        await hitSound.load();
+        
+        const successSound = new Audio("/sounds/success.mp3");
+        successSound.volume = 0.6;
+        await successSound.load();
+        
+        // Store in Zustand
+        const audioStore = useAudio.getState();
+        audioStore.setBackgroundMusic(backgroundMusic);
+        audioStore.setHitSound(hitSound);
+        audioStore.setSuccessSound(successSound);
+        
+        console.log("Audio loaded. Press 'M' to toggle sound.");
+      } catch (error) {
+        console.error("Failed to load audio:", error);
+      }
+    }
     
-    const hitSound = new Audio("/sounds/hit.mp3");
-    const successSound = new Audio("/sounds/success.mp3");
-    
-    const audioStore = useAudio.getState();
-    audioStore.setBackgroundMusic(backgroundMusic);
-    audioStore.setHitSound(hitSound);
-    audioStore.setSuccessSound(successSound);
-    
-    // Don't autoplay - user needs to interact first
-    console.log("Audio loaded. Press 'M' to toggle sound.");
+    setupAudio();
     
     return () => {
-      backgroundMusic.pause();
-      backgroundMusic.src = "";
+      const { backgroundMusic } = useAudio.getState();
+      if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.src = "";
+      }
     };
   }, []);
 

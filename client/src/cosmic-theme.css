@@ -46,8 +46,8 @@
 .cosmic-main-btn {
   position: relative;
   overflow: hidden;
-  padding: 15px 30px;
-  border-radius: 12px;
+  padding: 8px 16px;
+  border-radius: 8px;
   border: 2px solid var(--kloud-teal);
   background: linear-gradient(
     45deg,
@@ -58,17 +58,17 @@
   background-size: 300% 100%;
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  font-size: 1.2rem;
-  letter-spacing: 2px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: white;
   animation: ultra-glow 3s infinite, nebula-shift 6s infinite;
-  margin: 15px 0;
+  margin: 10px 0;
   transition: all 0.4s ease;
   transform-style: preserve-3d;
   box-shadow: 
-    0 10px 15px rgba(0, 0, 0, 0.4),
-    0 0 30px 5px rgba(0, 255, 204, 0.3);
+    0 5px 10px rgba(0, 0, 0, 0.4),
+    0 0 20px 3px rgba(0, 255, 204, 0.3);
 }
 
 .cosmic-main-btn:hover {
@@ -165,7 +165,8 @@
   text-transform: uppercase;
   transition: all 0.3s ease;
   border-radius: 6px;
-  padding: 8px 15px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
 }
 
 .control-btn:hover {
