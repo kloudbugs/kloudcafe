@@ -60,12 +60,15 @@ function App() {
 
   return (
     <>
+      {/* Twinkling stars background animation */}
+      <div className="stars"></div>
+      
       <ControlPanel />
       
       <div className="absolute top-4 right-4 z-10 flex items-center space-x-4">
         <button
           onClick={toggleMute}
-          className="bg-black/70 hover:bg-black/90 text-white px-3 py-2 rounded-md transition-colors"
+          className="control-btn"
         >
           {isMuted ? "Unmute" : "Mute"}
         </button>
@@ -84,7 +87,7 @@ function App() {
       >
         {showPerformance && <Stats />}
         
-        <color attach="background" args={["#000000"]} />
+        <color attach="background" args={["#0a0a0a"]} /> {/* using cosmic-black from the guide */}
         
         <Suspense fallback={null}>
           <Cell />

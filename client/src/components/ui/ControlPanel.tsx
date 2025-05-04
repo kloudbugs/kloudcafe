@@ -20,16 +20,27 @@ const ControlPanel: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-black/70 hover:bg-black/90 text-white px-3 py-2 rounded-md transition-colors"
+          className="cosmic-main-btn"
         >
-          Show Controls
+          <span>Show Controls</span>
         </button>
       )}
       
       {isOpen && (
-        <div className="bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Mining Network Controls</h2>
+        <div className="bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm border border-[#00ffcc] shadow-lg shadow-[#00ffcc]/20" 
+             style={{
+               background: "linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(10, 10, 10, 0.95))"
+             }}>
+          <div className="flex justify-between items-center mb-4"
+               style={{
+                 background: "linear-gradient(45deg, var(--stellar-blue), var(--space-purple))",
+                 margin: "-16px -16px 16px -16px",
+                 padding: "12px 16px",
+                 borderTopLeftRadius: "8px",
+                 borderTopRightRadius: "8px",
+                 borderBottom: "2px solid var(--kloud-teal)"
+               }}>
+            <h2 className="text-lg font-semibold" style={{ color: "var(--kloud-teal)" }}>Mining Network Controls</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="text-white/80 hover:text-white"

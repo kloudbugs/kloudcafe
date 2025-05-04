@@ -1,0 +1,176 @@
+/* Cosmic Theme for KloudBugs - Based on Cosmic Bitcoin Theme */
+
+:root {
+  --cosmic-black: #0a0a0a;      /* Main background color */
+  --space-purple: #8a2be2;      /* Purple accent color */
+  --cyber-gold: #ffd700;        /* Gold accent color */
+  --deep-space: #111122;        /* Secondary background color */
+  --nebula-pink: #c71585;       /* Pink accent for alerts */
+  --stellar-blue: #4b0082;      /* Deep blue/indigo color */
+  --dark-matter: #1a1a2e;       /* Tertiary background color */
+  --light-gold: #ffe066;        /* Lighter gold for hover states */
+  
+  /* KloudBugs Colors */
+  --kloud-teal: #00ffcc;        /* Leaf glow color */
+  --kloud-orange: #f08030;      /* Coffee bean color */
+  --kloud-blue: #4cccff;        /* Gem blue color */
+}
+
+/* Background star animation */
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: 
+      radial-gradient(2px 2px at 20px 30px, var(--kloud-teal), rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 40px 70px, var(--kloud-blue), rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 50px 160px, var(--kloud-orange), rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 90px 40px, var(--space-purple), rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 130px 80px, var(--kloud-blue), rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 160px 120px, var(--kloud-teal), rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: twinkle 8s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.3; }
+}
+
+/* Ultra Flashy Main Buttons */
+.cosmic-main-btn {
+  position: relative;
+  overflow: hidden;
+  padding: 15px 30px;
+  border-radius: 12px;
+  border: 2px solid var(--kloud-teal);
+  background: linear-gradient(
+    45deg,
+    rgba(0, 255, 204, 0.4),
+    rgba(76, 204, 255, 0.6),
+    rgba(240, 128, 48, 0.5)
+  );
+  background-size: 300% 100%;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: white;
+  animation: ultra-glow 3s infinite, nebula-shift 6s infinite;
+  margin: 15px 0;
+  transition: all 0.4s ease;
+  transform-style: preserve-3d;
+  box-shadow: 
+    0 10px 15px rgba(0, 0, 0, 0.4),
+    0 0 30px 5px rgba(0, 255, 204, 0.3);
+}
+
+.cosmic-main-btn:hover {
+  transform: translateY(-5px) scale(1.03);
+  animation: ultra-glow 1.5s infinite, nebula-shift 3s infinite;
+  color: white;
+  text-shadow: 
+    0 0 10px var(--kloud-teal),
+    0 0 20px var(--kloud-blue);
+}
+
+.cosmic-main-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg, 
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: cosmic-rays 2s infinite;
+  z-index: 1;
+}
+
+.cosmic-main-btn:hover:before {
+  animation: cosmic-rays 1s infinite;
+}
+
+.cosmic-main-btn span {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes ultra-glow {
+  0% {
+    box-shadow: 
+      0 0 30px 5px rgba(0, 255, 204, 0.7), 
+      0 0 40px 10px rgba(76, 204, 255, 0.4),
+      inset 0 0 15px 2px rgba(240, 128, 48, 0.5);
+  }
+  50% {
+    box-shadow: 
+      0 0 50px 10px rgba(0, 255, 204, 0.9), 
+      0 0 60px 15px rgba(76, 204, 255, 0.6),
+      inset 0 0 20px 5px rgba(240, 128, 48, 0.7);
+  }
+  100% {
+    box-shadow: 
+      0 0 30px 5px rgba(0, 255, 204, 0.7), 
+      0 0 40px 10px rgba(76, 204, 255, 0.4),
+      inset 0 0 15px 2px rgba(240, 128, 48, 0.5);
+  }
+}
+
+@keyframes nebula-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes cosmic-rays {
+  0% {
+    opacity: 0.2;
+    transform: scaleX(0) translateX(-100%);
+  }
+  20% {
+    opacity: 0.8;
+    transform: scaleX(1) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1) translateX(100%);
+  }
+}
+
+/* Styling for control buttons */
+.control-btn {
+  background: linear-gradient(45deg, var(--stellar-blue), var(--space-purple));
+  border: 1px solid var(--kloud-teal);
+  color: var(--kloud-teal);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  padding: 8px 15px;
+}
+
+.control-btn:hover {
+  background: linear-gradient(45deg, var(--space-purple), var(--stellar-blue));
+  border-color: var(--kloud-blue);
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
+  transform: translateY(-2px);
+}
