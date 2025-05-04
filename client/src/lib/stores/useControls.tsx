@@ -10,6 +10,7 @@ interface ControlsState {
   coreIntensity: number;
   particleCount: number;
   pulseIntensity: number;
+  blockCount: number;
   colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner';
   interactionEnabled: boolean;
   
@@ -20,6 +21,7 @@ interface ControlsState {
   setCoreIntensity: (value: number) => void;
   setParticleCount: (value: number) => void;
   setPulseIntensity: (value: number) => void;
+  setBlockCount: (value: number) => void;
   setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner') => void;
   toggleInteraction: () => void;
   
@@ -35,6 +37,7 @@ export const useControls = create<ControlsState>((set, get) => ({
   coreIntensity: 1.0,
   particleCount: 600,
   pulseIntensity: 0.7,
+  blockCount: 20,
   colorScheme: 'miner',
   interactionEnabled: false,
   
@@ -45,6 +48,7 @@ export const useControls = create<ControlsState>((set, get) => ({
   setCoreIntensity: (value) => set({ coreIntensity: value }),
   setParticleCount: (value) => set({ particleCount: value }),
   setPulseIntensity: (value) => set({ pulseIntensity: value }),
+  setBlockCount: (value) => set({ blockCount: value }),
   setColorScheme: (value) => set({ colorScheme: value }),
   toggleInteraction: () => set(state => ({ interactionEnabled: !state.interactionEnabled })),
   

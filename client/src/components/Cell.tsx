@@ -3,6 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import CellCore from "./CellCore";
 import Tendrils from "./Tendrils";
+import MiningBlocks from "./MiningBlocks";
 import { useControls } from "../lib/stores/useControls";
 
 // Main Cell component combining core and tendrils
@@ -64,6 +65,14 @@ const Cell: React.FC = () => {
       <CellCore 
         intensity={controls.coreIntensity} 
         color={controls.getColorByScheme('core')}
+      />
+      
+      {/* Mining blocks orbiting around core */}
+      <MiningBlocks 
+        count={controls.blockCount} 
+        orbitRadius={4.5} 
+        minDistance={3.5}
+        maxDistance={5.5}
       />
       
       {/* Multiple tendrils radiating from the core */}
