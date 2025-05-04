@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { shaderMaterial } from "@react-three/drei";
@@ -71,6 +71,14 @@ const CellCore: React.FC<CellCoreProps> = ({
   const groupRef = useRef<THREE.Group>(null);
   
   // Update the shader uniforms on each frame
+  // Apply color and intensity from props
+  useEffect(() => {
+    if (materialRef.current) {
+      materialRef.current.color = new THREE.Color(color);
+      materialRef.current.glowIntensity = intensity;
+    }
+  }, [color, intensity]);
+  
   useFrame((_, delta) => {
     if (materialRef.current) {
       materialRef.current.time += delta;
@@ -95,9 +103,9 @@ const CellCore: React.FC<CellCoreProps> = ({
       <mesh>
         <sphereGeometry args={[radius * 0.85, detail, detail]} />
         <meshStandardMaterial 
-          color="#ff3300"
-          emissive="#ff5500"
-          emissiveIntensity={0.8}
+          color={color}
+          emissive={color}
+          emissiveIntensity={0.8 * intensity}
           roughness={0.3}
           metalness={0.6}
           map={noiseTexture}
@@ -106,8 +114,8 @@ const CellCore: React.FC<CellCoreProps> = ({
       
       {/* Add point light inside the core for glow effect */}
       <pointLight 
-        color="#ff6600" 
-        intensity={5} 
+        color={color} 
+        intensity={5 * intensity} 
         distance={10} 
         decay={2} 
       />

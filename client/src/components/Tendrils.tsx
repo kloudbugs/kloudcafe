@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { shaderMaterial } from "@react-three/drei";
@@ -103,6 +103,17 @@ const Tendrils: React.FC<TendrilsProps> = ({
     
     return new THREE.TubeGeometry(curve, segments, radius, radiusSegments, false);
   }, [curve, length]);
+  
+  // Apply color from props
+  useEffect(() => {
+    if (materialRef.current) {
+      materialRef.current.color = new THREE.Color(color);
+      // Calculate a lighter color for the tip based on the provided color
+      const tipColor = new THREE.Color(color);
+      tipColor.multiplyScalar(1.5); // Make it brighter
+      materialRef.current.tipColor = tipColor;
+    }
+  }, [color]);
   
   // Animation
   useFrame((_, delta) => {
