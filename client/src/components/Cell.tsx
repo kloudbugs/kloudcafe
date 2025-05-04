@@ -3,21 +3,21 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import CellCore from "./CellCore";
 import Tendrils from "./Tendrils";
-
-// Number of tendrils to generate
-const TENDRIL_COUNT = 60;
+import { useControls } from "../lib/stores/useControls";
 
 // Main Cell component combining core and tendrils
 const Cell: React.FC = () => {
+  const controls = useControls();
+  
   // Pre-calculate positions for each tendril
   const tendrilData = useMemo(() => {
     const data = [];
     
     // Create a spherical distribution for tendril origins
-    for (let i = 0; i < TENDRIL_COUNT; i++) {
+    for (let i = 0; i < controls.tendrilCount; i++) {
       // Fibonacci sphere distribution for even spacing
-      const phi = Math.acos(-1 + (2 * i) / TENDRIL_COUNT);
-      const theta = Math.sqrt(TENDRIL_COUNT * Math.PI) * phi;
+      const phi = Math.acos(-1 + (2 * i) / controls.tendrilCount);
+      const theta = Math.sqrt(controls.tendrilCount * Math.PI) * phi;
       
       // Calculate position on sphere
       const x = Math.cos(theta) * Math.sin(phi);
@@ -45,21 +45,26 @@ const Cell: React.FC = () => {
     }
     
     return data;
-  }, []);
+  }, [controls.tendrilCount]);
   
   // Central group for the entire cell
   const cellGroup = useMemo(() => new THREE.Group(), []);
   
   // Slowly rotate the entire cell for added dynamism
   useFrame((_, delta) => {
-    cellGroup.rotation.y += delta * 0.05;
-    cellGroup.rotation.x += delta * 0.02;
+    if (controls.autoRotate) {
+      cellGroup.rotation.y += delta * controls.rotationSpeed;
+      cellGroup.rotation.x += delta * controls.rotationSpeed * 0.4;
+    }
   });
   
   return (
     <group ref={(ref) => ref && (cellGroup.copy(ref), ref.clear(), ref.add(cellGroup))}>
       {/* The glowing core */}
-      <CellCore />
+      <CellCore 
+        intensity={controls.coreIntensity} 
+        color={controls.getColorByScheme('core')}
+      />
       
       {/* Multiple tendrils radiating from the core */}
       {tendrilData.map((data, index) => (
@@ -69,6 +74,7 @@ const Cell: React.FC = () => {
           length={data.length}
           phaseOffset={data.phaseOffset}
           speed={data.speed}
+          color={controls.getColorByScheme('tendril')}
         />
       ))}
     </group>

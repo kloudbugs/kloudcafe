@@ -34,11 +34,15 @@ declare global {
 interface CellCoreProps {
   radius?: number;
   detail?: number;
+  intensity?: number;
+  color?: string;
 }
 
 const CellCore: React.FC<CellCoreProps> = ({ 
   radius = 1.5, 
-  detail = 32 
+  detail = 32,
+  intensity = 1.0,
+  color = "#ff3300"
 }) => {
   // Reference to the custom shader material
   const materialRef = useRef<any>();

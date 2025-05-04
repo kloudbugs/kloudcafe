@@ -6,7 +6,9 @@ import Environment from "./components/Environment";
 import BackgroundParticles from "./components/BackgroundParticles";
 import MouseInteractionLayer from "./components/MouseInteractionLayer";
 import PulseWave from "./components/PulseWave";
+import ControlPanel from "./components/ui/ControlPanel";
 import { useAudio } from "./lib/stores/useAudio";
+import { useControls } from "./lib/stores/useControls";
 
 // Main App component
 function App() {
@@ -51,8 +53,12 @@ function App() {
     };
   }, []);
 
+  const controls = useControls();
+
   return (
     <>
+      <ControlPanel />
+      
       <div className="absolute top-4 right-4 z-10 flex items-center space-x-4">
         <button
           onClick={toggleMute}
@@ -80,9 +86,17 @@ function App() {
         <Suspense fallback={null}>
           <Cell />
           <Environment />
-          <BackgroundParticles count={600} radius={40} size={0.04} />
-          <PulseWave frequency={0.8} intensity={0.7} />
-          <MouseInteractionLayer visible={false} />
+          <BackgroundParticles 
+            count={controls.particleCount} 
+            radius={40} 
+            size={0.04} 
+          />
+          <PulseWave 
+            frequency={0.8} 
+            intensity={controls.pulseIntensity}
+            baseColor={controls.getColorByScheme('pulse')}
+          />
+          <MouseInteractionLayer visible={controls.interactionEnabled} />
         </Suspense>
         
         <OrbitControls 

@@ -40,6 +40,7 @@ interface TendrilsProps {
   length: number;
   phaseOffset: number;
   speed: number;
+  color?: string;
 }
 
 const Tendrils: React.FC<TendrilsProps> = ({
@@ -47,6 +48,7 @@ const Tendrils: React.FC<TendrilsProps> = ({
   length,
   phaseOffset,
   speed,
+  color = "#ff4400"
 }) => {
   // Reference to the shader material
   const materialRef = useRef<any>();
