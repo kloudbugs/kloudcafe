@@ -95,7 +95,7 @@ const CellCore: React.FC<CellCoreProps> = ({
     <group ref={groupRef}>
       {/* Main core sphere with glow effect */}
       <mesh>
-        <sphereGeometry args={[radius, detail, detail]} />
+        <icosahedronGeometry args={[radius, 2]} />
         <glowMaterial ref={materialRef} />
       </mesh>
       

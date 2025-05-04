@@ -77,7 +77,7 @@ const PulseWave: React.FC<PulseWaveProps> = ({
   
   return (
     <mesh ref={meshRef}>
-      <sphereGeometry args={[2, 32, 32]} />
+      <sphereGeometry args={[2.5, 32, 32]} />
       <primitive object={shaderMaterial} ref={materialRef} />
     </mesh>
   );

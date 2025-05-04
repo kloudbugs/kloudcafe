@@ -11,6 +11,7 @@ const ControlPanel: React.FC = () => {
     { value: 'green', label: 'Green', color: '#00dd44' },
     { value: 'purple', label: 'Purple', color: '#aa33ff' },
     { value: 'bioluminescent', label: 'Bio', color: '#c9ff00' },
+    { value: 'miner', label: 'Miner', color: '#ffcc00' },
   ];
   
   return (

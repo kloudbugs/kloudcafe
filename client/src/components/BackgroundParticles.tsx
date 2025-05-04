@@ -57,6 +57,9 @@ const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
   
   // Create the particles material
   const particleMaterial = useMemo(() => {
+    // Create a circular texture for particles
+    const texture = new THREE.CanvasTexture(createCircleTexture());
+    
     const material = new THREE.PointsMaterial({
       size,
       vertexColors: true,
@@ -64,10 +67,36 @@ const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
       opacity: 0.75,
       blending: THREE.AdditiveBlending,
       sizeAttenuation: true,
+      map: texture,
     });
     
     return material;
   }, [size]);
+  
+  // Helper function to create a circular particle texture
+  function createCircleTexture() {
+    const canvas = document.createElement('canvas');
+    const size = 64;
+    canvas.width = size;
+    canvas.height = size;
+    
+    const context = canvas.getContext('2d');
+    if (!context) return canvas;
+    
+    // Draw a circular gradient
+    const gradient = context.createRadialGradient(
+      size / 2, size / 2, 0,
+      size / 2, size / 2, size / 2
+    );
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.5)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, size, size);
+    
+    return canvas;
+  }
   
   // Animate particles
   useFrame((_, delta) => {

@@ -10,7 +10,7 @@ interface ControlsState {
   coreIntensity: number;
   particleCount: number;
   pulseIntensity: number;
-  colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent';
+  colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner';
   interactionEnabled: boolean;
   
   // Action functions
@@ -20,7 +20,7 @@ interface ControlsState {
   setCoreIntensity: (value: number) => void;
   setParticleCount: (value: number) => void;
   setPulseIntensity: (value: number) => void;
-  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent') => void;
+  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner') => void;
   toggleInteraction: () => void;
   
   // Helper function to get color by scheme
@@ -35,7 +35,7 @@ export const useControls = create<ControlsState>((set, get) => ({
   coreIntensity: 1.0,
   particleCount: 600,
   pulseIntensity: 0.7,
-  colorScheme: 'orange',
+  colorScheme: 'miner',
   interactionEnabled: false,
   
   // Setter functions
@@ -77,6 +77,11 @@ export const useControls = create<ControlsState>((set, get) => ({
         core: '#2a9d3a',
         tendril: '#c9ff00',
         pulse: '#aaff22',
+      },
+      miner: {
+        core: '#ffcc00',  // Gold-like core
+        tendril: '#3d85c6', // Electric blue tendrils
+        pulse: '#b7ffff',  // Light blue energy pulse
       }
     };
     
