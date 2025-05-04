@@ -61,23 +61,21 @@ const ControlPanel: React.FC = () => {
               <span className="mr-1">{isMuted ? "🔇" : "🔊"}</span>
               {isMuted ? "Unmute" : "Mute"}
             </button>
+            
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`control-btn ${isOpen ? 'unmuted' : ''}`}
+              title="Toggle advanced controls"
+            >
+              <span className="mr-1">⚙️</span>
+              {isOpen ? "Hide" : "Settings"}
+            </button>
           </div>
         </div>
-      </div>
-      
-      {/* Bottom Controls Button and Panel */}
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10">
-        {!isOpen && (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="cosmic-main-btn"
-          >
-            <span>Show Controls</span>
-          </button>
-        )}
         
+        {/* Advanced Controls Panel */}
         {isOpen && (
-          <div className="bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm border-2 border-[#ffd700] shadow-lg shadow-[#9d4edd]/30 mb-2" 
+          <div className="absolute top-12 right-4 bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm border-2 border-[#ffd700] shadow-lg shadow-[#9d4edd]/30" 
                style={{
                  background: "linear-gradient(135deg, rgba(20, 17, 40, 0.9), rgba(10, 10, 10, 0.98))",
                  boxShadow: "0 0 15px rgba(157, 78, 221, 0.5), 0 0 30px rgba(255, 215, 0, 0.3)"
@@ -94,7 +92,7 @@ const ControlPanel: React.FC = () => {
               <h2 className="text-lg font-semibold" style={{ 
                 color: "#ffd700", 
                 textShadow: "0 0 5px rgba(255, 215, 0, 0.7)" 
-              }}>Cosmic Mining Network</h2>
+              }}>Advanced Controls</h2>
               <button
                 onClick={() => setIsOpen(false)}
                 className="text-white/80 hover:text-white"
