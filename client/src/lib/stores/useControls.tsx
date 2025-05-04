@@ -10,7 +10,7 @@ interface ControlsState {
   coreIntensity: number;
   particleCount: number;
   pulseIntensity: number;
-  colorScheme: 'orange' | 'blue' | 'green' | 'purple';
+  colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent';
   interactionEnabled: boolean;
   
   // Action functions
@@ -20,7 +20,7 @@ interface ControlsState {
   setCoreIntensity: (value: number) => void;
   setParticleCount: (value: number) => void;
   setPulseIntensity: (value: number) => void;
-  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple') => void;
+  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent') => void;
   toggleInteraction: () => void;
   
   // Helper function to get color by scheme
@@ -72,6 +72,11 @@ export const useControls = create<ControlsState>((set, get) => ({
         core: '#9900ff',
         tendril: '#aa33ff',
         pulse: '#cc66ff',
+      },
+      bioluminescent: {
+        core: '#2a9d3a',
+        tendril: '#c9ff00',
+        pulse: '#aaff22',
       }
     };
     

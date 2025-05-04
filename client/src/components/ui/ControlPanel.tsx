@@ -10,6 +10,7 @@ const ControlPanel: React.FC = () => {
     { value: 'blue', label: 'Blue', color: '#0099ff' },
     { value: 'green', label: 'Green', color: '#00dd44' },
     { value: 'purple', label: 'Purple', color: '#aa33ff' },
+    { value: 'bioluminescent', label: 'Bio', color: '#c9ff00' },
   ];
   
   return (

@@ -6,12 +6,14 @@ interface BackgroundParticlesProps {
   count?: number;
   radius?: number;
   size?: number;
+  color?: string;
 }
 
 const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
   count = 400,
   radius = 30,
-  size = 0.05
+  size = 0.05,
+  color = "#ff6600"
 }) => {
   // Reference to the points object
   const pointsRef = useRef<THREE.Points>(null);

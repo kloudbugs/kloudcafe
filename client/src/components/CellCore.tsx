@@ -106,8 +106,10 @@ const CellCore: React.FC<CellCoreProps> = ({
           color={color}
           emissive={color}
           emissiveIntensity={0.8 * intensity}
-          roughness={0.3}
-          metalness={0.6}
+          roughness={0.2}
+          metalness={0.8}
+          transparent={true}
+          opacity={0.85}
           map={noiseTexture}
         />
       </mesh>

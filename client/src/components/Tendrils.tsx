@@ -148,6 +148,7 @@ const Tendrils: React.FC<TendrilsProps> = ({
         length={length}
         thickness={0.05 * (1.0 - length * 0.1)}
         transparent={true}
+        opacity={0.8}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
