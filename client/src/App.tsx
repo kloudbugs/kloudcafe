@@ -12,6 +12,7 @@ import Crown from "./components/Crown";
 import StarSparkles from "./components/StarSparkles";
 import TwistingCube from "./components/TwistingCube";
 import ExplodingBox from "./components/ExplodingBox";
+import CoffeeCup from "./components/CoffeeCup";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 
@@ -187,20 +188,48 @@ function App() {
                   letterSpacing: '2px',
                   filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))'
                 }}>KLOUDBUGS</h1>
-                <p className="miner-text" style={{ 
-                  fontSize: '2.5rem', 
-                  margin: '0.5rem 0 0',
-                  color: 'white',
-                  background: 'linear-gradient(45deg, #ffd700, #ffb700, #ffd700)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6)',
-                  fontWeight: 'bold',
-                  letterSpacing: '5px',
-                  transform: 'scale(1.05)'
-                }}>ZIG-MINER</p>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', margin: '0.5rem 0 0' }}>
+                  <span 
+                    className="miner-text" 
+                    data-text="ZIG"
+                    style={{ 
+                      fontSize: '2.5rem',
+                      color: 'white',
+                      background: 'linear-gradient(45deg, #ffd700, #ffb700, #ffd700)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6)',
+                      fontWeight: 'bold',
+                      letterSpacing: '5px'
+                    }}
+                  >ZIG</span>
+                  <div style={{ width: '60px', height: '50px', position: 'relative' }}></div>
+                  <span 
+                    className="miner-text" 
+                    data-text="MINER"
+                    style={{ 
+                      fontSize: '2.5rem',
+                      color: 'white',
+                      background: 'linear-gradient(45deg, #ffd700, #ffb700, #ffd700)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6)',
+                      fontWeight: 'bold',
+                      letterSpacing: '5px'
+                    }}
+                  >MINER</span>
+                </div>
               </div>
             </Html>
+            
+            {/* 3D Coffee Cup between ZIG and MINER */}
+            <CoffeeCup 
+              position={[0, -0.7, 1]} 
+              rotation={[0.1, 0.2, 0]} 
+              scale={1.2}
+              color="#7b2cbf"
+              steamColor="#ffd700"
+            />
           </group>
           
           {/* Crown at the top */}

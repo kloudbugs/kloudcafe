@@ -200,7 +200,7 @@
 }
 
 .miner-text::before {
-  content: 'ZIG-MINER';
+  content: attr(data-text);
   position: absolute;
   top: 0;
   left: 0;
