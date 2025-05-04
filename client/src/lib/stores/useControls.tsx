@@ -88,9 +88,9 @@ export const useControls = create<ControlsState>((set, get) => ({
         pulse: '#9900ff',  // Purple like the background
       },
       kloud: {
-        core: '#00ffcc',  // Turquoise glow
-        tendril: '#ff6600', // Orange from the coffee bean
-        pulse: '#9966ff',  // Purple ambient glow
+        core: '#00ffcc',  // Turquoise leaf glow
+        tendril: '#f08030', // Coffee bean brown/orange
+        pulse: '#4cccff',  // Blue gem color
       }
     };
     

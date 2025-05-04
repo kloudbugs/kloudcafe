@@ -8,6 +8,8 @@ import MouseInteractionLayer from "./components/MouseInteractionLayer";
 import PulseWave from "./components/PulseWave";
 import MiningGrid from "./components/MiningGrid";
 import ControlPanel from "./components/ui/ControlPanel";
+import Crown from "./components/Crown";
+import StarSparkles from "./components/StarSparkles";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 
@@ -115,7 +117,7 @@ function App() {
                 fontSize: '1.5rem',
                 fontWeight: 'bold',
                 color: 'white',
-                textShadow: '0 0 10px #00ffcc, 0 0 20px #9966ff',
+                textShadow: '0 0 10px #00ffcc, 0 0 20px #4cccff',
                 width: '300px',
                 textAlign: 'center',
                 pointerEvents: 'none'
@@ -125,18 +127,42 @@ function App() {
                 <h1 style={{ 
                   fontSize: '3rem', 
                   margin: '0',
-                  color: '#00ffcc',
-                  textShadow: '0 0 10px #00ffcc, 0 0 20px #00ffcc'
+                  background: 'linear-gradient(to bottom, white, #4cccff)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 0 10px #00ffcc, 0 0 20px #00ffcc',
+                  fontWeight: 'bold',
+                  letterSpacing: '1px',
+                  filter: 'drop-shadow(0 0 8px rgba(0, 255, 204, 0.8))'
                 }}>KLOUDBUGS</h1>
                 <p style={{ 
                   fontSize: '1.5rem', 
                   margin: '0.5rem 0 0',
-                  color: '#ff6600',
-                  textShadow: '0 0 10px #ff6600, 0 0 20px #ff6600'
+                  color: 'white',
+                  textShadow: '0 0 10px #f08030, 0 0 20px #f08030',
+                  fontWeight: 'bold',
+                  letterSpacing: '2px'
                 }}>CAFE VAULT</p>
               </div>
             </Html>
           </group>
+          
+          {/* Crown at the top */}
+          <Crown 
+            size={1.2} 
+            pointCount={7} 
+            color="#f08030" 
+            gemColor="#4cccff"
+            position={[0, 5, 0]}
+          />
+          
+          {/* Sparkle stars around the scene */}
+          <StarSparkles 
+            count={15} 
+            radius={8} 
+            size={0.15} 
+            color="#ffffff" 
+          />
         </Suspense>
         
         <OrbitControls 
