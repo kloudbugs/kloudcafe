@@ -13,6 +13,7 @@ import StarSparkles from "./components/StarSparkles";
 import TwistingCube from "./components/TwistingCube";
 import ExplodingBox from "./components/ExplodingBox";
 import CoffeeCup from "./components/CoffeeCup";
+import GalacticTransformBlocks from "./components/GalacticTransformBlocks";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 
@@ -262,6 +263,18 @@ function App() {
             size={1.7} 
             color="#5a189a" 
             glowColor="#ffd700" 
+          />
+          
+          {/* Galactic blocks that transform into stars and nodes */}
+          <GalacticTransformBlocks 
+            position={[0, -4, -2]}
+            count={15}
+            radius={3}
+            blockSize={0.4}
+            starSize={0.2}
+            blockColor="#7b2cbf"
+            starColor="#ffd700"
+            glowColor="#9d4edd"
           />
         </Suspense>
         
