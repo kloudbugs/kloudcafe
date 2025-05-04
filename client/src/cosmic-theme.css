@@ -167,6 +167,9 @@
   border-radius: 6px;
   padding: 5px 10px;
   font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .control-btn:hover {
@@ -174,6 +177,20 @@
   border-color: var(--kloud-blue);
   box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
   transform: translateY(-2px);
+}
+
+/* Muted and unmuted specific styles */
+.control-btn.muted {
+  background: linear-gradient(45deg, #4a1259, #2c1320);
+  color: #c5c5c5;
+  border-color: #694873;
+}
+
+.control-btn.unmuted {
+  background: linear-gradient(45deg, #5a189a, #7b2cbf);
+  color: #ffd700;
+  border-color: #ffd700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
 }
 
 /* ZIG-MINER text animation */

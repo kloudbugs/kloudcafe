@@ -35,21 +35,41 @@ function App() {
 
   // Load audio elements
   useEffect(() => {
+    // Function to preload an audio file and return a promise
+    const preloadAudio = (src: string): Promise<HTMLAudioElement> => {
+      return new Promise((resolve, reject) => {
+        const audio = new Audio();
+        
+        audio.addEventListener('canplaythrough', () => {
+          resolve(audio);
+        }, { once: true });
+        
+        audio.addEventListener('error', (e) => {
+          console.error(`Error loading audio ${src}:`, e);
+          reject(new Error(`Failed to load audio: ${src}`));
+        }, { once: true });
+        
+        audio.src = src;
+        audio.load();
+      });
+    };
+    
     async function setupAudio() {
       try {
-        // Create audio elements
-        const backgroundMusic = new Audio("/sounds/background.mp3");
+        console.log("Loading audio files...");
+        
+        // Preload all audio files in parallel
+        const [backgroundMusic, hitSound, successSound] = await Promise.all([
+          preloadAudio("/sounds/background.mp3"),
+          preloadAudio("/sounds/hit.mp3"),
+          preloadAudio("/sounds/success.mp3")
+        ]);
+        
+        // Configure audio properties
         backgroundMusic.loop = true;
-        backgroundMusic.volume = 0.5;
-        await backgroundMusic.load();
-        
-        const hitSound = new Audio("/sounds/hit.mp3");
-        hitSound.volume = 0.6;
-        await hitSound.load();
-        
-        const successSound = new Audio("/sounds/success.mp3");
-        successSound.volume = 0.6;
-        await successSound.load();
+        backgroundMusic.volume = 0.4;
+        hitSound.volume = 0.5;
+        successSound.volume = 0.5;
         
         // Store in Zustand
         const audioStore = useAudio.getState();
@@ -57,7 +77,23 @@ function App() {
         audioStore.setHitSound(hitSound);
         audioStore.setSuccessSound(successSound);
         
-        console.log("Audio loaded. Press 'M' to toggle sound.");
+        console.log("Audio loaded successfully. Press 'M' to toggle sound.");
+        
+        // Add a test button click to help with audio autoplay restrictions
+        const unlockAudio = () => {
+          // Try to play and immediately pause to unlock audio
+          backgroundMusic.play().then(() => {
+            backgroundMusic.pause();
+            backgroundMusic.currentTime = 0;
+            document.body.removeEventListener('click', unlockAudio);
+            console.log("Audio unlocked by user interaction");
+          }).catch(e => {
+            console.warn("Couldn't unlock audio:", e);
+          });
+        };
+        
+        document.body.addEventListener('click', unlockAudio, { once: false });
+        
       } catch (error) {
         console.error("Failed to load audio:", error);
       }
@@ -71,6 +107,7 @@ function App() {
         backgroundMusic.pause();
         backgroundMusic.src = "";
       }
+      document.body.removeEventListener('click', () => {});
     };
   }, []);
 
@@ -86,8 +123,10 @@ function App() {
       <div className="absolute top-4 right-4 z-10 flex items-center space-x-4">
         <button
           onClick={toggleMute}
-          className="control-btn"
+          className={`control-btn ${isMuted ? 'muted' : 'unmuted'}`}
+          aria-label={isMuted ? "Unmute" : "Mute"}
         >
+          <span className="mr-1">{isMuted ? "🔇" : "🔊"}</span>
           {isMuted ? "Unmute" : "Mute"}
         </button>
       </div>
