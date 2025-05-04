@@ -14,7 +14,8 @@ const Crown: React.FC<CrownProps> = ({
   size = 1,
   pointCount = 5,
   color = "#ffaa33",
-  gemColor = "#4cccff"
+  gemColor = "#4cccff",
+  position = [0, 0, 0]
 }) => {
   const groupRef = useRef<THREE.Group>(null);
   
@@ -51,7 +52,7 @@ const Crown: React.FC<CrownProps> = ({
   });
   
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} position={position}>
       {/* Crown base */}
       <mesh position={[0, 0.1, 0]}>
         <torusGeometry args={[size * 0.7, size * 0.1, 16, 32]} />
