@@ -3,6 +3,9 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stats } from "@react-three/drei";
 import Cell from "./components/Cell";
 import Environment from "./components/Environment";
+import BackgroundParticles from "./components/BackgroundParticles";
+import MouseInteractionLayer from "./components/MouseInteractionLayer";
+import PulseWave from "./components/PulseWave";
 import { useAudio } from "./lib/stores/useAudio";
 
 // Main App component
@@ -77,6 +80,9 @@ function App() {
         <Suspense fallback={null}>
           <Cell />
           <Environment />
+          <BackgroundParticles count={600} radius={40} size={0.04} />
+          <PulseWave frequency={0.8} intensity={0.7} />
+          <MouseInteractionLayer visible={false} />
         </Suspense>
         
         <OrbitControls 

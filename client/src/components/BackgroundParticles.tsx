@@ -1,0 +1,116 @@
+import { useRef, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+
+interface BackgroundParticlesProps {
+  count?: number;
+  radius?: number;
+  size?: number;
+}
+
+const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
+  count = 400,
+  radius = 30,
+  size = 0.05
+}) => {
+  // Reference to the points object
+  const pointsRef = useRef<THREE.Points>(null);
+  
+  // Create particles in a spherical distribution
+  const [positions, colors] = useMemo(() => {
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    
+    for (let i = 0; i < count; i++) {
+      // Random position in a spherical volume
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+      const r = radius * Math.cbrt(Math.random()); // Cube root for more even distribution
+      
+      // Convert to Cartesian coordinates
+      const x = r * Math.sin(phi) * Math.cos(theta);
+      const y = r * Math.sin(phi) * Math.sin(theta);
+      const z = r * Math.cos(phi);
+      
+      // Set position
+      positions[i * 3] = x;
+      positions[i * 3 + 1] = y;
+      positions[i * 3 + 2] = z;
+      
+      // Set color - subtle orange/red hues with varied alpha
+      const intensity = 0.2 + Math.random() * 0.3;
+      colors[i * 3] = 1.0 * intensity;
+      colors[i * 3 + 1] = 0.3 * intensity;
+      colors[i * 3 + 2] = 0.1 * intensity;
+    }
+    
+    return [positions, colors];
+  }, [count, radius]);
+  
+  // Create the particles material
+  const particleMaterial = useMemo(() => {
+    const material = new THREE.PointsMaterial({
+      size,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true,
+    });
+    
+    return material;
+  }, [size]);
+  
+  // Animate particles
+  useFrame((_, delta) => {
+    if (pointsRef.current) {
+      // Slowly rotate the entire particle system
+      pointsRef.current.rotation.y += delta * 0.02;
+      pointsRef.current.rotation.x += delta * 0.01;
+      
+      // Optional: make particles twinkle or pulse
+      const particles = pointsRef.current.geometry.attributes.position.array;
+      const colors = pointsRef.current.geometry.attributes.color.array;
+      
+      for (let i = 0; i < count; i++) {
+        // Subtle position fluctuation
+        if (i % 5 === 0) { // Only move some particles for performance
+          const idx = i * 3;
+          particles[idx] += Math.sin(Date.now() * 0.001 + i) * 0.01;
+          particles[idx + 1] += Math.cos(Date.now() * 0.002 + i) * 0.01;
+          
+          // Subtle color pulsing
+          const pulse = Math.sin(Date.now() * 0.001 + i) * 0.1 + 0.9;
+          colors[idx] *= pulse;
+          colors[idx + 1] *= pulse;
+          colors[idx + 2] *= pulse;
+        }
+      }
+      
+      pointsRef.current.geometry.attributes.position.needsUpdate = true;
+      pointsRef.current.geometry.attributes.color.needsUpdate = true;
+    }
+  });
+  
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          count={count}
+          array={colors}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <primitive object={particleMaterial} />
+    </points>
+  );
+};
+
+export default BackgroundParticles;
