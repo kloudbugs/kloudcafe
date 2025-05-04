@@ -18,22 +18,23 @@ import { useControls } from "./lib/stores/useControls";
 // Main App component
 function App() {
   const [showPerformance, setShowPerformance] = useState(false);
-  const { toggleMute, isMuted } = useAudio();
 
-  // Toggle stats with 'p' key
+  // Toggle stats with 'p' key and sound with 'm' key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "p") {
         setShowPerformance((prev) => !prev);
       }
       if (e.key === "m") {
-        toggleMute();
+        // Get audio store and toggle mute
+        const audioStore = useAudio.getState();
+        audioStore.toggleMute();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [toggleMute]);
+  }, []);
 
   // Load audio elements
   useEffect(() => {
@@ -121,17 +122,6 @@ function App() {
       <div className="stars"></div>
       
       <ControlPanel />
-      
-      <div className="absolute top-4 right-4 z-10 flex items-center space-x-4">
-        <button
-          onClick={toggleMute}
-          className={`control-btn ${isMuted ? 'muted' : 'unmuted'}`}
-          aria-label={isMuted ? "Unmute" : "Mute"}
-        >
-          <span className="mr-1">{isMuted ? "🔇" : "🔊"}</span>
-          {isMuted ? "Unmute" : "Mute"}
-        </button>
-      </div>
       
       <Canvas
         shadows
