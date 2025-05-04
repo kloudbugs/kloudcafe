@@ -23,43 +23,44 @@ const MiningGrid: React.FC<MiningGridProps> = ({
   const gridRef = useRef<THREE.Group>(null);
   const controls = useControls();
   
-  const coreColor = controls.getColorByScheme('core');
-  const tendrilColor = controls.getColorByScheme('tendril');
+  const primaryColor = controls.getColorByScheme('core');
+  const accentColor = controls.getColorByScheme('tendril');
+  const highlightColor = controls.getColorByScheme('pulse');
   
   // Create materials
   const blockMaterial = useMemo(() => 
     new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#4b8b3b'), // Green for blocks
-      emissive: new THREE.Color('#447a33'),
+      color: new THREE.Color('#23374d'), // Dark blue for blocks
+      emissive: new THREE.Color(primaryColor),
       emissiveIntensity: 0.15,
-      metalness: 0.3,
-      roughness: 0.7,
+      metalness: 0.8,
+      roughness: 0.2,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.9,
     }), 
-  []);
+  [primaryColor]);
   
   const highlightMaterial = useMemo(() => 
     new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#68a859'), // Lighter green for highlighted blocks
-      emissive: new THREE.Color('#68a859'),
-      emissiveIntensity: 0.25,
-      metalness: 0.4,
-      roughness: 0.6,
+      color: new THREE.Color('#345277'), // Lighter blue for highlighted blocks
+      emissive: new THREE.Color(highlightColor),
+      emissiveIntensity: 0.4,
+      metalness: 0.9,
+      roughness: 0.1,
       transparent: true,
       opacity: 0.95,
     }), 
-  []);
+  [highlightColor]);
   
   const edgeMaterial = useMemo(() => 
     new THREE.LineBasicMaterial({
-      color: new THREE.Color('#1e2a3d'), // Dark blue for grid lines
-      opacity: 0.7,
+      color: new THREE.Color(accentColor), // Purple/accent color for grid lines
+      opacity: 0.9,
       transparent: true,
     }), 
-  []);
+  [accentColor]);
   
-interface BlockData {
+  interface BlockData {
     position: THREE.Vector3;
     size: THREE.Vector3;
     isHighlighted: boolean;
@@ -185,9 +186,7 @@ interface BlockData {
     <group ref={gridRef} position={[0, 0, -5]}>
       {/* Grid outline - creating a custom-positioned line */}
       <group>
-        <lineSegments geometry={gridEdges}>
-          <primitive object={edgeMaterial} attach="material" />
-        </lineSegments>
+        <primitive object={new THREE.Line(gridEdges, edgeMaterial)} />
       </group>
       
       {/* Grid blocks */}

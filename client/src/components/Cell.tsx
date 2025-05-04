@@ -4,6 +4,7 @@ import * as THREE from "three";
 import CellCore from "./CellCore";
 import Tendrils from "./Tendrils";
 import MiningBlocks from "./MiningBlocks";
+import ElectricGrid from "./ElectricGrid";
 import { useControls } from "../lib/stores/useControls";
 
 // Main Cell component combining core and tendrils
@@ -61,10 +62,11 @@ const Cell: React.FC = () => {
   
   return (
     <group ref={(ref) => ref && (cellGroup.copy(ref), ref.clear(), ref.add(cellGroup))}>
-      {/* The glowing core */}
-      <CellCore 
-        intensity={controls.coreIntensity} 
-        color={controls.getColorByScheme('core')}
+      {/* The electric grid core */}
+      <ElectricGrid 
+        size={3} 
+        gridDivisions={4}
+        nodeSize={0.15}
       />
       
       {/* Mining blocks orbiting around core */}

@@ -83,9 +83,9 @@ export const useControls = create<ControlsState>((set, get) => ({
         pulse: '#aaff22',
       },
       miner: {
-        core: '#ffcc00',  // Gold-like core
-        tendril: '#3d85c6', // Electric blue tendrils
-        pulse: '#b7ffff',  // Light blue energy pulse
+        core: '#00e5ff',  // Cyan/blue core
+        tendril: '#5900ff', // Electric purple tendrils
+        pulse: '#ff00aa',  // Pink energy pulse
       }
     };
     

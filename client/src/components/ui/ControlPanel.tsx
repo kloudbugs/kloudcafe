@@ -28,7 +28,7 @@ const ControlPanel: React.FC = () => {
       {isOpen && (
         <div className="bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Cell Controls</h2>
+            <h2 className="text-lg font-semibold">Mining Network Controls</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="text-white/80 hover:text-white"
