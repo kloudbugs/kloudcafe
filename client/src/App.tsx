@@ -90,6 +90,7 @@ function App() {
             count={controls.particleCount} 
             radius={40} 
             size={0.04} 
+            color={controls.getColorByScheme('pulse')}
           />
           <PulseWave 
             frequency={0.8} 

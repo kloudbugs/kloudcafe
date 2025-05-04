@@ -23,6 +23,12 @@ const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     
+    // Parse the color to RGB
+    const colorObj = new THREE.Color(color);
+    const r = colorObj.r;
+    const g = colorObj.g;
+    const b = colorObj.b;
+    
     for (let i = 0; i < count; i++) {
       // Random position in a spherical volume
       const theta = Math.random() * Math.PI * 2;
@@ -39,15 +45,15 @@ const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = z;
       
-      // Set color - subtle orange/red hues with varied alpha
-      const intensity = 0.2 + Math.random() * 0.3;
-      colors[i * 3] = 1.0 * intensity;
-      colors[i * 3 + 1] = 0.3 * intensity;
-      colors[i * 3 + 2] = 0.1 * intensity;
+      // Set color with slight variations for more natural look
+      const intensity = 0.2 + Math.random() * 0.5;
+      colors[i * 3] = r * intensity;
+      colors[i * 3 + 1] = g * intensity;
+      colors[i * 3 + 2] = b * intensity;
     }
     
     return [positions, colors];
-  }, [count, radius]);
+  }, [count, radius, color]);
   
   // Create the particles material
   const particleMaterial = useMemo(() => {
@@ -55,7 +61,7 @@ const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
       size,
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.75,
       blending: THREE.AdditiveBlending,
       sizeAttenuation: true,
     });
