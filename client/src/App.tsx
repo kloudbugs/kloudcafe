@@ -1,6 +1,6 @@
 import { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stats } from "@react-three/drei";
+import { OrbitControls, Stats, Html } from "@react-three/drei";
 import Cell from "./components/Cell";
 import Environment from "./components/Environment";
 import BackgroundParticles from "./components/BackgroundParticles";
@@ -105,6 +105,38 @@ function App() {
             maxBlockSize={5}
           />
           <MouseInteractionLayer visible={controls.interactionEnabled} />
+          
+          {/* KloudBugs Title */}
+          <group position={[0, 7, 0]}>
+            <Html
+              transform
+              center
+              style={{
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                color: 'white',
+                textShadow: '0 0 10px #00ffcc, 0 0 20px #9966ff',
+                width: '300px',
+                textAlign: 'center',
+                pointerEvents: 'none'
+              }}
+            >
+              <div>
+                <h1 style={{ 
+                  fontSize: '3rem', 
+                  margin: '0',
+                  color: '#00ffcc',
+                  textShadow: '0 0 10px #00ffcc, 0 0 20px #00ffcc'
+                }}>KLOUDBUGS</h1>
+                <p style={{ 
+                  fontSize: '1.5rem', 
+                  margin: '0.5rem 0 0',
+                  color: '#ff6600',
+                  textShadow: '0 0 10px #ff6600, 0 0 20px #ff6600'
+                }}>CAFE VAULT</p>
+              </div>
+            </Html>
+          </group>
         </Suspense>
         
         <OrbitControls 

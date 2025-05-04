@@ -11,7 +11,7 @@ interface ControlsState {
   particleCount: number;
   pulseIntensity: number;
   blockCount: number;
-  colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner';
+  colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner' | 'kloud';
   interactionEnabled: boolean;
   
   // Action functions
@@ -22,7 +22,7 @@ interface ControlsState {
   setParticleCount: (value: number) => void;
   setPulseIntensity: (value: number) => void;
   setBlockCount: (value: number) => void;
-  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner') => void;
+  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner' | 'kloud') => void;
   toggleInteraction: () => void;
   
   // Helper function to get color by scheme
@@ -38,7 +38,7 @@ export const useControls = create<ControlsState>((set, get) => ({
   particleCount: 600,
   pulseIntensity: 0.7,
   blockCount: 20,
-  colorScheme: 'miner',
+  colorScheme: 'kloud',
   interactionEnabled: false,
   
   // Setter functions
@@ -83,9 +83,14 @@ export const useControls = create<ControlsState>((set, get) => ({
         pulse: '#aaff22',
       },
       miner: {
-        core: '#00e5ff',  // Cyan/blue core
-        tendril: '#5900ff', // Electric purple tendrils
-        pulse: '#ff00aa',  // Pink energy pulse
+        core: '#00ffcc',  // Neon turquoise/teal like the leaf glow
+        tendril: '#ff9900', // Orange like the coffee bean
+        pulse: '#9900ff',  // Purple like the background
+      },
+      kloud: {
+        core: '#00ffcc',  // Turquoise glow
+        tendril: '#ff6600', // Orange from the coffee bean
+        pulse: '#9966ff',  // Purple ambient glow
       }
     };
     
