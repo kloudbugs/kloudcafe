@@ -10,6 +10,8 @@ import MiningGrid from "./components/MiningGrid";
 import ControlPanel from "./components/ui/ControlPanel";
 import Crown from "./components/Crown";
 import StarSparkles from "./components/StarSparkles";
+import TwistingCube from "./components/TwistingCube";
+import ExplodingBox from "./components/ExplodingBox";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 
@@ -226,6 +228,21 @@ function App() {
             radius={8} 
             size={0.15} 
             color="#ffffff" 
+          />
+          
+          {/* Twisting and exploding cubes */}
+          <TwistingCube 
+            position={[-8, -3, -5]} 
+            size={2} 
+            color="#9d4edd" 
+            glowColor="#ffd700" 
+          />
+          
+          <ExplodingBox 
+            position={[8, -3, -5]} 
+            size={1.7} 
+            color="#5a189a" 
+            glowColor="#ffd700" 
           />
         </Suspense>
         
