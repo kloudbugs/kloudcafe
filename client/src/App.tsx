@@ -138,7 +138,7 @@ function App() {
                   letterSpacing: '2px',
                   filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))'
                 }}>KLOUDBUGS</h1>
-                <p style={{ 
+                <p className="miner-text" style={{ 
                   fontSize: '2.5rem', 
                   margin: '0.5rem 0 0',
                   color: 'white',
@@ -148,16 +148,8 @@ function App() {
                   textShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6)',
                   fontWeight: 'bold',
                   letterSpacing: '5px',
-                  transform: 'scale(1.05)',
-                  animation: 'pulse-glow 2s infinite'
-                }}>MINER</p>
-                <style jsx>{`
-                  @keyframes pulse-glow {
-                    0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
-                    50% { filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)); }
-                    100% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
-                  }
-                `}</style>
+                  transform: 'scale(1.05)'
+                }}>ZIG-MINER</p>
               </div>
             </Html>
           </group>
