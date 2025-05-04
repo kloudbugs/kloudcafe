@@ -98,7 +98,7 @@ const ControlPanel: React.FC = () => {
                 step="0.05"
                 value={controls.rotationSpeed}
                 onChange={(e) => controls.setRotationSpeed(parseFloat(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                className="cosmic-slider w-full cursor-pointer"
               />
             </div>
             
@@ -112,7 +112,7 @@ const ControlPanel: React.FC = () => {
                 step="10"
                 value={controls.tendrilCount}
                 onChange={(e) => controls.setTendrilCount(parseInt(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                className="cosmic-slider w-full cursor-pointer"
               />
             </div>
             
@@ -126,7 +126,7 @@ const ControlPanel: React.FC = () => {
                 step="0.1"
                 value={controls.coreIntensity}
                 onChange={(e) => controls.setCoreIntensity(parseFloat(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                className="cosmic-slider w-full cursor-pointer"
               />
             </div>
             
@@ -140,7 +140,7 @@ const ControlPanel: React.FC = () => {
                 step="0.1"
                 value={controls.pulseIntensity}
                 onChange={(e) => controls.setPulseIntensity(parseFloat(e.target.value))}
-                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                className="cosmic-slider w-full cursor-pointer"
               />
             </div>
             

@@ -139,16 +139,25 @@ function App() {
                   filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))'
                 }}>KLOUDBUGS</h1>
                 <p style={{ 
-                  fontSize: '1.5rem', 
+                  fontSize: '2.5rem', 
                   margin: '0.5rem 0 0',
                   color: 'white',
-                  background: 'linear-gradient(to right, #9d4edd, #5a189a)',
+                  background: 'linear-gradient(45deg, #ffd700, #ffb700, #ffd700)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 10px rgba(157, 78, 221, 0.8)',
+                  textShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6)',
                   fontWeight: 'bold',
-                  letterSpacing: '3px'
-                }}>CAFE VAULT</p>
+                  letterSpacing: '5px',
+                  transform: 'scale(1.05)',
+                  animation: 'pulse-glow 2s infinite'
+                }}>MINER</p>
+                <style jsx>{`
+                  @keyframes pulse-glow {
+                    0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
+                    50% { filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)); }
+                    100% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7)); }
+                  }
+                `}</style>
               </div>
             </Html>
           </group>
