@@ -6,6 +6,7 @@ import Environment from "./components/Environment";
 import BackgroundParticles from "./components/BackgroundParticles";
 import MouseInteractionLayer from "./components/MouseInteractionLayer";
 import PulseWave from "./components/PulseWave";
+import MiningGrid from "./components/MiningGrid";
 import ControlPanel from "./components/ui/ControlPanel";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
@@ -96,6 +97,12 @@ function App() {
             frequency={0.8} 
             intensity={controls.pulseIntensity}
             baseColor={controls.getColorByScheme('pulse')}
+          />
+          <MiningGrid
+            width={24}
+            height={18}
+            cellSize={0.15}
+            maxBlockSize={5}
           />
           <MouseInteractionLayer visible={controls.interactionEnabled} />
         </Suspense>

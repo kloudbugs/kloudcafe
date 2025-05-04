@@ -59,9 +59,15 @@ const MiningGrid: React.FC<MiningGridProps> = ({
     }), 
   []);
   
+interface BlockData {
+    position: THREE.Vector3;
+    size: THREE.Vector3;
+    isHighlighted: boolean;
+  }
+  
   // Generate grid data using a space-filling algorithm
   const gridBlocks = useMemo(() => {
-    const blocks = [];
+    const blocks: BlockData[] = [];
     const grid = Array(width).fill(0).map(() => Array(height).fill(false));
     
     // Fill grid with blocks of different sizes
@@ -177,8 +183,12 @@ const MiningGrid: React.FC<MiningGridProps> = ({
   
   return (
     <group ref={gridRef} position={[0, 0, -5]}>
-      {/* Grid outline */}
-      <line geometry={gridEdges} material={edgeMaterial} />
+      {/* Grid outline - creating a custom-positioned line */}
+      <group>
+        <lineSegments geometry={gridEdges}>
+          <primitive object={edgeMaterial} attach="material" />
+        </lineSegments>
+      </group>
       
       {/* Grid blocks */}
       {gridBlocks.map((block, index) => (
