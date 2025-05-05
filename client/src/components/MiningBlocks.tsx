@@ -1,13 +1,36 @@
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useControls } from '../lib/stores/useControls';
+import { useAudio } from '../lib/stores/useAudio';
+import BitcoinExplosion from './BitcoinExplosion';
 
 interface MiningBlocksProps {
   count?: number;
   orbitRadius?: number;
   minDistance?: number;
   maxDistance?: number;
+}
+
+interface BlockDataType {
+  position: THREE.Vector3;
+  rotationSpeed: number;
+  rotationAxis: THREE.Vector3;
+  orbitSpeed: number;
+  orbitRadius: number;
+  orbitPhase: number;
+  orbitInclination: number;
+  scale: number;
+  pulsePhase: number;
+  pulseSpeed: number;
+  explodeCountdown: number;
+  exploding: boolean;
+}
+
+interface ExplosionData {
+  position: THREE.Vector3;
+  color: string;
+  id: number;
 }
 
 const MiningBlocks: React.FC<MiningBlocksProps> = ({
@@ -20,24 +43,47 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
   const orbitRadius = baseOrbitRadius;
   const blocksRef = useRef<THREE.Group>(null);
   const blockRefs = useRef<THREE.Mesh[]>([]);
+  const groupRefs = useRef<THREE.Group[]>([]);
+  
+  const [explosions, setExplosions] = useState<ExplosionData[]>([]);
+  const [nextExplosionId, setNextExplosionId] = useState(0);
   
   const controls = useControls();
+  const audio = useAudio();
   const coreColor = controls.getColorByScheme('core');
+  const tendrilColor = controls.getColorByScheme('tendril');
   
-  // Create block geometry and materials - using simple cubes
+  // Create inner block geometry and materials - using tunic cube style
   const blockGeometry = useMemo(() => new THREE.BoxGeometry(0.4, 0.4, 0.4), []);
+  
+  // Main block material
   const blockMaterial = useMemo(() => 
     new THREE.MeshStandardMaterial({
       color: coreColor,
       emissive: coreColor,
-      emissiveIntensity: 0.3,
-      metalness: 0.9,
+      emissiveIntensity: 0.5,
+      metalness: 0.8,
       roughness: 0.2,
     }), 
   [coreColor]);
   
-  // Generate initial positions for blocks
-  const blockData = useMemo(() => {
+  // Edge line material
+  const lineMaterial = useMemo(() => 
+    new THREE.LineBasicMaterial({
+      color: tendrilColor,
+      transparent: true,
+      opacity: 0.8,
+      linewidth: 1,
+    }),
+  [tendrilColor]);
+  
+  // Create edges geometry for the tunic cube effect
+  const edgesGeometry = useMemo(() => {
+    return new THREE.EdgesGeometry(blockGeometry);
+  }, [blockGeometry]);
+  
+  // Generate initial positions and properties for blocks
+  const blockData = useMemo<BlockDataType[]>(() => {
     const data = [];
     
     for (let i = 0; i < count; i++) {
@@ -64,6 +110,13 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
       const orbitPhase = Math.random() * Math.PI * 2;
       const orbitInclination = Math.random() * Math.PI * 0.3;
       
+      // Pulse animation properties (for tunic-like effect)
+      const pulsePhase = Math.random() * Math.PI * 2;
+      const pulseSpeed = 0.5 + Math.random() * 1.5;
+      
+      // Explosion timer - random time between 15-60 seconds
+      const explodeCountdown = 10 + Math.random() * 45;
+      
       data.push({
         position: new THREE.Vector3(x, y, z),
         rotationSpeed,
@@ -73,6 +126,10 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
         orbitPhase,
         orbitInclination,
         scale: 0.7 + Math.random() * 0.6,
+        pulsePhase,
+        pulseSpeed,
+        explodeCountdown,
+        exploding: false,
       });
     }
     
@@ -82,19 +139,66 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
   // Setup refs when component mounts
   useEffect(() => {
     blockRefs.current = blockRefs.current.slice(0, count);
+    groupRefs.current = groupRefs.current.slice(0, count);
   }, [count]);
+  
+  // Handle explosion of a block
+  const explodeBlock = (index: number, position: THREE.Vector3) => {
+    // Make block invisible - will reset visibility later
+    if (groupRefs.current[index]) {
+      groupRefs.current[index].visible = false;
+    }
+    
+    // Create explosion at this position
+    const newExplosion = {
+      position: position.clone(),
+      color: Math.random() > 0.5 ? tendrilColor : coreColor,
+      id: nextExplosionId,
+    };
+    
+    setExplosions(prev => [...prev, newExplosion]);
+    setNextExplosionId(prev => prev + 1);
+    
+    // Play explosion sound
+    if (audio.hitSound) {
+      audio.playHit();
+    }
+    
+    // Reset block state after explosion
+    setTimeout(() => {
+      // Make block visible again
+      if (groupRefs.current[index]) {
+        groupRefs.current[index].visible = true;
+      }
+      
+      // Reset explosion timer for future
+      blockData[index].explodeCountdown = 15 + Math.random() * 45;
+      blockData[index].exploding = false;
+    }, 2000);
+  };
+  
+  // Remove an explosion when it's complete
+  const handleExplosionComplete = (id: number) => {
+    setExplosions(prev => prev.filter(exp => exp.id !== id));
+  };
   
   // Animation loop
   useFrame((_, delta) => {
     if (!blocksRef.current) return;
     
-    // Update each block's position and rotation
+    // Update each block's position, rotation, and pulse
     blockData.forEach((data, i) => {
       const blockMesh = blockRefs.current[i];
-      if (!blockMesh) return;
+      const blockGroup = groupRefs.current[i];
+      if (!blockMesh || !blockGroup) return;
+      
+      // Update pulsing animation phase
+      data.pulsePhase += delta * data.pulseSpeed;
+      
+      // Calculate pulse factor (0.9 to 1.1)
+      const pulseFactor = 0.92 + Math.sin(data.pulsePhase) * 0.08 + Math.cos(data.pulsePhase * 0.7) * 0.1;
       
       // Update orbit position
-      const time = Date.now() * 0.001;
       data.orbitPhase += delta * data.orbitSpeed;
       
       // Calculate new position based on orbit
@@ -102,15 +206,32 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
       const orbitZ = Math.sin(data.orbitPhase) * data.orbitRadius;
       const orbitY = Math.sin(data.orbitPhase + data.orbitInclination) * data.orbitRadius * 0.3;
       
-      // Apply position
-      blockMesh.position.set(
+      // Calculate world position for the block
+      const worldPos = new THREE.Vector3(
         data.position.x + orbitX * 0.2,
         data.position.y + orbitY * 0.2,
         data.position.z + orbitZ * 0.2
       );
       
+      // Apply position to group
+      blockGroup.position.copy(worldPos);
+      
+      // Apply pulse scale to block mesh
+      blockMesh.scale.set(pulseFactor, pulseFactor, pulseFactor);
+      
       // Rotate block
       blockMesh.rotateOnAxis(data.rotationAxis, delta * data.rotationSpeed);
+      
+      // Update explosion countdown
+      if (!data.exploding) {
+        data.explodeCountdown -= delta;
+        
+        // Check if it's time to explode
+        if (data.explodeCountdown <= 0) {
+          data.exploding = true;
+          explodeBlock(i, worldPos);
+        }
+      }
     });
     
     // Rotate the entire group slowly if auto-rotate is enabled
@@ -120,18 +241,37 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
   });
   
   return (
-    <group ref={blocksRef}>
-      {blockData.map((data, i) => (
-        <group key={i} position={data.position} scale={data.scale}>
-          <mesh 
-            ref={el => el && (blockRefs.current[i] = el)} 
-            geometry={blockGeometry} 
-            material={blockMaterial}
-          />
-          {/* Removed the outer wireframe mesh that was creating the green/blue objects */}
-        </group>
+    <>
+      <group ref={blocksRef}>
+        {blockData.map((data, i) => (
+          <group 
+            key={i} 
+            position={data.position} 
+            scale={data.scale}
+            ref={el => el && (groupRefs.current[i] = el)}
+          >
+            {/* Main block mesh */}
+            <mesh 
+              ref={el => el && (blockRefs.current[i] = el)} 
+              geometry={blockGeometry} 
+              material={blockMaterial}
+            />
+            {/* Edge lines for tunic cube effect */}
+            <lineSegments geometry={edgesGeometry} material={lineMaterial} />
+          </group>
+        ))}
+      </group>
+      
+      {/* Render active explosions */}
+      {explosions.map((explosion) => (
+        <BitcoinExplosion
+          key={explosion.id}
+          position={explosion.position}
+          color={explosion.color}
+          onComplete={() => handleExplosionComplete(explosion.id)}
+        />
       ))}
-    </group>
+    </>
   );
 };
 
