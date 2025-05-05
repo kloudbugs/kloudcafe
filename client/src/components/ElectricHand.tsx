@@ -91,7 +91,7 @@ const createLightningBolt = (
   };
 };
 
-// Create a hand shape from simple geometries
+// Create a robotic hand shape from simple geometries
 const createHandSegments = (
   start: THREE.Vector3,
   end: THREE.Vector3,
@@ -100,26 +100,59 @@ const createHandSegments = (
   const segments: HandSegment[] = [];
   const direction = new THREE.Vector3().subVectors(end, start).normalize();
   
-  // Create palm
+  // Create palm - more rectangular for robot hand
   const palmPosition = new THREE.Vector3().lerpVectors(start, end, 0.6);
   segments.push({
     position: palmPosition,
     rotation: new THREE.Euler(
-      Math.random() * Math.PI * 0.2,
-      Math.random() * Math.PI * 0.2,
-      Math.random() * Math.PI * 0.2
+      Math.random() * Math.PI * 0.1, // Less random rotation for more mechanical look
+      Math.random() * Math.PI * 0.1,
+      Math.random() * Math.PI * 0.1
     ),
-    scale: 0.25 + Math.random() * 0.1,
+    scale: 0.28, // Larger, more consistent size for the palm
     progress: 0
   });
   
-  // Create fingers
-  const fingerBasePosition = new THREE.Vector3().lerpVectors(start, end, 0.75);
-  const fingerSpread = 0.15;
+  // Add wrist connector
+  const wristPosition = new THREE.Vector3().lerpVectors(start, end, 0.45);
+  segments.push({
+    position: wristPosition,
+    rotation: new THREE.Euler(0, 0, 0), // Aligned perfectly for mechanical look
+    scale: 0.22,
+    progress: 0
+  });
+  
+  // Add forearm segment
+  const forearmPosition = new THREE.Vector3().lerpVectors(start, end, 0.3);
+  segments.push({
+    position: forearmPosition,
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.20,
+    progress: 0
+  });
+  
+  // Create fingers - more mechanical, precise arrangement
+  const fingerBasePosition = new THREE.Vector3().lerpVectors(start, end, 0.78);
+  const fingerSpread = 0.2; // Wider spread for robot hand
   
   for (let i = 0; i < fingerCount; i++) {
-    // Calculate position offset for finger around a semicircle
-    const angle = (i / (fingerCount - 1)) * Math.PI;
+    // Calculate position offset for finger in a more structured pattern
+    // For a robot hand, we'll make the fingers more parallel and aligned
+    
+    let angle;
+    if (fingerCount === 5) {
+      // Special case for 5 fingers to create a thumb
+      if (i === 0) {
+        // Thumb positioned separately
+        angle = Math.PI * 0.7; // Angled more to the side
+      } else {
+        // Other 4 fingers evenly spaced
+        angle = ((i - 0.5) / (fingerCount - 1.5)) * Math.PI * 0.7;
+      }
+    } else {
+      angle = (i / (fingerCount - 1)) * Math.PI * 0.8;
+    }
+    
     const fingerOffset = new THREE.Vector3(
       Math.cos(angle) * fingerSpread,
       Math.sin(angle) * fingerSpread,
@@ -143,33 +176,79 @@ const createHandSegments = (
     
     const fingerPosition = fingerBasePosition.clone().add(worldOffset);
     
-    // Create finger segment
+    // Calculate precise finger rotation based on position - more mechanical
+    let fingerRotation;
+    if (i === 0 && fingerCount === 5) {
+      // Thumb has special rotation
+      fingerRotation = new THREE.Euler(
+        Math.PI * 0.1,
+        Math.PI * 0.2,
+        Math.PI * 0.1
+      );
+    } else {
+      // Regular finger rotation - minimal randomness for mechanical precision
+      fingerRotation = new THREE.Euler(
+        Math.PI * 0.05 * Math.sin(i), // Slight predictable variation
+        Math.PI * 0.05 * Math.cos(i),
+        0
+      );
+    }
+    
+    // Create knuckle segment for robotic finger
     segments.push({
       position: fingerPosition,
-      rotation: new THREE.Euler(
-        Math.random() * Math.PI * 0.3,
-        Math.random() * Math.PI * 0.3,
-        Math.random() * Math.PI * 0.3
-      ),
-      scale: 0.1 + Math.random() * 0.05,
+      rotation: fingerRotation,
+      scale: 0.12, // Uniform size for mechanical look
+      progress: 0
+    });
+    
+    // Create finger middle segment
+    const fingerMiddlePosition = fingerPosition.clone().add(
+      direction.clone().multiplyScalar(0.15)
+    );
+    
+    segments.push({
+      position: fingerMiddlePosition,
+      rotation: fingerRotation,
+      scale: 0.09, // Progressively smaller for a tapered finger
       progress: 0
     });
     
     // Create finger tip segment
-    const fingerTipPosition = fingerPosition.clone().add(
-      direction.clone().multiplyScalar(0.2)
+    const fingerTipPosition = fingerMiddlePosition.clone().add(
+      direction.clone().multiplyScalar(0.15)
     );
     
     segments.push({
       position: fingerTipPosition,
-      rotation: new THREE.Euler(
-        Math.random() * Math.PI * 0.3,
-        Math.random() * Math.PI * 0.3,
-        Math.random() * Math.PI * 0.3
-      ),
-      scale: 0.05 + Math.random() * 0.03,
+      rotation: fingerRotation,
+      scale: 0.06, // Smallest segment at tip
       progress: 0
     });
+  }
+  
+  // Add small connection points between segments for a more robotic look
+  // These are small connector cylinders
+  const connectorPositions = segments.map(segment => segment.position);
+  
+  // Create connectors between adjacent segments
+  for (let i = 1; i < connectorPositions.length; i++) {
+    // Only connect segments that are close to each other
+    const distance = connectorPositions[i].distanceTo(connectorPositions[i-1]);
+    if (distance < 0.3) {
+      const connectorPosition = new THREE.Vector3().lerpVectors(
+        connectorPositions[i], 
+        connectorPositions[i-1], 
+        0.5
+      );
+      
+      segments.push({
+        position: connectorPosition,
+        rotation: new THREE.Euler(0, 0, 0),
+        scale: 0.03, // Very small connectors
+        progress: 0
+      });
+    }
   }
   
   return segments;
@@ -404,26 +483,58 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
         ))}
       </group>
       
-      {/* Hand segments */}
-      {handSegments.map((segment, i) => (
-        <mesh
-          key={i}
-          ref={el => el && (handSegmentRefs.current[i] = el)}
-          position={segment.position}
-          rotation={segment.rotation}
-          scale={0} // Start with zero scale, will be animated
-        >
-          <sphereGeometry args={[1, 16, 16]} />
-          <meshStandardMaterial
-            color={i % 2 === 0 ? color : secondaryColor}
-            emissive={i % 2 === 0 ? color : secondaryColor}
-            emissiveIntensity={1}
-            transparent
-            opacity={0.9}
-            toneMapped={false}
-          />
-        </mesh>
-      ))}
+      {/* Hand segments with various robot-like shapes */}
+      {handSegments.map((segment, i) => {
+        // Choose different geometry for different parts
+        let geometry;
+        
+        // First three segments are wrist and palm - use box geometries
+        if (i < 3) {
+          // Use box for palm and wrist segments (more robotic)
+          geometry = <boxGeometry args={[1.2, 0.8, 0.4]} />;
+        } 
+        // Finger segments - alternate between different shapes
+        else if (i % 3 === 0) {
+          // Knuckles - use cylindrical shapes
+          geometry = <cylinderGeometry args={[0.5, 0.5, 1.2, 8]} />;
+        } 
+        else if (i % 3 === 1) {
+          // Middle finger segments - use boxes
+          geometry = <boxGeometry args={[0.6, 0.6, 1.2]} />;
+        } 
+        else {
+          // Finger tips - use cones
+          geometry = <coneGeometry args={[0.5, 1, 8]} />;
+        }
+        
+        // Small connector elements
+        if (i > 15) {
+          // Small connecting joints
+          geometry = <torusGeometry args={[0.5, 0.2, 8, 8]} />;
+        }
+        
+        return (
+          <mesh
+            key={i}
+            ref={el => el && (handSegmentRefs.current[i] = el)}
+            position={segment.position}
+            rotation={segment.rotation}
+            scale={0} // Start with zero scale, will be animated
+          >
+            {geometry}
+            <meshStandardMaterial
+              color={i % 2 === 0 ? color : secondaryColor}
+              emissive={i % 2 === 0 ? color : secondaryColor}
+              emissiveIntensity={1.5}
+              transparent
+              opacity={0.9}
+              toneMapped={false}
+              metalness={0.8} // More metallic for robot look
+              roughness={0.2} // Less rough for shiny robot appearance
+            />
+          </mesh>
+        );
+      })}
     </group>
   );
 };
