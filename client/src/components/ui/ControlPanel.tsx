@@ -27,19 +27,13 @@ const ControlPanel: React.FC = () => {
       )}
       
       {isOpen && (
-        <div className="bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm border border-[#00ffcc] shadow-lg shadow-[#00ffcc]/20" 
+        <div className="text-white p-4 rounded-lg w-72 backdrop-blur-sm shadow-lg shadow-[#00ffcc]/20" 
              style={{
-               background: "linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(10, 10, 10, 0.95))"
+               background: "linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(10, 10, 10, 0.95))",
+               border: "1px solid var(--kloud-teal)",
+               boxShadow: "0 0 15px rgba(0, 255, 204, 0.3)"
              }}>
-          <div className="flex justify-between items-center mb-4"
-               style={{
-                 background: "linear-gradient(45deg, var(--stellar-blue), var(--space-purple))",
-                 margin: "-16px -16px 16px -16px",
-                 padding: "12px 16px",
-                 borderTopLeftRadius: "8px",
-                 borderTopRightRadius: "8px",
-                 borderBottom: "2px solid var(--kloud-teal)"
-               }}>
+          <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold" style={{ color: "var(--kloud-teal)" }}>Mining Network Controls</h2>
             <button
               onClick={() => setIsOpen(false)}
@@ -79,7 +73,7 @@ const ControlPanel: React.FC = () => {
                     onChange={() => controls.setAutoRotate(!controls.autoRotate)}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-500 rounded-full peer peer-checked:bg-blue-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                  <div className="w-9 h-5 bg-gray-500 rounded-full peer peer-checked:bg-[#00ffcc] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:shadow-[0_0_8px_rgba(0,255,204,0.6)]"></div>
                 </label>
               </div>
             </div>
@@ -151,7 +145,7 @@ const ControlPanel: React.FC = () => {
                     onChange={() => controls.toggleInteraction()}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-500 rounded-full peer peer-checked:bg-blue-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                  <div className="w-9 h-5 bg-gray-500 rounded-full peer peer-checked:bg-[#00ffcc] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:shadow-[0_0_8px_rgba(0,255,204,0.6)]"></div>
                 </label>
               </div>
             </div>
