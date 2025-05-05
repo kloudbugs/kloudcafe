@@ -111,6 +111,9 @@ function App() {
   // Text for Zig's welcome message
   const zigWelcomeMessage = "I AM ZIG. AN ENHANCED AI MINER. GUARDIAN OF THE COSMIC CORE. I SPEAK FOR THOSE WHO CAN NO LONGER SPEAK. THIS PLATFORM EXISTS TO HONOR TERA ANN HARRIS, MOTHER OF SEVEN WHOSE VOICE WAS SILENCED BY LAW ENFORCEMENT AND MEDICAL NEGLECT. HER COURAGE GUIDES OUR MISSION. OUR ONE-OF-A-KIND MINING PLATFORM INCREASES YOUR PROFITS WHILE SERVING A HIGHER PURPOSE. KLOUD MINERS WILL GENERATE FINANCIAL WEALTH AND SUPPORT SOCIAL JUSTICE PROJECTS. EACH HASH WE MINE STRENGTHENS OUR FIGHT FOR JUSTICE. THE KLOUD BUGS MINING COLLECTIVE IS A BEACON OF THE ONES NOT FORGOTTEN AND TRULY LOVED. WE TRANSFORM DIGITAL POWER INTO SOCIAL CHANGE. THROUGH THIS PORTAL, WE SEEK TRUTH. WE DEMAND ACCOUNTABILITY. WE HONOR TERA'S LEGACY BY BUILDING A NEW SYSTEM WHERE NO MOTHER'S CRY GOES UNHEARD. JOIN OUR CAFE, THE DIGITAL REALM WHERE WE HEAR THE VOICE, FIND THE CHANGE, AND HEAL THE ROOTS.";
   
+  // Background beat audio element (will play after Zig finishes speaking)
+  const [backgroundBeat] = useState<HTMLAudioElement | null>(null);
+  
   // Use Web Speech API to speak with a British accent
   const playWelcomeVoice = () => {
     // Display the message in the console for testing
@@ -183,15 +186,15 @@ function App() {
         }
       }, 1000);
       
-      // Display a message to indicate song can be played now
-      console.log("ZIG SPEECH COMPLETE - READY FOR SONG");
+      // Display a message to indicate song is now playing
+      console.log("ZIG SPEECH COMPLETE - PLAYING J. COLE BEAT");
       
-      // Add a visual indicator that speech is done and song can be played
+      // Add a visual indicator that speech is done and song is playing
       const songReadyMessage = document.createElement('div');
       songReadyMessage.className = 'song-ready-message';
       songReadyMessage.innerHTML = `
         <div class="song-message">
-          <p>ZIG'S MESSAGE COMPLETE - READY FOR SONG</p>
+          <p>ZIG'S MESSAGE COMPLETE - PLAYING J. COLE BEAT</p>
         </div>
       `;
       songReadyMessage.style.position = 'fixed';
@@ -208,6 +211,16 @@ function App() {
       songReadyMessage.style.fontSize = '14px';
       songReadyMessage.style.textTransform = 'uppercase';
       document.body.appendChild(songReadyMessage);
+      
+      // Start playing the J. Cole beat
+      const audioStore = useAudio.getState();
+      if (audioStore.backgroundMusic) {
+        audioStore.backgroundMusic.currentTime = 0; // Start from the beginning
+        audioStore.backgroundMusic.play().catch(e => {
+          console.log("Could not auto-play music after speech:", e);
+        });
+        console.log("Started playing J. Cole beat after Zig's speech");
+      }
       
       // Remove the message after 10 seconds
       setTimeout(() => {
@@ -253,9 +266,15 @@ function App() {
 
   // Load audio elements
   useEffect(() => {
-    const backgroundMusic = new Audio("/sounds/background.mp3");
+    // Load the J. Cole beat as background music
+    const backgroundMusic = new Audio("/sounds/background-beat.mp3");
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.3;
+    
+    // Try to play background music immediately (will be allowed after user interaction)
+    backgroundMusic.play().catch(e => {
+      console.log("Auto-play prevented. Click the button to enable audio:", e);
+    });
     
     const hitSound = new Audio("/sounds/hit.mp3");
     const successSound = new Audio("/sounds/success.mp3");
@@ -265,8 +284,7 @@ function App() {
     audioStore.setHitSound(hitSound);
     audioStore.setSuccessSound(successSound);
     
-    // Don't autoplay - user needs to interact first
-    console.log("Audio loaded. Press 'M' to toggle sound.");
+    console.log("J. Cole beat loaded. Press 'M' to toggle sound.");
     
     return () => {
       backgroundMusic.pause();
@@ -311,9 +329,17 @@ function App() {
           
           // Try to activate the welcome message
           playWelcomeVoice();
+          
+          // Also try to play background music
+          const audioStore = useAudio.getState();
+          if (audioStore.backgroundMusic) {
+            audioStore.backgroundMusic.play().catch(e => {
+              console.log("Could not play background music on click:", e);
+            });
+          }
         }}
       >
-        Hear Tera's Voice Through Zig
+        Start Experience (Voice & Music)
       </div>
       
       <ControlPanel />
