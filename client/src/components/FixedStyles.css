@@ -1,0 +1,19 @@
+/* Override styles to fix UI issues */
+
+/* Hide unwanted tooltip in bottom left */
+.feature-tooltip:not(.visible) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Ensure proper positioning of tooltips */
+.feature-tooltip {
+  position: absolute !important;
+  z-index: 1000;
+}
+
+/* Hide any floating elements that might be in unwanted positions */
+div[style*="position: fixed"][style*="bottom:"][style*="left:"] {
+  display: none !important;
+}

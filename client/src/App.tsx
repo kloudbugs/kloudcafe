@@ -17,6 +17,7 @@ import * as THREE from "three";
 // Import CSS styles
 import "./components/ZigNotification.css";
 import "./components/HighlightEffects.css";
+import "./components/FixedStyles.css"; // Override styles to fix UI issues
 
 // Main App component
 function App() {
