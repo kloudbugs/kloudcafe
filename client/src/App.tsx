@@ -349,13 +349,11 @@ function App() {
         camera={{ position: [0, 2, 12], fov: 50, near: 0.1, far: 1000 }}
         gl={{ 
           antialias: true,
-          powerPreference: "high-performance", // Changed to high performance
+          powerPreference: "default",
           alpha: false,
           stencil: false,
-          depth: true,
-          preserveDrawingBuffer: true // Added to help with stability
+          depth: true
         }}
-        performance={{ min: 0.5 }} // Added performance minimum
       >
         {showPerformance && <Stats />}
         

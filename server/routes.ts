@@ -3,15 +3,10 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Add route-handling middleware for client-side routes
-  // This is needed to make sure all React Router routes work with direct URL access
-  app.get(['/', '/landing', '/message', '/experience'], (req, res, next) => {
-    // Log the incoming request
-    console.log(`[Route Handler] Received request for: ${req.path}`);
-    next(); // Let the client-side routing handle these routes
-  });
+  // put application routes here
+  // prefix all routes with /api
 
-  // API routes would go here, prefixed with /api
+  // use storage to perform CRUD operations on the storage interface
   // e.g. storage.insertUser(user) or storage.getUserByUsername(username)
 
   const httpServer = createServer(app);
