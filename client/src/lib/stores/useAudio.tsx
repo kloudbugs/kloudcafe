@@ -15,13 +15,14 @@ interface AudioState {
   toggleMute: () => void;
   playHit: () => void;
   playSuccess: () => void;
+  playBackgroundMusic: () => void;
 }
 
 export const useAudio = create<AudioState>((set, get) => ({
   backgroundMusic: null,
   hitSound: null,
   successSound: null,
-  isMuted: true, // Start muted by default
+  isMuted: false, // Start unmuted by default
   
   setBackgroundMusic: (music) => set({ backgroundMusic: music }),
   setHitSound: (sound) => set({ hitSound: sound }),
@@ -69,6 +70,30 @@ export const useAudio = create<AudioState>((set, get) => ({
       successSound.play().catch(error => {
         console.log("Success sound play prevented:", error);
       });
+    }
+  },
+  
+  playBackgroundMusic: () => {
+    const { backgroundMusic, isMuted } = get();
+    if (backgroundMusic) {
+      if (isMuted) {
+        console.log("Background music skipped (muted)");
+        return;
+      }
+      
+      // Reset to beginning if it was already playing
+      backgroundMusic.currentTime = 0;
+      backgroundMusic.volume = 0.3;
+      backgroundMusic.loop = true;
+      
+      // Play and handle errors
+      backgroundMusic.play().then(() => {
+        console.log("Now playing background music");
+      }).catch(error => {
+        console.log("Background music play prevented:", error);
+      });
+    } else {
+      console.log("Background music not loaded yet");
     }
   }
 }));

@@ -136,15 +136,10 @@ function App() {
     // Activate Bitcoin tendrils briefly
     setBitcoinTendrilsActive(true);
     
-    // Start playing the J. Cole beat immediately
+    // Start playing the J. Cole beat immediately using our store method
     const audioStore = useAudio.getState();
-    if (audioStore.backgroundMusic) {
-      audioStore.backgroundMusic.currentTime = 0; // Start from the beginning
-      audioStore.backgroundMusic.play().catch(e => {
-        console.log("Could not auto-play music:", e);
-      });
-      console.log("Playing J. Cole beat");
-    }
+    audioStore.playBackgroundMusic();
+    console.log("Playing J. Cole beat");
     
     // Remove notification and deactivate tendrils after 3 seconds
     setTimeout(() => {
@@ -167,11 +162,6 @@ function App() {
     backgroundMusic.loop = true; 
     backgroundMusic.volume = 0.3;
     
-    // Try to play background music immediately (will be allowed after user interaction)
-    backgroundMusic.play().catch(e => {
-      console.log("Auto-play prevented. Music will play after user interaction:", e);
-    });
-    
     const hitSound = new Audio("/sounds/hit.mp3");
     const successSound = new Audio("/sounds/success.mp3");
     
@@ -180,12 +170,29 @@ function App() {
     audioStore.setHitSound(hitSound);
     audioStore.setSuccessSound(successSound);
     
+    // Play the music using our store method
+    audioStore.playBackgroundMusic();
+    
     console.log("J. Cole beat loaded and playing");
+    
+    // Make sure music plays when user interacts with the page
+    const handleUserInteraction = () => {
+      audioStore.playBackgroundMusic();
+      // Remove event listeners after first interaction
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+    };
+    
+    // Add event listeners for user interaction
+    document.addEventListener('click', handleUserInteraction);
+    document.addEventListener('keydown', handleUserInteraction);
     
     return () => {
       // Clean up
       backgroundMusic.pause();
       backgroundMusic.src = "";
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
     };
   }, []);
 
