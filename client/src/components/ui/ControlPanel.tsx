@@ -108,10 +108,10 @@ const ControlPanel: React.FC = () => {
         </button>
       </div>
       
-      {/* Galactic News button */}
+      {/* C12 Platform button */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
         <button
-          onClick={() => navigate('/news')}
+          onClick={() => navigate('/c12')}
           className="cosmic-main-btn"
           style={{ 
             width: '64px',
@@ -120,13 +120,13 @@ const ControlPanel: React.FC = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'rgba(0, 204, 255, 0.3)',
-            boxShadow: '0 0 15px rgba(0, 204, 255, 0.5)',
-            border: '2px solid #00ccff'
+            backgroundColor: 'rgba(153, 0, 255, 0.3)',
+            boxShadow: '0 0 15px rgba(153, 0, 255, 0.5)',
+            border: '2px solid #9900ff'
           }}
         >
-          <Radio className="w-5 h-5 mb-1 text-cyan-400" />
-          <span className="text-[10px]">News</span>
+          <Radio className="w-5 h-5 mb-1 text-purple-400" />
+          <span className="text-[10px]">C12 Platform</span>
         </button>
       </div>
       
