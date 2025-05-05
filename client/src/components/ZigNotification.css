@@ -1,12 +1,12 @@
 /* Zig Notification Styles - Primal/Ancient Theme */
 .zig-notification {
   position: fixed;
-  top: 65%; /* Back to top positioning, but lower to see the core */
+  top: 65%; /* Moved down from 50% to 65% to better see the orbit and core ball */
   left: 50%;
-  transform: translate(-50%, -50%); /* Go back to both axis translation */
+  transform: translate(-50%, -50%);
   z-index: 1000;
   max-width: 90%;
-  width: 450px; /* Keep the smaller width */
+  width: 650px;
   animation: fadeIn 0.7s ease-out;
 }
 
@@ -14,9 +14,9 @@
   background-color: rgba(0, 0, 0, 0.7); /* More transparent to see through to the core ball */
   border: 2px solid #00ffff;
   border-radius: 5px;
-  padding: 10px; /* Reduced padding */
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), 
-              inset 0 0 10px rgba(0, 255, 255, 0.2);
+  padding: 18px;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7), 
+              inset 0 0 15px rgba(0, 255, 255, 0.3);
   color: white;
   font-family: 'Courier New', monospace;
   text-align: center;
@@ -26,33 +26,31 @@
 .zig-message h2 {
   color: #00ffff;
   margin-top: 0;
-  font-size: 16px; /* Smaller font */
+  font-size: 24px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   font-weight: 800;
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
   animation: glow 1.5s infinite alternate;
-  margin-bottom: 8px; /* Reduced margin */
+  margin-bottom: 15px;
 }
 
 .zig-message p {
-  font-size: 10px; /* Smaller font */
-  line-height: 1.4; /* Reduced line height */
+  font-size: 14px;
+  line-height: 1.7;
   margin-bottom: 0;
   text-align: center;
   color: #ffffff;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
   text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-  max-height: 150px; /* Set a max height */
-  overflow-y: auto; /* Add scroll if needed */
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -60%); /* Slight fade from a bit higher */
+    transform: translate(-50%, -75%); /* Adjusted to match the new position */
   }
   to {
     opacity: 1;

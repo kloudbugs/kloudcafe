@@ -17,108 +17,25 @@
   pointer-events: all;
 }
 
-/* Positioning classes - moved to sides to not block center view */
+/* Positioning classes */
 .star-notification.top-left {
-  top: 100px;
-  left: 30px;
+  top: 20px;
+  left: 20px;
 }
 
 .star-notification.top-right {
-  top: 100px;
-  right: 30px;
+  top: 20px;
+  right: 20px;
 }
 
 .star-notification.bottom-left {
-  bottom: 100px;
-  left: 30px;
+  bottom: 20px;
+  left: 20px;
 }
 
 .star-notification.bottom-right {
-  bottom: 100px;
-  right: 30px;
-}
-
-/* Click here arrow */
-.click-arrow {
-  position: absolute;
-  width: 80px;
-  height: 30px;
-  background-color: #ffcc00;
-  color: black;
-  font-weight: bold;
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 15px;
-  animation: bounce 1.5s infinite;
-  z-index: 2001;
-}
-
-.click-arrow:after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
-
-/* Position the arrow based on the notification position */
-.star-notification.top-right .click-arrow {
-  top: -40px;
+  bottom: 20px;
   right: 20px;
-}
-
-.star-notification.top-right .click-arrow:after {
-  bottom: -8px;
-  right: 15px;
-  border-width: 10px 8px 0 8px;
-  border-color: #ffcc00 transparent transparent transparent;
-}
-
-.star-notification.top-left .click-arrow {
-  top: -40px;
-  left: 20px;
-}
-
-.star-notification.top-left .click-arrow:after {
-  bottom: -8px;
-  left: 15px;
-  border-width: 10px 8px 0 8px;
-  border-color: #ffcc00 transparent transparent transparent;
-}
-
-.star-notification.bottom-right .click-arrow {
-  bottom: -40px;
-  right: 20px;
-}
-
-.star-notification.bottom-right .click-arrow:after {
-  top: -8px;
-  right: 15px;
-  border-width: 0 8px 10px 8px;
-  border-color: transparent transparent #ffcc00 transparent;
-}
-
-.star-notification.bottom-left .click-arrow {
-  bottom: -40px;
-  left: 20px;
-}
-
-.star-notification.bottom-left .click-arrow:after {
-  top: -8px;
-  left: 15px;
-  border-width: 0 8px 10px 8px;
-  border-color: transparent transparent #ffcc00 transparent;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
 .star-shape {

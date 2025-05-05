@@ -24,7 +24,7 @@ function App() {
   const [bitcoinTendrilsActive, setBitcoinTendrilsActive] = useState(false);
   const welcomeAudioRef = useRef<HTMLAudioElement>(null);
 
-  // Initialize speech synthesis voices but don't auto-play
+  // Initialize speech synthesis voices and force speech
   useEffect(() => {
     let voicesLoaded = false;
     
@@ -49,11 +49,13 @@ function App() {
         console.log("No British voice found, will use default voice");
       }
       
-      // Just log that voices are loaded, but don't auto-play
-      console.log("Voices loaded - ready for user interaction");
+      // Attempt to speak after voices are loaded
+      console.log("Playing Zig's welcome message (British AI voice)");
       console.log("Press 'V' to replay the message at any time");
       
-      // Do NOT auto-play the welcome message - wait for Moon notification click instead
+      setTimeout(() => {
+        playWelcomeVoice();
+      }, 1000);
     };
 
     // This helps load voices in some browsers
@@ -81,20 +83,8 @@ function App() {
       }
     }, 2000);
     
-    // Listen for AI voice activation event from moon click
-    const handleStartAiVoiceEvent = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      if (customEvent.detail?.activated) {
-        console.log('AI voice activated via moon click!');
-        playWelcomeVoice();
-      }
-    };
-    
-    window.addEventListener('startAiVoice', handleStartAiVoiceEvent);
-    
     return () => {
       clearTimeout(backupTimer);
-      window.removeEventListener('startAiVoice', handleStartAiVoiceEvent);
     };
   }, []);
 

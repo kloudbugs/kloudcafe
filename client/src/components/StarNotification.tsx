@@ -45,9 +45,6 @@ const StarNotification: React.FC<StarNotificationProps> = ({
       onClick={handleClick}
       ref={starRef}
     >
-      {/* Click here arrow */}
-      <div className="click-arrow">CLICK HERE</div>
-      
       <div className="star-shape">
         <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
           <path d="M25 0 L31.5 17.5 L50 17.5 L35 28.5 L40 45 L25 35 L10 45 L15 28.5 L0 17.5 L18.5 17.5 Z" />

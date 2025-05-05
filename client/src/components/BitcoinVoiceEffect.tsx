@@ -40,15 +40,11 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
     }, 10000);
   };
   
-  // Create a global event for feature discovery
+  // Handle notification click
   const handleStarClick = () => {
     // Show features or tooltips when star is clicked
-    console.log('Star clicked - showing features!');
+    console.log('Star clicked - show features!');
     setShowStarNotification(false);
-    
-    // Dispatch a custom event to trigger feature discovery
-    const event = new CustomEvent('showFeatureTour', { detail: { activated: true } });
-    window.dispatchEvent(event);
   };
   
   // Clean up on unmount
@@ -68,24 +64,18 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
         playWelcomeMessage(playEffect);
       }
     };
-    
-    // Listen for custom event to start AI voice
-    const handleStartAiVoiceEvent = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      if (customEvent.detail?.activated && !isPlaying) {
-        console.log('AI voice activated via moon click!');
-        playWelcomeMessage(playEffect);
-      }
-    };
 
     window.addEventListener('keydown', keyHandler);
-    window.addEventListener('startAiVoice', handleStartAiVoiceEvent);
     
-    // NO auto-play - wait for moon click instead
+    // Auto-play when the component mounts (after a delay to ensure audio is ready)
+    const timer = setTimeout(() => {
+      console.log("Auto-playing welcome message...");
+      playWelcomeMessage(playEffect);
+    }, 3000);
     
     return () => {
       window.removeEventListener('keydown', keyHandler);
-      window.removeEventListener('startAiVoice', handleStartAiVoiceEvent);
+      clearTimeout(timer);
     };
   }, [isPlaying]);
 
