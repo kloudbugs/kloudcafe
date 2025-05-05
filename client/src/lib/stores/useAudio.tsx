@@ -28,40 +28,11 @@ export const useAudio = create<AudioState>((set, get) => ({
   setSuccessSound: (sound) => set({ successSound: sound }),
   
   toggleMute: () => {
-    const { isMuted, backgroundMusic } = get();
+    const { isMuted } = get();
     const newMutedState = !isMuted;
     
-    // Update the muted state
+    // Just update the muted state
     set({ isMuted: newMutedState });
-    
-    // Handle background music
-    if (backgroundMusic) {
-      if (newMutedState) {
-        // Muting - pause the music
-        backgroundMusic.pause();
-      } else {
-        // Unmuting - play the music
-        const playPromise = backgroundMusic.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              console.log("Background music started successfully");
-            })
-            .catch(error => {
-              console.error("Failed to play background music:", error);
-              // Auto-resume playback when user interacts with the document
-              document.body.addEventListener('click', function resumeOnInteraction() {
-                backgroundMusic.play()
-                  .then(() => {
-                    console.log("Music started after user interaction");
-                    document.body.removeEventListener('click', resumeOnInteraction);
-                  })
-                  .catch(e => console.error("Still couldn't play:", e));
-              }, { once: true });
-            });
-        }
-      }
-    }
     
     // Log the change
     console.log(`Sound ${newMutedState ? 'muted' : 'unmuted'}`);
