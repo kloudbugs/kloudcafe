@@ -91,164 +91,131 @@ const createLightningBolt = (
   };
 };
 
-// Create a robotic hand shape from simple geometries
-const createHandSegments = (
+// Create a Taurus constellation-like pattern with nodes and connecting starry electric lines
+const createConstellationNodes = (
   start: THREE.Vector3,
   end: THREE.Vector3,
-  fingerCount: number = 5
+  nodeCount: number = 12 // More nodes for a richer constellation
 ): HandSegment[] => {
   const segments: HandSegment[] = [];
   const direction = new THREE.Vector3().subVectors(end, start).normalize();
   
-  // Create palm - more rectangular for robot hand
-  const palmPosition = new THREE.Vector3().lerpVectors(start, end, 0.6);
+  // Create a central node - main star of the constellation
+  const centerPosition = new THREE.Vector3().lerpVectors(start, end, 0.5);
   segments.push({
-    position: palmPosition,
-    rotation: new THREE.Euler(
-      Math.random() * Math.PI * 0.1, // Less random rotation for more mechanical look
-      Math.random() * Math.PI * 0.1,
-      Math.random() * Math.PI * 0.1
-    ),
-    scale: 0.28, // Larger, more consistent size for the palm
-    progress: 0
-  });
-  
-  // Add wrist connector
-  const wristPosition = new THREE.Vector3().lerpVectors(start, end, 0.45);
-  segments.push({
-    position: wristPosition,
-    rotation: new THREE.Euler(0, 0, 0), // Aligned perfectly for mechanical look
-    scale: 0.22,
-    progress: 0
-  });
-  
-  // Add forearm segment
-  const forearmPosition = new THREE.Vector3().lerpVectors(start, end, 0.3);
-  segments.push({
-    position: forearmPosition,
+    position: centerPosition,
     rotation: new THREE.Euler(0, 0, 0),
-    scale: 0.20,
+    scale: 0.18, // Larger central star
     progress: 0
   });
   
-  // Create fingers - more mechanical, precise arrangement
-  const fingerBasePosition = new THREE.Vector3().lerpVectors(start, end, 0.78);
-  const fingerSpread = 0.2; // Wider spread for robot hand
+  // Create outer nodes in a Taurus-like horned pattern
+  // The Taurus constellation looks roughly like a V with extensions
   
-  for (let i = 0; i < fingerCount; i++) {
-    // Calculate position offset for finger in a more structured pattern
-    // For a robot hand, we'll make the fingers more parallel and aligned
-    
-    let angle;
-    if (fingerCount === 5) {
-      // Special case for 5 fingers to create a thumb
-      if (i === 0) {
-        // Thumb positioned separately
-        angle = Math.PI * 0.7; // Angled more to the side
-      } else {
-        // Other 4 fingers evenly spaced
-        angle = ((i - 0.5) / (fingerCount - 1.5)) * Math.PI * 0.7;
-      }
-    } else {
-      angle = (i / (fingerCount - 1)) * Math.PI * 0.8;
-    }
-    
-    const fingerOffset = new THREE.Vector3(
-      Math.cos(angle) * fingerSpread,
-      Math.sin(angle) * fingerSpread,
-      0
-    );
-    
-    // Create orthogonal basis for spreading fingers
-    const forward = direction.clone();
-    const right = new THREE.Vector3(1, 0, 0);
-    if (Math.abs(forward.dot(right)) > 0.9) {
-      right.set(0, 1, 0);
-    }
-    
-    const up = new THREE.Vector3().crossVectors(forward, right).normalize();
-    right.crossVectors(up, forward).normalize();
-    
-    // Apply the offset in local space
-    const worldOffset = new THREE.Vector3()
-      .addScaledVector(right, fingerOffset.x)
-      .addScaledVector(up, fingerOffset.y);
-    
-    const fingerPosition = fingerBasePosition.clone().add(worldOffset);
-    
-    // Calculate precise finger rotation based on position - more mechanical
-    let fingerRotation;
-    if (i === 0 && fingerCount === 5) {
-      // Thumb has special rotation
-      fingerRotation = new THREE.Euler(
-        Math.PI * 0.1,
-        Math.PI * 0.2,
-        Math.PI * 0.1
-      );
-    } else {
-      // Regular finger rotation - minimal randomness for mechanical precision
-      fingerRotation = new THREE.Euler(
-        Math.PI * 0.05 * Math.sin(i), // Slight predictable variation
-        Math.PI * 0.05 * Math.cos(i),
-        0
-      );
-    }
-    
-    // Create knuckle segment for robotic finger
-    segments.push({
-      position: fingerPosition,
-      rotation: fingerRotation,
-      scale: 0.12, // Uniform size for mechanical look
-      progress: 0
-    });
-    
-    // Create finger middle segment
-    const fingerMiddlePosition = fingerPosition.clone().add(
-      direction.clone().multiplyScalar(0.15)
-    );
-    
-    segments.push({
-      position: fingerMiddlePosition,
-      rotation: fingerRotation,
-      scale: 0.09, // Progressively smaller for a tapered finger
-      progress: 0
-    });
-    
-    // Create finger tip segment
-    const fingerTipPosition = fingerMiddlePosition.clone().add(
-      direction.clone().multiplyScalar(0.15)
-    );
+  // Define a radius for the constellation spread
+  const constellationRadius = 1.2;
+  
+  // Create the main V shape nodes (the face of Taurus)
+  const taurusNode1 = centerPosition.clone().add(
+    new THREE.Vector3(constellationRadius * 0.4, constellationRadius * 0.4, 0)
+  );
+  
+  const taurusNode2 = centerPosition.clone().add(
+    new THREE.Vector3(-constellationRadius * 0.4, constellationRadius * 0.4, 0)
+  );
+  
+  // Central star (Aldebaran - the Eye of the Bull)
+  segments.push({
+    position: centerPosition.clone().add(new THREE.Vector3(0, constellationRadius * 0.2, 0)),
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.15, // Prominent star
+    progress: 0
+  });
+  
+  // Create the V Shape (face) of Taurus
+  segments.push({
+    position: taurusNode1,
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.1,
+    progress: 0
+  });
+  
+  segments.push({
+    position: taurusNode2,
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.1,
+    progress: 0
+  });
+  
+  // Create the horn extensions
+  // Right horn
+  segments.push({
+    position: taurusNode1.clone().add(new THREE.Vector3(constellationRadius * 0.3, constellationRadius * 0.2, 0)),
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.08,
+    progress: 0
+  });
+  
+  segments.push({
+    position: taurusNode1.clone().add(new THREE.Vector3(constellationRadius * 0.6, constellationRadius * 0.3, 0)),
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.06,
+    progress: 0
+  });
+  
+  // Left horn
+  segments.push({
+    position: taurusNode2.clone().add(new THREE.Vector3(-constellationRadius * 0.3, constellationRadius * 0.2, 0)),
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.08,
+    progress: 0
+  });
+  
+  segments.push({
+    position: taurusNode2.clone().add(new THREE.Vector3(-constellationRadius * 0.6, constellationRadius * 0.3, 0)),
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: 0.06,
+    progress: 0
+  });
+  
+  // Add the Pleiades star cluster (the Seven Sisters) as smaller nodes
+  const pleiadesCenter = centerPosition.clone().add(new THREE.Vector3(0, constellationRadius * 0.7, 0));
+  
+  // Create a small cluster of 7 stars
+  for (let i = 0; i < 7; i++) {
+    const angle = (i / 7) * Math.PI * 2;
+    const radius = 0.2 + Math.random() * 0.1;
     
     segments.push({
-      position: fingerTipPosition,
-      rotation: fingerRotation,
-      scale: 0.06, // Smallest segment at tip
+      position: pleiadesCenter.clone().add(
+        new THREE.Vector3(
+          Math.cos(angle) * radius,
+          Math.sin(angle) * radius,
+          0
+        )
+      ),
+      rotation: new THREE.Euler(0, 0, 0),
+      scale: 0.03 + Math.random() * 0.02, // Small stars in the cluster
       progress: 0
     });
   }
   
-  // Add small connection points between segments for a more robotic look
-  // These are small connector cylinders
-  const connectorPositions = segments.map(segment => segment.position);
-  
-  // Create connectors between adjacent segments
-  for (let i = 1; i < connectorPositions.length; i++) {
-    // Only connect segments that are close to each other
-    const distance = connectorPositions[i].distanceTo(connectorPositions[i-1]);
-    if (distance < 0.3) {
-      const connectorPosition = new THREE.Vector3().lerpVectors(
-        connectorPositions[i], 
-        connectorPositions[i-1], 
-        0.5
-      );
-      
-      segments.push({
-        position: connectorPosition,
-        rotation: new THREE.Euler(0, 0, 0),
-        scale: 0.03, // Very small connectors
-        progress: 0
-      });
-    }
+  // Add some random background stars to fill out the constellation
+  for (let i = 0; i < 10; i++) {
+    const randomPosition = centerPosition.clone().add(
+      new THREE.Vector3(
+        (Math.random() - 0.5) * constellationRadius * 2,
+        (Math.random() - 0.5) * constellationRadius * 2,
+        (Math.random() - 0.5) * constellationRadius * 0.5
+      )
+    );
+    
+    segments.push({
+      position: randomPosition,
+      rotation: new THREE.Euler(0, 0, 0),
+      scale: 0.02 + Math.random() * 0.04, // Various sized background stars
+      progress: 0
+    });
   }
   
   return segments;
@@ -322,9 +289,9 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
     return boltsArray;
   }, [position, target, color, secondaryColor]);
   
-  // Create hand segments
+  // Create constellation nodes for the Taurus pattern
   const handSegments = useMemo<HandSegment[]>(() => {
-    return createHandSegments(position, target, 5);
+    return createConstellationNodes(position, target);
   }, [position, target]);
   
   // Create lines for each bolt
