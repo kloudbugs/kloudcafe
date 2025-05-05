@@ -1,9 +1,10 @@
 import React, { useRef, useMemo, useEffect, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useControls } from '../lib/stores/useControls';
 import { useAudio } from '../lib/stores/useAudio';
 import BitcoinExplosion from './BitcoinExplosion';
+import ElectricHand from './ElectricHand';
 
 interface MiningBlocksProps {
   count?: number;
@@ -25,10 +26,21 @@ interface BlockDataType {
   pulseSpeed: number;
   explodeCountdown: number;
   exploding: boolean;
+  // Add voltage field to track electric charge
+  voltage: number;
+  // Track if this block has a hand effect active
+  handEffectActive: boolean;
 }
 
 interface ExplosionData {
   position: THREE.Vector3;
+  color: string;
+  id: number;
+}
+
+interface ElectricHandData {
+  position: THREE.Vector3;
+  target: THREE.Vector3;
   color: string;
   id: number;
 }
@@ -46,12 +58,18 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
   const groupRefs = useRef<THREE.Group[]>([]);
   
   const [explosions, setExplosions] = useState<ExplosionData[]>([]);
+  const [electricHands, setElectricHands] = useState<ElectricHandData[]>([]);
   const [nextExplosionId, setNextExplosionId] = useState(0);
+  const [nextHandId, setNextHandId] = useState(0);
+  
+  // Reference to camera for positioning electric hands
+  const { camera } = useThree();
   
   const controls = useControls();
   const audio = useAudio();
   const coreColor = controls.getColorByScheme('core');
   const tendrilColor = controls.getColorByScheme('tendril');
+  const electricBlue = '#00aaff'; // Electric effect color
   
   // Create inner block geometry and materials - using tunic cube style
   const blockGeometry = useMemo(() => new THREE.BoxGeometry(0.4, 0.4, 0.4), []);
@@ -130,6 +148,10 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
         pulseSpeed,
         explodeCountdown,
         exploding: false,
+        // Initialize voltage field (0 to 1 representing charge level)
+        voltage: Math.random() * 0.5,
+        // No hand effect initially
+        handEffectActive: false,
       });
     }
     
@@ -142,6 +164,31 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
     groupRefs.current = groupRefs.current.slice(0, count);
   }, [count]);
   
+  // Create an electric hand effect from camera to block
+  const createElectricHand = (targetPosition: THREE.Vector3) => {
+    // Use camera position as starting point for the electric hand
+    const cameraPosition = camera.position.clone();
+    
+    // Create a new electric hand effect
+    const newHand: ElectricHandData = {
+      position: cameraPosition,
+      target: targetPosition.clone(),
+      color: electricBlue,
+      id: nextHandId,
+    };
+    
+    setElectricHands(prev => [...prev, newHand]);
+    setNextHandId(prev => prev + 1);
+    
+    // Play electricity sound
+    if (audio.hitSound) {
+      audio.playHit();
+    }
+    
+    // Return the ID for cleanup later
+    return nextHandId;
+  };
+  
   // Handle explosion of a block
   const explodeBlock = (index: number, position: THREE.Vector3) => {
     // Make block invisible - will reset visibility later
@@ -149,19 +196,28 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
       groupRefs.current[index].visible = false;
     }
     
-    // Create explosion at this position
-    const newExplosion = {
-      position: position.clone(),
-      color: Math.random() > 0.5 ? tendrilColor : coreColor,
-      id: nextExplosionId,
-    };
-    
-    setExplosions(prev => [...prev, newExplosion]);
-    setNextExplosionId(prev => prev + 1);
-    
-    // Play explosion sound
-    if (audio.hitSound) {
-      audio.playHit();
+    // First trigger electric hand effect from camera to block
+    if (!blockData[index].handEffectActive) {
+      blockData[index].handEffectActive = true;
+      createElectricHand(position);
+      
+      // Delay explosion to allow electric effect to finish
+      setTimeout(() => {
+        // Create explosion at this position
+        const newExplosion = {
+          position: position.clone(),
+          color: Math.random() > 0.5 ? tendrilColor : coreColor,
+          id: nextExplosionId,
+        };
+        
+        setExplosions(prev => [...prev, newExplosion]);
+        setNextExplosionId(prev => prev + 1);
+        
+        // Play explosion sound
+        if (audio.hitSound) {
+          audio.playHit();
+        }
+      }, 1500); // Delay explosion by 1.5 seconds
     }
     
     // Reset block state after explosion
@@ -171,15 +227,22 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
         groupRefs.current[index].visible = true;
       }
       
-      // Reset explosion timer for future
+      // Reset explosion timer and voltage for future
       blockData[index].explodeCountdown = 15 + Math.random() * 45;
       blockData[index].exploding = false;
-    }, 2000);
+      blockData[index].handEffectActive = false;
+      blockData[index].voltage = Math.random() * 0.5;
+    }, 3500); // Longer timeout to accommodate electric effect plus explosion
   };
   
   // Remove an explosion when it's complete
   const handleExplosionComplete = (id: number) => {
     setExplosions(prev => prev.filter(exp => exp.id !== id));
+  };
+  
+  // Remove an electric hand effect when it's complete
+  const handleElectricHandComplete = (id: number) => {
+    setElectricHands(prev => prev.filter(hand => hand.id !== id));
   };
   
   // Animation loop
@@ -258,6 +321,23 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
             />
             {/* Edge lines for tunic cube effect */}
             <lineSegments geometry={edgesGeometry} material={lineMaterial} />
+            
+            {/* Show Bitcoin logo for blocks with higher voltage */}
+            {data.voltage > 0.7 && !data.exploding && (
+              <sprite
+                scale={[0.3, 0.3, 0.3]}
+                position={[0, 0.3, 0]}
+              >
+                <spriteMaterial
+                  map={new THREE.TextureLoader().load("/images/bitcoin_symbol.png")}
+                  transparent
+                  opacity={0.8}
+                  color="#ffcc00"
+                  toneMapped={false}
+                  depthTest={false}
+                />
+              </sprite>
+            )}
           </group>
         ))}
       </group>
@@ -269,6 +349,18 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
           position={explosion.position}
           color={explosion.color}
           onComplete={() => handleExplosionComplete(explosion.id)}
+        />
+      ))}
+      
+      {/* Render electric hand effects */}
+      {electricHands.map((hand) => (
+        <ElectricHand
+          key={hand.id}
+          position={hand.position}
+          target={hand.target}
+          color={hand.color}
+          duration={2.0}
+          onComplete={() => handleElectricHandComplete(hand.id)}
         />
       ))}
     </>
