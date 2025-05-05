@@ -305,17 +305,18 @@ function App() {
         className="interaction-button"
         style={{
           position: 'fixed',
-          bottom: '20px',
+          bottom: '110px',
           right: '20px',
           zIndex: 1000,
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
           color: '#00ffff',
-          padding: '10px 15px',
-          borderRadius: '5px',
-          border: '1px solid #00ffff',
+          padding: '12px 18px',
+          borderRadius: '8px',
+          border: '2px solid #00ffff',
           cursor: 'pointer',
           fontSize: '14px',
-          boxShadow: '0 0 10px rgba(0, 255, 255, 0.5)',
+          fontWeight: 'bold',
+          boxShadow: '0 0 15px rgba(0, 255, 255, 0.6)',
           userSelect: 'none'
         }}
         onClick={() => {
