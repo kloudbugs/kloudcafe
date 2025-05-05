@@ -12,7 +12,7 @@ interface StarNotificationProps {
 
 const StarNotification: React.FC<StarNotificationProps> = ({
   visible,
-  position = 'top-right',
+  position = 'top-left',
   pulseColor = '#ffcc00',
   size = 50,
   message = 'New Feature!',

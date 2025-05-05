@@ -43,8 +43,57 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
   // Handle notification click
   const handleStarClick = () => {
     // Show features or tooltips when star is clicked
-    console.log('Star clicked - show features!');
+    console.log('Star clicked - showing feature highlights!');
     setShowStarNotification(false);
+    
+    // Here we highlight the bitcoin core
+    // First we need to wait for the DOM to fully reflect the Three.js scene
+    setTimeout(() => {
+      // Apply the highlight to the bitcoin core
+      const bitcoinCoreElements = document.querySelectorAll('canvas');
+      
+      // First add a highlight overlay to indicate where the core is
+      const overlay = document.createElement('div');
+      overlay.className = 'highlight-overlay';
+      overlay.style.position = 'fixed';
+      overlay.style.top = '50%';
+      overlay.style.left = '50%';
+      overlay.style.width = '200px';
+      overlay.style.height = '200px';
+      overlay.style.marginLeft = '-100px';
+      overlay.style.marginTop = '-100px';
+      overlay.style.borderRadius = '50%';
+      overlay.style.border = '4px dashed #ffcc00';
+      overlay.style.boxShadow = '0 0 20px rgba(255, 204, 0, 0.8)';
+      overlay.style.zIndex = '1000';
+      overlay.style.pointerEvents = 'none';
+      overlay.style.animation = 'highlight-pulse 2s infinite';
+      
+      document.body.appendChild(overlay);
+      
+      // Display a tooltip above it
+      const tooltip = document.createElement('div');
+      tooltip.className = 'feature-tooltip';
+      tooltip.style.position = 'fixed';
+      tooltip.style.top = 'calc(50% - 150px)';
+      tooltip.style.left = '50%';
+      tooltip.style.transform = 'translateX(-50%)';
+      tooltip.style.zIndex = '1001';
+      tooltip.style.opacity = '1';
+      tooltip.style.pointerEvents = 'none';
+      tooltip.innerHTML = `
+        <h3 class="feature-tooltip-title">COSMIC CORE</h3>
+        <p class="feature-tooltip-description">This glowing Bitcoin core is the central source of cosmic mining power.</p>
+      `;
+      
+      document.body.appendChild(tooltip);
+      
+      // Remove the highlights after 5 seconds
+      setTimeout(() => {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+      }, 5000);
+    }, 100);
   };
   
   // Clean up on unmount

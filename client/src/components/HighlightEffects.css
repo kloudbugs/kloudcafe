@@ -1,0 +1,23 @@
+/* Highlight pulse effect for feature discovery */
+.highlight-pulse {
+  animation: highlight-pulse 2s infinite;
+  outline: 4px solid #ffcc00;
+  outline-offset: 2px;
+  z-index: 100;
+  position: relative;
+}
+
+@keyframes highlight-pulse {
+  0% {
+    outline-color: rgba(255, 204, 0, 0.5);
+    outline-offset: 2px;
+  }
+  50% {
+    outline-color: rgba(255, 204, 0, 1);
+    outline-offset: 6px;
+  }
+  100% {
+    outline-color: rgba(255, 204, 0, 0.5);
+    outline-offset: 2px;
+  }
+}

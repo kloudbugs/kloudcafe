@@ -14,8 +14,9 @@ import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 import * as THREE from "three";
 
-// Import Zig notification styles
+// Import CSS styles
 import "./components/ZigNotification.css";
+import "./components/HighlightEffects.css";
 
 // Main App component
 function App() {

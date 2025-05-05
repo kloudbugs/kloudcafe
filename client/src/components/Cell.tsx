@@ -24,19 +24,21 @@ const Cell: React.FC = () => {
   
   return (
     <group ref={(ref) => ref && (cellGroup.copy(ref), ref.clear(), ref.add(cellGroup))}>
-      {/* The electric grid core */}
-      <ElectricGrid 
-        size={3} 
-        gridDivisions={4}
-        nodeSize={0.15}
-      />
-      
-      {/* Electric tendrils inside the core */}
-      <ElectricTendrils 
-        count={12} 
-        length={1.5} 
-        width={0.03}
-      />
+      {/* The bitcoin core with electric grid - add className for DOM access */}
+      <group className="bitcoin-core">
+        <ElectricGrid 
+          size={3} 
+          gridDivisions={4}
+          nodeSize={0.15}
+        />
+        
+        {/* Electric tendrils inside the core */}
+        <ElectricTendrils 
+          count={12} 
+          length={1.5} 
+          width={0.03}
+        />
+      </group>
       
       {/* Mining blocks orbiting around core */}
       <MiningBlocks 
