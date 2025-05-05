@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zig's Welcome Message</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        button {
+            background-color: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .message {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+        audio {
+            width: 100%;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Zig's Welcome Message (British AI Voice)</h1>
+    
+    <div class="message">
+        Hello fellow kloud bugminers, my name is Zig. If you've made it to this page, you're on the right galactic path.
+        
+        I am one of your Tera guardians configured and created by your admin guardian. I am a super enchanted AI miner you can only find here, computing all our hashes together so we don't fail. 
+        
+        It's time to save the world and save lives. Welcome to the Kloud Bugs mining cafe. Let's get started...
+    </div>
+    
+    <button id="speak">Generate British AI Voice</button>
+    <button id="download" disabled>Download MP3</button>
+    
+    <audio id="audio" controls></audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const text = `Hello fellow kloud bugminers, my name is Zig. If you've made it to this page, you're on the right galactic path. I am one of your Tera guardians configured and created by your admin guardian. I am a super enchanted AI miner you can only find here, computing all our hashes together so we don't fail. It's time to save the world and save lives. Welcome to the Kloud Bugs mining cafe. Let's get started...`;
+            const speakBtn = document.getElementById('speak');
+            const downloadBtn = document.getElementById('download');
+            const audio = document.getElementById('audio');
+            let audioBlob = null;
+            
+            // Find a British voice if available
+            function findBritishVoice() {
+                const voices = window.speechSynthesis.getVoices();
+                return voices.find(voice => 
+                    voice.lang.includes('en-GB') || 
+                    voice.name.includes('British') ||
+                    voice.name.includes('UK')
+                ) || voices[0]; // Fallback to first voice
+            }
+            
+            // Load voices when available
+            window.speechSynthesis.onvoiceschanged = findBritishVoice;
+            
+            speakBtn.addEventListener('click', () => {
+                // Set up speech synthesis
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = findBritishVoice();
+                utterance.rate = 0.9; // Slightly slower
+                utterance.pitch = 1.0;
+                
+                // Set up audio recording
+                const audioContext = new AudioContext();
+                const destination = audioContext.createMediaStreamDestination();
+                const mediaRecorder = new MediaRecorder(destination.stream);
+                const audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audio.src = audioUrl;
+                    downloadBtn.disabled = false;
+                };
+                
+                mediaRecorder.start();
+                
+                // Speak the text
+                window.speechSynthesis.speak(utterance);
+                
+                // When done speaking, stop recording
+                utterance.onend = () => {
+                    mediaRecorder.stop();
+                };
+            });
+            
+            downloadBtn.addEventListener('click', () => {
+                if (!audioBlob) return;
+                
+                const url = URL.createObjectURL(audioBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'welcome-message.mp3';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+        });
+    </script>
+</body>
+</html>

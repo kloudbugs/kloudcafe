@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <circle cx="200" cy="200" r="180" fill="#001133"/>
+  <ellipse cx="200" cy="120" rx="120" ry="40" fill="#FFCC00"/>
+  <circle cx="200" cy="110" r="20" fill="#00FFFF"/>
+  <circle cx="150" cy="200" r="30" fill="#00CCFF"/>
+  <circle cx="250" cy="200" r="30" fill="#00CCFF"/>
+  <text x="200" y="330" font-family="Arial" font-size="36" font-weight="bold" text-anchor="middle" fill="#FFCC00">MINER</text>
+</svg>

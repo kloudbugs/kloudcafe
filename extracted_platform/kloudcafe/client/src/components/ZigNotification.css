@@ -1,0 +1,83 @@
+/* Zig Notification Styles - Primal/Ancient Theme */
+.zig-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  max-width: 90%;
+  width: 650px;
+  animation: fadeIn 0.7s ease-out;
+}
+
+.zig-message {
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 2px solid #00ffff;
+  border-radius: 5px;
+  padding: 18px;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7), 
+              inset 0 0 15px rgba(0, 255, 255, 0.3);
+  color: white;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+.zig-message h2 {
+  color: #00ffff;
+  margin-top: 0;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+  animation: glow 1.5s infinite alternate;
+  margin-bottom: 15px;
+}
+
+.zig-message p {
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 0;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -65%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+                inset 0 0 5px rgba(0, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.9),
+                inset 0 0 20px rgba(0, 255, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+                inset 0 0 5px rgba(0, 255, 255, 0.2);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+  }
+  to {
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+  }
+}

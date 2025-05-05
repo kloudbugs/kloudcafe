@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        audio {
+            display: block;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>British Voice Text-to-Speech Generator</h1>
+    <p>This tool generates British-accented speech and allows you to download it as an MP3 file.</p>
+    
+    <textarea id="text" placeholder="Enter text to convert to speech">Welcome to the cosmic Bitcoin mining experience. Prepare for an extraordinary journey through digital constellations and blockchain galaxies.</textarea>
+    
+    <div>
+        <button id="generate">Generate British Voice</button>
+        <button id="play" disabled>Play</button>
+        <button id="download" disabled>Download MP3</button>
+    </div>
+    
+    <audio id="audio" controls></audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textArea = document.getElementById('text');
+            const generateBtn = document.getElementById('generate');
+            const playBtn = document.getElementById('play');
+            const downloadBtn = document.getElementById('download');
+            const audioElement = document.getElementById('audio');
+            
+            let audioBlob = null;
+            
+            // Function to find a British voice
+            function findBritishVoice() {
+                const voices = window.speechSynthesis.getVoices();
+                // Try to find a British English voice
+                return voices.find(voice => 
+                    voice.lang.includes('en-GB') || 
+                    voice.name.includes('British') ||
+                    voice.name.includes('UK')
+                ) || voices[0]; // Fallback to first available voice
+            }
+            
+            // Check if voices are loaded
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = findBritishVoice;
+            }
+            
+            // Generate speech
+            generateBtn.addEventListener('click', function() {
+                const text = textArea.value;
+                if (!text) return;
+                
+                // Create utterance with British voice
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = findBritishVoice();
+                utterance.rate = 0.9; // Slightly slower for clarity
+                utterance.pitch = 1.0;
+                
+                // Set up audio recording
+                const audioContext = new AudioContext();
+                const destination = audioContext.createMediaStreamDestination();
+                const mediaRecorder = new MediaRecorder(destination.stream);
+                const audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioElement.src = audioUrl;
+                    
+                    playBtn.disabled = false;
+                    downloadBtn.disabled = false;
+                };
+                
+                mediaRecorder.start();
+                speechSynthesis.speak(utterance);
+                
+                utterance.onend = () => {
+                    mediaRecorder.stop();
+                };
+            });
+            
+            // Play audio
+            playBtn.addEventListener('click', function() {
+                audioElement.play();
+            });
+            
+            // Download audio
+            downloadBtn.addEventListener('click', function() {
+                if (!audioBlob) return;
+                
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(audioBlob);
+                a.download = 'welcome-message.mp3';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+        });
+    </script>
+</body>
+</html>

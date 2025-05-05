@@ -10,6 +10,7 @@ import ControlPanel from "./components/ui/ControlPanel";
 import OrbitingLogo from "./components/OrbitingLogo";
 import StarSparkles from "./components/StarSparkles";
 import ElectricTendrils from "./components/ElectricTendrils";
+import KloudBugsCafe from "./components/KloudBugsCafe";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 import * as THREE from "three";
@@ -25,6 +26,7 @@ function App() {
   const [showPerformance, setShowPerformance] = useState(false);
   const { toggleMute, isMuted } = useAudio();
   const [bitcoinTendrilsActive, setBitcoinTendrilsActive] = useState(false);
+  const [showCafe, setShowCafe] = useState(false);
   const welcomeAudioRef = useRef<HTMLAudioElement>(null);
 
   // Initialize speech synthesis voices and force speech
@@ -104,6 +106,11 @@ function App() {
         // Play the British voice welcome message
         playWelcomeVoice();
         console.log("Voice triggered by 'V' key");
+      }
+      if (e.key === "c") {
+        // Toggle CAFE platform
+        setShowCafe((prev) => !prev);
+        console.log(`CAFE platform ${showCafe ? 'closed' : 'opened'}`);
       }
     };
 
@@ -202,6 +209,9 @@ function App() {
     <>
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
+      
+      {/* Show CAFE platform when enabled */}
+      {showCafe && <KloudBugsCafe onClose={() => setShowCafe(false)} />}
       
       <ControlPanel />
       
