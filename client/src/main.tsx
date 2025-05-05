@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Experience from "./pages/Experience";
 import LandingPage from "./pages/LandingPage";
-import KloudBugsCafe from "./pages/C12Platform"; // Component name remains C12Platform, but we're using it for KloudBugs Cafe
+import KloudBugsCafe from "./pages/KloudBugsCafe";
 import "./index.css";
 
 // Create root and render app with router

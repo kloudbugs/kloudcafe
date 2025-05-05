@@ -8,7 +8,7 @@ const KloudBugsCafe: React.FC = () => {
   const [showContent, setShowContent] = useState(false);
   
   useEffect(() => {
-    // Simulate loading C12 platform content
+    // Simulate loading cafe content
     const timer = setTimeout(() => {
       setLoading(false);
       setShowContent(true);
