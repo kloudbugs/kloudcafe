@@ -4,13 +4,12 @@ import * as THREE from "three";
 import CellCore from "./CellCore";
 import MiningBlocks from "./MiningBlocks";
 import ElectricGrid from "./ElectricGrid";
+import ElectricTendrils from "./ElectricTendrils";
 import { useControls } from "../lib/stores/useControls";
 
 // Main Cell component with electric grid core and mining blocks
 const Cell: React.FC = () => {
   const controls = useControls();
-  
-  // Tendril calculations removed as requested
   
   // Central group for the entire cell
   const cellGroup = useMemo(() => new THREE.Group(), []);
@@ -32,6 +31,13 @@ const Cell: React.FC = () => {
         nodeSize={0.15}
       />
       
+      {/* Electric tendrils inside the core */}
+      <ElectricTendrils 
+        count={12} 
+        length={1.5} 
+        width={0.03}
+      />
+      
       {/* Mining blocks orbiting around core */}
       <MiningBlocks 
         count={controls.blockCount} 
@@ -39,8 +45,6 @@ const Cell: React.FC = () => {
         minDistance={3.5}
         maxDistance={5.5}
       />
-      
-      {/* Tendrils removed as requested */}
     </group>
   );
 };

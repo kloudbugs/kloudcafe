@@ -38,7 +38,7 @@ export const useControls = create<ControlsState>((set, get) => ({
   particleCount: 600,
   pulseIntensity: 0.7,
   blockCount: 20,
-  colorScheme: 'kloud',
+  colorScheme: 'cosmic',
   interactionEnabled: false,
   
   // Setter functions
@@ -91,6 +91,11 @@ export const useControls = create<ControlsState>((set, get) => ({
         core: '#00ffcc',  // Turquoise leaf glow
         tendril: '#f08030', // Coffee bean brown/orange
         pulse: '#4cccff',  // Blue gem color
+      },
+      cosmic: {
+        core: '#9900ff',  // Purple
+        tendril: '#ffcc00', // Gold
+        pulse: '#cc66ff',  // Light purple
       }
     };
     
