@@ -68,18 +68,24 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
         playWelcomeMessage(playEffect);
       }
     };
+    
+    // Listen for custom event to start AI voice
+    const handleStartAiVoiceEvent = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      if (customEvent.detail?.activated && !isPlaying) {
+        console.log('AI voice activated via moon click!');
+        playWelcomeMessage(playEffect);
+      }
+    };
 
     window.addEventListener('keydown', keyHandler);
+    window.addEventListener('startAiVoice', handleStartAiVoiceEvent);
     
-    // Auto-play when the component mounts (after a delay to ensure audio is ready)
-    const timer = setTimeout(() => {
-      console.log("Auto-playing welcome message...");
-      playWelcomeMessage(playEffect);
-    }, 3000);
+    // NO auto-play - wait for moon click instead
     
     return () => {
       window.removeEventListener('keydown', keyHandler);
-      clearTimeout(timer);
+      window.removeEventListener('startAiVoice', handleStartAiVoiceEvent);
     };
   }, [isPlaying]);
 

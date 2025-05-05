@@ -17,11 +17,15 @@ const Experience: React.FC = () => {
     setOnboardingComplete(true);
   };
   
-  // Handle moon click - start tutorial
+  // Handle moon click - start tutorial and AI voice
   const handleMoonClick = () => {
-    console.log('Starting interactive tutorial!');
+    console.log('Starting interactive tutorial and AI voice!');
     setTutorialStarted(true);
     setShowNotifications(false);
+    
+    // Trigger AI voice by dispatching a custom event
+    const event = new CustomEvent('startAiVoice', { detail: { activated: true } });
+    window.dispatchEvent(event);
   };
   
   // Handle star click event - start feature tour
