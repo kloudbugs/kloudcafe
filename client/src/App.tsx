@@ -302,49 +302,7 @@ function App() {
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
       
-      {/* Add an initial interaction button to enable audio in browsers */}
-      <div 
-        className="interaction-button"
-        style={{
-          position: 'fixed',
-          bottom: '110px',
-          right: '20px',
-          zIndex: 1000,
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          color: '#00ffff',
-          padding: '12px 18px',
-          borderRadius: '8px',
-          border: '2px solid #00ffff',
-          cursor: 'pointer',
-          fontSize: '14px',
-          fontWeight: 'bold',
-          boxShadow: '0 0 15px rgba(0, 255, 255, 0.6)',
-          userSelect: 'none'
-        }}
-        onClick={() => {
-          // This helps with browser policies that require user interaction
-          const synth = window.speechSynthesis;
-          synth.cancel(); // Clear any previous speech
-          
-          // Try a short test speech to enable the API
-          const testUtterance = new SpeechSynthesisUtterance(".");
-          testUtterance.volume = 0; // Silent test
-          synth.speak(testUtterance);
-          
-          // Try to activate the welcome message
-          playWelcomeVoice();
-          
-          // Also try to play background music
-          const audioStore = useAudio.getState();
-          if (audioStore.backgroundMusic) {
-            audioStore.backgroundMusic.play().catch(e => {
-              console.log("Could not play background music on click:", e);
-            });
-          }
-        }}
-      >
-        Start Experience (Voice & Music)
-      </div>
+      {/* Removed interaction button */}
       
       {/* Removed C12 Platform Link Button */}
       
