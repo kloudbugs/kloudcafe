@@ -91,19 +91,7 @@ const ControlPanel: React.FC = () => {
               />
             </div>
             
-            {/* Tendril Count */}
-            <div>
-              <label className="block mb-1 text-sm font-medium">Tendrils: {controls.tendrilCount}</label>
-              <input
-                type="range"
-                min="20"
-                max="120"
-                step="10"
-                value={controls.tendrilCount}
-                onChange={(e) => controls.setTendrilCount(parseInt(e.target.value))}
-                className="w-full cursor-pointer"
-              />
-            </div>
+            {/* Tendrils removed as requested */}
             
             {/* Core Intensity */}
             <div>
