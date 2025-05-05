@@ -133,15 +133,25 @@ const BitcoinExplosion: React.FC<BitcoinExplosionProps> = ({
           rotation={particle.rotation}
           scale={particle.scale}
         >
-          <Text
-            fontSize={0.5}
-            color={color}
-            anchorX="center"
-            anchorY="middle"
-            userData={{ keepAlive: true }} // Prevents Text from being culled
-          >
-            ₿
-          </Text>
+          <mesh>
+            <circleGeometry args={[0.3, 32]} />
+            <meshStandardMaterial 
+              color={color} 
+              emissive={color}
+              emissiveIntensity={0.5}
+              metalness={0.7}
+              roughness={0.2}
+            />
+            <Text
+              fontSize={0.35}
+              color="#FFFFFF"
+              anchorX="center"
+              anchorY="middle"
+              userData={{ keepAlive: true }} // Prevents Text from being culled
+            >
+              ₿
+            </Text>
+          </mesh>
         </group>
       ))}
     </group>

@@ -89,42 +89,38 @@ const ControlPanel: React.FC = () => {
             </button>
           </div>
           
-          <div className="space-y-4">
-            {/* Mining Stats */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
-                <div className="text-sm text-purple-200 mb-1">Hash Rate</div>
-                <div className="text-xl font-bold text-yellow-300">248.3 TH/s</div>
+          <div className="space-y-2">
+            {/* Mining Stats - More compact */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-purple-900/40 p-2 rounded-lg border border-purple-700">
+                <div className="text-xs text-purple-200">Hash Rate</div>
+                <div className="text-sm font-bold text-yellow-300">248.3 TH/s</div>
               </div>
-              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
-                <div className="text-sm text-purple-200 mb-1">Daily Earnings</div>
-                <div className="text-xl font-bold text-yellow-300">0.0023 ₿</div>
+              <div className="bg-purple-900/40 p-2 rounded-lg border border-purple-700">
+                <div className="text-xs text-purple-200">Earnings</div>
+                <div className="text-sm font-bold text-yellow-300">0.0023 ₿</div>
               </div>
-              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
-                <div className="text-sm text-purple-200 mb-1">Efficiency</div>
-                <div className="text-xl font-bold text-yellow-300">92.8%</div>
+              <div className="bg-purple-900/40 p-2 rounded-lg border border-purple-700">
+                <div className="text-xs text-purple-200">Efficiency</div>
+                <div className="text-sm font-bold text-yellow-300">92.8%</div>
               </div>
-              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
-                <div className="text-sm text-purple-200 mb-1">Uptime</div>
-                <div className="text-xl font-bold text-yellow-300">99.1%</div>
+              <div className="bg-purple-900/40 p-2 rounded-lg border border-purple-700">
+                <div className="text-xs text-purple-200">Uptime</div>
+                <div className="text-sm font-bold text-yellow-300">99.1%</div>
               </div>
             </div>
             
-            {/* Recent Activity */}
-            <div className="mt-4">
-              <h3 className="text-md font-semibold text-yellow-300 mb-2">Recent Activity</h3>
-              <div className="space-y-2 text-sm">
+            {/* Recent Activity - More compact */}
+            <div className="mt-2">
+              <h3 className="text-xs font-semibold text-yellow-300 mb-1">Recent Activity</h3>
+              <div className="space-y-1 text-xs">
                 <div className="flex justify-between border-b border-purple-800/50 pb-1">
-                  <span className="text-purple-200">Block #729043 mined</span>
+                  <span className="text-purple-200">Block #729043</span>
                   <span className="text-yellow-400">+0.00012 ₿</span>
                 </div>
                 <div className="flex justify-between border-b border-purple-800/50 pb-1">
-                  <span className="text-purple-200">Block #729042 mined</span>
+                  <span className="text-purple-200">Block #729042</span>
                   <span className="text-yellow-400">+0.00015 ₿</span>
-                </div>
-                <div className="flex justify-between border-b border-purple-800/50 pb-1">
-                  <span className="text-purple-200">Block #729040 mined</span>
-                  <span className="text-yellow-400">+0.00011 ₿</span>
                 </div>
               </div>
             </div>
@@ -157,24 +153,24 @@ const ControlPanel: React.FC = () => {
             </button>
           </div>
           
-          <div className="space-y-6">
+          <div className="space-y-3">
             {/* Color Scheme */}
             <div>
-              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Color Scheme</label>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <label className="block mb-1 text-xs font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Color Scheme</label>
+              <div className="flex flex-wrap gap-1 justify-center">
                 {colorOptions.map(option => (
                   <button
                     key={option.value}
                     onClick={() => controls.setColorScheme(option.value as any)}
-                    className={`w-10 h-10 rounded-full transition-all duration-300 ${
+                    className={`w-7 h-7 rounded-full transition-all duration-300 ${
                       controls.colorScheme === option.value 
-                        ? 'scale-110 ring-2 ring-white shadow-lg' 
+                        ? 'scale-110 ring-1 ring-white shadow-md' 
                         : 'opacity-70 hover:opacity-100 hover:scale-105'
                     }`}
                     style={{ 
                       backgroundColor: option.color,
                       boxShadow: controls.colorScheme === option.value 
-                        ? `0 0 15px ${option.color}` 
+                        ? `0 0 10px ${option.color}` 
                         : 'none'
                     }}
                     title={option.label}
@@ -186,7 +182,7 @@ const ControlPanel: React.FC = () => {
             {/* Auto Rotation */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Auto Rotation</label>
+                <label className="text-xs font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Auto Rotation</label>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
@@ -194,14 +190,14 @@ const ControlPanel: React.FC = () => {
                     onChange={() => controls.setAutoRotate(!controls.autoRotate)}
                     className="sr-only peer"
                   />
-                  <div className="w-12 h-6 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:shadow-[0_0_12px_rgba(153,0,255,0.7)]"></div>
+                  <div className="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:shadow-[0_0_8px_rgba(153,0,255,0.7)]"></div>
                 </label>
               </div>
             </div>
             
             {/* Rotation Speed */}
             <div>
-              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Rotation Speed</label>
+              <label className="block mb-1 text-xs font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Rotation Speed</label>
               <div className="px-1">
                 <input
                   type="range"
@@ -215,11 +211,9 @@ const ControlPanel: React.FC = () => {
               </div>
             </div>
             
-            {/* Tendrils removed as requested */}
-            
             {/* Core Intensity */}
             <div>
-              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Core Intensity</label>
+              <label className="block mb-1 text-xs font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Core Intensity</label>
               <div className="px-1">
                 <input
                   type="range"
@@ -235,7 +229,7 @@ const ControlPanel: React.FC = () => {
             
             {/* Pulse Intensity */}
             <div>
-              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Pulse Intensity</label>
+              <label className="block mb-1 text-xs font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Pulse Intensity</label>
               <div className="px-1">
                 <input
                   type="range"
@@ -249,46 +243,48 @@ const ControlPanel: React.FC = () => {
               </div>
             </div>
             
-            {/* Mouse Interaction */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Mouse Interaction</label>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={controls.interactionEnabled}
-                    onChange={() => controls.toggleInteraction()}
-                    className="sr-only peer"
-                  />
-                  <div className="w-12 h-6 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:shadow-[0_0_12px_rgba(153,0,255,0.7)]"></div>
-                </label>
+            <div className="grid grid-cols-2 gap-2">
+              {/* Mouse Interaction */}
+              <div>
+                <div className="flex flex-col items-start">
+                  <label className="text-xs font-medium text-purple-200 mb-1" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Mouse Interaction</label>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={controls.interactionEnabled}
+                      onChange={() => controls.toggleInteraction()}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:shadow-[0_0_8px_rgba(153,0,255,0.7)]"></div>
+                  </label>
+                </div>
+              </div>
+              
+              {/* Sound Toggle */}
+              <div>
+                <div className="flex flex-col items-start">
+                  <label className="text-xs font-medium text-purple-200 mb-1" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>
+                    Sound Effects
+                  </label>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={!audio.isMuted}
+                      onChange={() => audio.toggleMute()}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:shadow-[0_0_8px_rgba(153,0,255,0.7)]"></div>
+                  </label>
+                </div>
               </div>
             </div>
             
-            {/* Sound Toggle */}
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>
-                  Sound Effects
-                </label>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={!audio.isMuted}
-                    onChange={() => audio.toggleMute()}
-                    className="sr-only peer"
-                  />
-                  <div className="w-12 h-6 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:shadow-[0_0_12px_rgba(153,0,255,0.7)]"></div>
-                </label>
-              </div>
-            </div>
-            
-            {/* Keyboard shortcuts */}
-            <div className="mt-6 py-3 px-4 text-xs text-yellow-300 border border-purple-700 rounded-lg bg-purple-900/50" 
-                 style={{ boxShadow: "inset 0 0 15px rgba(153, 0, 255, 0.2)" }}>
-              <div className="font-semibold mb-2 uppercase tracking-wide">Cosmic Commands</div>
-              <p className="mb-1">• Press 'P' to toggle performance stats</p>
-              <p>• Press 'M' to toggle sound</p>
+            {/* Keyboard shortcuts - Made more compact */}
+            <div className="mt-3 py-2 px-2 text-xs text-yellow-300 border border-purple-700 rounded-lg bg-purple-900/50" 
+                 style={{ boxShadow: "inset 0 0 10px rgba(153, 0, 255, 0.2)" }}>
+              <div className="font-semibold mb-1 uppercase tracking-wide text-center text-[10px]">Cosmic Commands</div>
+              <p className="m-0 text-[10px]">• Press 'P': toggle stats</p>
+              <p className="m-0 text-[10px]">• Press 'M': toggle sound</p>
             </div>
           </div>
         </div>

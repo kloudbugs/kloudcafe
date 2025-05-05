@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bean-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#AB6C3E" />
+      <stop offset="100%" stop-color="#763C11" />
+    </linearGradient>
+    <linearGradient id="space-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A2A" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+    <radialGradient id="cosmic-glow" cx="50%" cy="50%" r="75%" fx="25%" fy="25%">
+      <stop offset="0%" stop-color="#9900FF" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#00FFCC" stop-opacity="0" />
+    </radialGradient>
+    <filter id="cosmic-filter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Space Background -->
+  <rect width="400" height="400" fill="url(#space-gradient)" />
+  
+  <!-- Cosmic Glow -->
+  <circle cx="200" cy="200" r="180" fill="url(#cosmic-glow)" filter="url(#cosmic-filter)" />
+  
+  <!-- Stars -->
+  <g>
+    <circle cx="50" cy="50" r="1" fill="#FFFFFF" />
+    <circle cx="100" cy="75" r="1.5" fill="#FFFFFF" />
+    <circle cx="150" cy="25" r="2" fill="#FFFFFF" />
+    <circle cx="250" cy="50" r="1" fill="#FFFFFF" />
+    <circle cx="300" cy="100" r="1.5" fill="#FFFFFF" />
+    <circle cx="350" cy="60" r="1" fill="#FFFFFF" />
+    <circle cx="75" cy="150" r="1" fill="#FFFFFF" />
+    <circle cx="30" cy="200" r="1.5" fill="#FFFFFF" />
+    <circle cx="60" cy="250" r="1" fill="#FFFFFF" />
+    <circle cx="25" cy="300" r="2" fill="#FFFFFF" />
+    <circle cx="80" cy="350" r="1" fill="#FFFFFF" />
+    <circle cx="200" cy="30" r="1.5" fill="#FFFFFF" />
+    <circle cx="350" cy="150" r="1" fill="#FFFFFF" />
+    <circle cx="320" cy="200" r="1.5" fill="#FFFFFF" />
+    <circle cx="370" cy="250" r="1" fill="#FFFFFF" />
+    <circle cx="340" cy="300" r="2" fill="#FFFFFF" />
+    <circle cx="375" cy="350" r="1.5" fill="#FFFFFF" />
+    <circle cx="200" cy="370" r="1" fill="#FFFFFF" />
+    <circle cx="250" cy="340" r="1.5" fill="#FFFFFF" />
+    <circle cx="300" cy="375" r="1" fill="#FFFFFF" />
+    <circle cx="150" cy="350" r="2" fill="#FFFFFF" />
+  </g>
+  
+  <!-- Twinkling Stars -->
+  <g>
+    <circle cx="125" cy="125" r="2" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="275" cy="125" r="2" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="4s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="125" cy="275" r="2" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="275" cy="275" r="2" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3.5s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Coffee Bean -->
+  <g transform="translate(200, 200)">
+    <ellipse cx="0" cy="0" rx="80" ry="110" fill="url(#bean-gradient)" stroke="#9900FF" stroke-width="3" />
+    <path d="M-80,0 C-80,-60 0,-110 0,-110 C0,-110 80,-60 80,0 C80,60 0,110 0,110 C0,110 -80,60 -80,0 Z" fill="none" stroke="#00FFCC" stroke-width="2" stroke-dasharray="10,5" />
+  </g>
+  
+  <!-- Energy Lines -->
+  <g stroke="#9900FF" fill="none" filter="url(#cosmic-filter)">
+    <path d="M120,100 C140,120 180,130 200,120" stroke-width="3" />
+    <path d="M280,100 C260,120 220,130 200,120" stroke-width="3" />
+    <path d="M120,300 C140,280 180,270 200,280" stroke-width="3" />
+    <path d="M280,300 C260,280 220,270 200,280" stroke-width="3" />
+  </g>
+  
+  <!-- Nebula Clouds -->
+  <ellipse cx="150" cy="150" rx="40" ry="30" fill="#9900FF" fill-opacity="0.2" />
+  <ellipse cx="250" cy="150" rx="40" ry="30" fill="#00FFCC" fill-opacity="0.2" />
+  <ellipse cx="150" cy="250" rx="40" ry="30" fill="#00FFCC" fill-opacity="0.2" />
+  <ellipse cx="250" cy="250" rx="40" ry="30" fill="#9900FF" fill-opacity="0.2" />
+  
+  <!-- Cosmic Particle Effects -->
+  <g fill="#FFFFFF">
+    <circle cx="180" cy="100" r="1">
+      <animate attributeName="cy" values="100;110;100" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="220" cy="100" r="1">
+      <animate attributeName="cy" values="100;90;100" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="180" cy="300" r="1">
+      <animate attributeName="cy" values="300;290;300" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="220" cy="300" r="1">
+      <animate attributeName="cy" values="300;310;300" dur="2s" repeatCount="indefinite" />
+    </circle>
+  </g>
+</svg>
