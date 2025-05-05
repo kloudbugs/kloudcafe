@@ -133,17 +133,35 @@ function App() {
     // Create speech synthesis utterance
     const utterance = new SpeechSynthesisUtterance(zigWelcomeMessage);
     
-    // Try to find a British voice
+    // Try to find British voices and use a specific one
     const voices = window.speechSynthesis.getVoices();
-    const britishVoice = voices.find(voice => 
+    console.log("Available voices:", voices.length);
+    
+    // Filter British voices
+    const britishVoices = voices.filter(voice => 
       voice.lang.includes('en-GB') || 
       voice.name.includes('British') ||
       voice.name.includes('UK')
     );
     
-    if (britishVoice) {
-      utterance.voice = britishVoice;
-      console.log("Using British voice:", britishVoice.name);
+    console.log("British voices available:", britishVoices.map(v => v.name).join(", "));
+    
+    // Try different British voices - prefer Microsoft Ryan or Thomas if available
+    let selectedVoice = null;
+    
+    // Try to find Microsoft Ryan or Thomas first (male British voices)
+    selectedVoice = britishVoices.find(voice => 
+      voice.name.includes("Ryan") || voice.name.includes("Thomas")
+    );
+    
+    // If not found, try any British voice
+    if (!selectedVoice && britishVoices.length > 0) {
+      selectedVoice = britishVoices[0];
+    }
+    
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      console.log("Using British voice:", selectedVoice.name);
     } else {
       console.log("No British voice found, using default voice");
     }
