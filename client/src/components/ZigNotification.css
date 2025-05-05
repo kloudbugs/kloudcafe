@@ -1,12 +1,12 @@
 /* Zig Notification Styles - Primal/Ancient Theme */
 .zig-notification {
   position: fixed;
-  top: 65%; /* Moved down from 50% to 65% to better see the orbit and core ball */
+  bottom: 15px; /* Position at the bottom instead of top */
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%); /* Only translate X axis */
   z-index: 1000;
   max-width: 90%;
-  width: 650px;
+  width: 450px; /* Reduced width */
   animation: fadeIn 0.7s ease-out;
 }
 
@@ -14,9 +14,9 @@
   background-color: rgba(0, 0, 0, 0.7); /* More transparent to see through to the core ball */
   border: 2px solid #00ffff;
   border-radius: 5px;
-  padding: 18px;
-  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7), 
-              inset 0 0 15px rgba(0, 255, 255, 0.3);
+  padding: 10px; /* Reduced padding */
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), 
+              inset 0 0 10px rgba(0, 255, 255, 0.2);
   color: white;
   font-family: 'Courier New', monospace;
   text-align: center;
@@ -26,35 +26,37 @@
 .zig-message h2 {
   color: #00ffff;
   margin-top: 0;
-  font-size: 24px;
+  font-size: 16px; /* Smaller font */
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   font-weight: 800;
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
   animation: glow 1.5s infinite alternate;
-  margin-bottom: 15px;
+  margin-bottom: 8px; /* Reduced margin */
 }
 
 .zig-message p {
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 10px; /* Smaller font */
+  line-height: 1.4; /* Reduced line height */
   margin-bottom: 0;
   text-align: center;
   color: #ffffff;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  max-height: 150px; /* Set a max height */
+  overflow-y: auto; /* Add scroll if needed */
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -75%); /* Adjusted to match the new position */
+    transform: translateX(-50%) translateY(20px); /* Slide up from below */
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
