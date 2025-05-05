@@ -76,24 +76,57 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
         />
       ))}
       
-      {/* Bitcoin Symbol for center */}
+      {/* Enhanced Bitcoin Symbol for center */}
       <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[0.8, 32, 32]} />
+        <sphereGeometry args={[0.9, 64, 64]} />
         <meshStandardMaterial 
           color="#ffcc00" 
-          metalness={0.8}
-          roughness={0.2}
+          metalness={0.9}
+          roughness={0.1}
           emissive="#ff9900"
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.7}
         />
         <Html position={[0, 0, 0.5]} transform center>
-          <div style={{ 
-            fontSize: '2rem', 
-            color: '#ffffff',
-            textShadow: '0 0 5px #ffcc00, 0 0 10px #ffcc00',
-            fontWeight: 'bold'
+          <div style={{
+            position: 'relative',
+            width: '80px',
+            height: '80px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,204,0,0.7) 0%, rgba(255,153,0,0.4) 70%, rgba(255,153,0,0) 100%)',
+            boxShadow: '0 0 20px rgba(255, 204, 0, 0.8)',
           }}>
-            ₿
+            {/* Pulsing outer ring */}
+            <div style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              borderRadius: '50%',
+              border: '2px solid rgba(255, 255, 255, 0.7)',
+              animation: 'bitcoin-pulse 2s infinite ease-in-out',
+            }}></div>
+            
+            {/* Bitcoin symbol */}
+            <div style={{ 
+              fontSize: '2.5rem', 
+              color: '#ffffff',
+              textShadow: '0 0 5px #ffcc00, 0 0 10px #ffcc00, 0 0 15px #ffcc00',
+              fontWeight: 'bold',
+              zIndex: '2',
+              transform: 'scale(1.2)',
+            }}>
+              ₿
+            </div>
+            
+            <style>{`
+              @keyframes bitcoin-pulse {
+                0% { transform: scale(1); opacity: 0.7; }
+                50% { transform: scale(1.15); opacity: 0.3; }
+                100% { transform: scale(1); opacity: 0.7; }
+              }
+            `}</style>
           </div>
         </Html>
       </mesh>
@@ -138,36 +171,84 @@ const OrbitingItem: React.FC<OrbitingItemProps> = ({
   
   return (
     <group ref={itemRef}>
-      {/* HTML Logo wrapper - Just your original images */}
+      {/* HTML Logo wrapper with enhanced border effects */}
       <Html transform center>
         <div style={{
-          width: `${size * 150}px`,
-          height: `${size * 150}px`,
-          overflow: 'hidden',
-          borderRadius: '50%', 
-          boxShadow: '0 0 15px rgba(153, 0, 255, 0.6), 0 0 30px rgba(0, 255, 204, 0.3)',
-          background: 'rgba(0, 0, 0, 0.2)',
+          position: 'relative',
+          width: `${size * 160}px`,
+          height: `${size * 160}px`,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '10px',
-          backdropFilter: 'blur(5px)',
-          border: '2px solid rgba(255, 204, 0, 0.7)',
           transform: 'scale(1)',
-          transition: 'transform 0.3s',
+          transition: 'transform 0.3s ease-in-out',
         }}
         className="logo-container">
-          <img
-            src={image}
-            alt="KloudBugs Logo"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              borderRadius: '50%',
-              padding: '2px',
-            }}
-          />
+          {/* Outer glow/energy border */}
+          <div style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            borderRadius: '50%',
+            background: 'linear-gradient(45deg, rgba(255, 204, 0, 0.3), rgba(0, 255, 204, 0.3), rgba(153, 0, 255, 0.3))',
+            boxShadow: '0 0 25px rgba(0, 255, 204, 0.6), 0 0 40px rgba(153, 0, 255, 0.4)',
+            filter: 'blur(3px)',
+            animation: 'pulse 3s infinite alternate',
+            zIndex: '-1',
+          }}></div>
+          
+          {/* Electric zap effect (always visible) */}
+          <div className="electric-zap"></div>
+          
+          {/* Middle border with electricity pattern */}
+          <div style={{
+            position: 'absolute',
+            top: '5%',
+            left: '5%',
+            width: '90%',
+            height: '90%',
+            borderRadius: '50%',
+            border: '3px solid rgba(255, 255, 255, 0.8)',
+            boxShadow: 'inset 0 0 15px rgba(0, 255, 255, 0.7)',
+            zIndex: '-1',
+          }}></div>
+          
+          {/* Inner container for image */}
+          <div style={{
+            width: '80%',
+            height: '80%',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            background: 'rgba(0, 0, 0, 0.2)',
+            backdropFilter: 'blur(5px)',
+            border: '4px solid rgba(255, 204, 0, 0.8)',
+            boxShadow: 'inset 0 0 10px rgba(255, 204, 0, 0.5), 0 0 20px rgba(255, 204, 0, 0.4)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '4px',
+          }}>
+            <img
+              src={image}
+              alt="KloudBugs Logo"
+              style={{
+                width: '92%',
+                height: '92%',
+                objectFit: 'contain', // Changed from 'cover' to 'contain' to prevent distortion
+                borderRadius: '50%',
+                padding: '4px', // Add padding to prevent image from touching the border
+              }}
+            />
+          </div>
+          
+          <style>{`
+            @keyframes pulse {
+              0% { opacity: 0.7; transform: scale(0.98); }
+              100% { opacity: 1; transform: scale(1.02); }
+            }
+          `}</style>
         </div>
       </Html>
     </group>
