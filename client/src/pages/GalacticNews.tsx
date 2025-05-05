@@ -87,13 +87,13 @@ const GalacticNews: React.FC = () => {
       <div className="news-overlay">
         {/* Header with navigation */}
         <div className="news-header">
-          <button 
+          <a 
+            href="/experience"
             className="back-button" 
-            onClick={() => navigate('/experience')}
             aria-label="Back to Experience"
           >
             <ArrowLeft /> <span>Return to Mining Station</span>
-          </button>
+          </a>
           <h1>COSMIC NETWORK NEWS</h1>
           <div className="broadcast-info">
             <div className="anchor-name">ANCHOR: {newsAnchor}</div>

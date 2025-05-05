@@ -61,6 +61,11 @@ const LandingPage: React.FC = () => {
             ENTER ZIG MINING PORTAL
           </Link>
           
+          <Link to="/news" className="news-button">
+            <span className="button-pulse"></span>
+            GALACTIC NEWS NETWORK
+          </Link>
+          
           <a 
             href="https://replit.com/t/kloudbugscafe" 
             target="_blank" 

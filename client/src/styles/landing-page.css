@@ -170,6 +170,7 @@ img, svg {
 }
 
 .enter-button,
+.news-button,
 .learn-more-button {
   display: inline-block;
   padding: 1rem 2rem;
