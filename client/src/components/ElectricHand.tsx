@@ -401,29 +401,47 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
       }
     });
     
-    // Update material opacity for all lightning lines
-    boltLines.forEach((line, i) => {
-      if (lineGroupRef.current && lineGroupRef.current.children[i]) {
-        const lineMesh = lineGroupRef.current.children[i] as THREE.LineSegments;
-        
-        // Safely handle material by checking it exists
-        if (lineMesh && lineMesh.material) {
-          const material = Array.isArray(lineMesh.material) 
-            ? lineMesh.material[0] as THREE.LineBasicMaterial 
-            : lineMesh.material as THREE.LineBasicMaterial;
+    // Update lightning bolts
+    if (lineGroupRef.current) {
+      bolts.forEach((bolt, i) => {
+        if (lineGroupRef.current.children[i]) {
+          const pointsMesh = lineGroupRef.current.children[i] as THREE.Points;
+          if (pointsMesh && pointsMesh.material) {
+            const material = pointsMesh.material as THREE.PointsMaterial;
             
-          material.opacity = bolts[i].life;
-          
-          // Make lightning color pulse between primary and secondary colors
-          const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
-          material.color.lerpColors(
-            new THREE.Color(color),
-            new THREE.Color(secondaryColor),
-            colorMix
-          );
+            // Update opacity based on bolt life
+            material.opacity = bolt.life;
+            
+            // Make lightning color pulse between primary and secondary colors
+            const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
+            material.color.lerpColors(
+              new THREE.Color(color),
+              new THREE.Color(secondaryColor),
+              colorMix
+            );
+            
+            // Update point positions for jitter effect during full intensity phase
+            if (progress > 0.3 && progress < 0.7 && i % 3 === 0) {
+              const jitterAmount = 0.1;
+              
+              // Create new position array with jitter
+              const positions = new Float32Array(bolt.points.length * 3);
+              bolt.points.forEach((point, j) => {
+                const idx = j * 3;
+                positions[idx] = point.x + (Math.random() - 0.5) * jitterAmount;
+                positions[idx + 1] = point.y + (Math.random() - 0.5) * jitterAmount;
+                positions[idx + 2] = point.z + (Math.random() - 0.5) * jitterAmount;
+              });
+              
+              // Update geometry
+              if (pointsMesh.geometry) {
+                pointsMesh.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+              }
+            }
+          }
         }
-      }
-    });
+      });
+    }
     
     // Check if animation is complete
     if (progress >= 1.0 && !completed.current) {
@@ -438,17 +456,22 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
     <group ref={groupRef}>
       {/* Lightning bolts */}
       <group ref={lineGroupRef}>
-        {boltLines.map((line, i) => (
-          <lineSegments key={i}>
-            <bufferGeometry attach="geometry" {...line.geometry} />
-            <lineBasicMaterial
-              attach="material"
-              color={line.color}
-              linewidth={line.width}
-              transparent
-              opacity={1}
+        {bolts.map((bolt, i) => (
+          <points key={i}>
+            <bufferGeometry>
+              <float32BufferAttribute 
+                attach="attributes-position" 
+                args={[Float32Array.from(bolt.points.flatMap(p => [p.x, p.y, p.z])), 3]} 
+              />
+            </bufferGeometry>
+            <pointsMaterial 
+              color={bolt.color} 
+              size={bolt.width * 8} 
+              transparent 
+              opacity={bolt.life}
+              sizeAttenuation
             />
-          </lineSegments>
+          </points>
         ))}
       </group>
       

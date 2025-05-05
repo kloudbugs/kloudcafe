@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { useControls } from '../lib/stores/useControls';
 import { useAudio } from '../lib/stores/useAudio';
 import BitcoinExplosion from './BitcoinExplosion';
-import ElectricHand from './ElectricHand';
+import ElectricHandSimple from './ElectricHandSimple';
 
 interface MiningBlocksProps {
   count?: number;
@@ -354,7 +354,7 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
       
       {/* Render electric hand effects */}
       {electricHands.map((hand) => (
-        <ElectricHand
+        <ElectricHandSimple
           key={hand.id}
           position={hand.position}
           target={hand.target}
