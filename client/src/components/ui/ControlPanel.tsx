@@ -17,45 +17,61 @@ const ControlPanel: React.FC = () => {
   ];
   
   return (
-    <div className="absolute left-4 top-4 z-10">
+    <div className="absolute right-4 bottom-4 z-10">
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           className="cosmic-main-btn"
         >
-          <span>Show Controls</span>
+          <span>Control Panel</span>
         </button>
       )}
       
       {isOpen && (
-        <div className="text-white p-4 rounded-lg w-72 backdrop-blur-sm bg-black/80" 
+        <div className="text-white p-5 rounded-lg w-80 backdrop-blur-md bg-black/90" 
              style={{
-               border: "1px solid #9900ff",
-               boxShadow: "0 0 15px rgba(153, 0, 255, 0.3)"
+               border: "2px solid #ffcc00",
+               boxShadow: "0 0 25px rgba(153, 0, 255, 0.5)",
+               background: "linear-gradient(145deg, rgba(10,10,20,0.9), rgba(26,26,46,0.9))"
              }}>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold" style={{ color: "#ffcc00" }}>ZIG MINER CONTROLS</h2>
+          <div className="flex justify-between items-center mb-4 border-b border-purple-500 pb-3">
+            <h2 className="text-xl font-bold" 
+                style={{ 
+                  color: "#ffcc00", 
+                  textShadow: "0 0 10px rgba(255, 204, 0, 0.5)",
+                  letterSpacing: "1px"
+                }}>ZIG MINER CONTROLS</h2>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white/80 hover:text-white"
+              className="text-yellow-400 hover:text-yellow-300 hover:scale-110 transition-all"
+              style={{ 
+                textShadow: "0 0 8px rgba(255, 204, 0, 0.6)" 
+              }}
             >
               ✕
             </button>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Color Scheme */}
             <div>
-              <label className="block mb-2 text-sm font-medium">Color Scheme</label>
-              <div className="flex space-x-2">
+              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Color Scheme</label>
+              <div className="flex flex-wrap gap-3 justify-center">
                 {colorOptions.map(option => (
                   <button
                     key={option.value}
                     onClick={() => controls.setColorScheme(option.value as any)}
-                    className={`w-8 h-8 rounded-full transition-transform ${
-                      controls.colorScheme === option.value ? 'scale-110 ring-2 ring-white' : 'opacity-70'
+                    className={`w-10 h-10 rounded-full transition-all duration-300 ${
+                      controls.colorScheme === option.value 
+                        ? 'scale-110 ring-2 ring-white shadow-lg' 
+                        : 'opacity-70 hover:opacity-100 hover:scale-105'
                     }`}
-                    style={{ backgroundColor: option.color }}
+                    style={{ 
+                      backgroundColor: option.color,
+                      boxShadow: controls.colorScheme === option.value 
+                        ? `0 0 15px ${option.color}` 
+                        : 'none'
+                    }}
                     title={option.label}
                   />
                 ))}
@@ -65,7 +81,7 @@ const ControlPanel: React.FC = () => {
             {/* Auto Rotation */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Auto Rotation</label>
+                <label className="text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Auto Rotation</label>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
@@ -73,59 +89,65 @@ const ControlPanel: React.FC = () => {
                     onChange={() => controls.setAutoRotate(!controls.autoRotate)}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-500 rounded-full peer peer-checked:bg-[#00ffcc] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:shadow-[0_0_8px_rgba(0,255,204,0.6)]"></div>
+                  <div className="w-12 h-6 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:shadow-[0_0_12px_rgba(153,0,255,0.7)]"></div>
                 </label>
               </div>
             </div>
             
             {/* Rotation Speed */}
             <div>
-              <label className="block mb-1 text-sm font-medium">Rotation Speed</label>
-              <input
-                type="range"
-                min="0.05"
-                max="1"
-                step="0.05"
-                value={controls.rotationSpeed}
-                onChange={(e) => controls.setRotationSpeed(parseFloat(e.target.value))}
-                className="w-full cursor-pointer"
-              />
+              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Rotation Speed</label>
+              <div className="px-1">
+                <input
+                  type="range"
+                  min="0.05"
+                  max="1"
+                  step="0.05"
+                  value={controls.rotationSpeed}
+                  onChange={(e) => controls.setRotationSpeed(parseFloat(e.target.value))}
+                  className="w-full cursor-pointer"
+                />
+              </div>
             </div>
             
             {/* Tendrils removed as requested */}
             
             {/* Core Intensity */}
             <div>
-              <label className="block mb-1 text-sm font-medium">Core Intensity</label>
-              <input
-                type="range"
-                min="0.5"
-                max="2"
-                step="0.1"
-                value={controls.coreIntensity}
-                onChange={(e) => controls.setCoreIntensity(parseFloat(e.target.value))}
-                className="w-full cursor-pointer"
-              />
+              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Core Intensity</label>
+              <div className="px-1">
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2"
+                  step="0.1"
+                  value={controls.coreIntensity}
+                  onChange={(e) => controls.setCoreIntensity(parseFloat(e.target.value))}
+                  className="w-full cursor-pointer"
+                />
+              </div>
             </div>
             
             {/* Pulse Intensity */}
             <div>
-              <label className="block mb-1 text-sm font-medium">Pulse Intensity</label>
-              <input
-                type="range"
-                min="0.2"
-                max="1.5"
-                step="0.1"
-                value={controls.pulseIntensity}
-                onChange={(e) => controls.setPulseIntensity(parseFloat(e.target.value))}
-                className="w-full cursor-pointer"
-              />
+              <label className="block mb-3 text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Pulse Intensity</label>
+              <div className="px-1">
+                <input
+                  type="range"
+                  min="0.2"
+                  max="1.5"
+                  step="0.1"
+                  value={controls.pulseIntensity}
+                  onChange={(e) => controls.setPulseIntensity(parseFloat(e.target.value))}
+                  className="w-full cursor-pointer"
+                />
+              </div>
             </div>
             
             {/* Mouse Interaction */}
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Mouse Interaction</label>
+                <label className="text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>Mouse Interaction</label>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
@@ -133,15 +155,17 @@ const ControlPanel: React.FC = () => {
                     onChange={() => controls.toggleInteraction()}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-500 rounded-full peer peer-checked:bg-[#00ffcc] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:shadow-[0_0_8px_rgba(0,255,204,0.6)]"></div>
+                  <div className="w-12 h-6 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:shadow-[0_0_12px_rgba(153,0,255,0.7)]"></div>
                 </label>
               </div>
             </div>
             
             {/* Keyboard shortcuts */}
-            <div className="mt-6 text-xs text-gray-400">
-              <p>Press 'P' to toggle performance stats</p>
-              <p>Press 'M' to toggle sound</p>
+            <div className="mt-6 py-3 px-4 text-xs text-yellow-300 border border-purple-700 rounded-lg bg-purple-900/50" 
+                 style={{ boxShadow: "inset 0 0 15px rgba(153, 0, 255, 0.2)" }}>
+              <div className="font-semibold mb-2 uppercase tracking-wide">Cosmic Commands</div>
+              <p className="mb-1">• Press 'P' to toggle performance stats</p>
+              <p>• Press 'M' to toggle sound</p>
             </div>
           </div>
         </div>

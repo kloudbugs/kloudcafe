@@ -48,12 +48,12 @@
   overflow: hidden;
   padding: 15px 30px;
   border-radius: 12px;
-  border: 2px solid var(--kloud-teal);
+  border: 2px solid var(--cyber-gold);
   background: linear-gradient(
     45deg,
-    rgba(0, 255, 204, 0.4),
-    rgba(76, 204, 255, 0.6),
-    rgba(240, 128, 48, 0.5)
+    rgba(138, 43, 226, 0.4),
+    rgba(153, 0, 255, 0.6),
+    rgba(255, 204, 0, 0.5)
   );
   background-size: 300% 100%;
   font-family: 'Orbitron', sans-serif;
@@ -68,7 +68,7 @@
   transform-style: preserve-3d;
   box-shadow: 
     0 10px 15px rgba(0, 0, 0, 0.4),
-    0 0 30px 5px rgba(0, 255, 204, 0.3);
+    0 0 30px 5px rgba(153, 0, 255, 0.3);
 }
 
 .cosmic-main-btn:hover {
@@ -76,8 +76,8 @@
   animation: ultra-glow 1.5s infinite, nebula-shift 3s infinite;
   color: white;
   text-shadow: 
-    0 0 10px var(--kloud-teal),
-    0 0 20px var(--kloud-blue);
+    0 0 10px var(--cyber-gold),
+    0 0 20px var(--space-purple);
 }
 
 .cosmic-main-btn:before {
@@ -182,6 +182,7 @@ input[type=range] {
   background: transparent;
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -189,28 +190,30 @@ input[type=range]::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--kloud-teal);
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+  background: var(--cyber-gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px solid white;
-  margin-top: 0px;
+  margin-top: -7px;
   z-index: 3;
+  position: relative;
 }
 
 input[type=range]::-webkit-slider-thumb:hover {
-  background: var(--kloud-blue);
+  background: var(--light-gold);
   transform: scale(1.1);
-  box-shadow: 0 0 12px rgba(76, 204, 255, 0.8);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
 }
 
 input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 0px;
+  height: 4px;
   cursor: pointer;
-  background: transparent;
+  background: linear-gradient(90deg, rgba(138, 43, 226, 0.4), rgba(153, 0, 255, 0.8));
+  border-radius: 5px;
   border: none;
-  opacity: 0;
+  box-shadow: 0 0 5px rgba(153, 0, 255, 0.3);
 }
 
 input[type=range]:focus {
