@@ -23,30 +23,18 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
   
   const controls = useControls();
   const coreColor = controls.getColorByScheme('core');
-  const tendrilColor = controls.getColorByScheme('tendril');
   
-  // Create block geometry and materials
+  // Create block geometry and materials - using simple cubes
   const blockGeometry = useMemo(() => new THREE.BoxGeometry(0.4, 0.4, 0.4), []);
   const blockMaterial = useMemo(() => 
     new THREE.MeshStandardMaterial({
       color: coreColor,
       emissive: coreColor,
-      emissiveIntensity: 0.2,
+      emissiveIntensity: 0.3,
       metalness: 0.9,
       roughness: 0.2,
     }), 
   [coreColor]);
-  
-  const wireMaterial = useMemo(() => 
-    new THREE.MeshStandardMaterial({
-      color: tendrilColor,
-      emissive: tendrilColor,
-      emissiveIntensity: 0.5,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.7,
-    }), 
-  [tendrilColor]);
   
   // Generate initial positions for blocks
   const blockData = useMemo(() => {
@@ -140,11 +128,7 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
             geometry={blockGeometry} 
             material={blockMaterial}
           />
-          <mesh
-            geometry={blockGeometry}
-            material={wireMaterial}
-            scale={1.2}
-          />
+          {/* Removed the outer wireframe mesh that was creating the green/blue objects */}
         </group>
       ))}
     </group>
