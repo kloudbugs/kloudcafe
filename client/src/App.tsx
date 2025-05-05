@@ -190,14 +190,14 @@ function App() {
       }, 1000);
       
       // Display a message to indicate song is now playing
-      console.log("ZIG SPEECH COMPLETE - PLAYING J. COLE BEAT (WILL NAVIGATE TO C12 WHEN DONE)");
+      console.log("ZIG SPEECH COMPLETE - PLAYING J. COLE BEAT (WILL NAVIGATE TO KLOUDBUGS CAFE WHEN DONE)");
       
       // Add a visual indicator that speech is done and song is playing
       const songReadyMessage = document.createElement('div');
       songReadyMessage.className = 'song-ready-message';
       songReadyMessage.innerHTML = `
         <div class="song-message">
-          <p>PLAYING SONG - WILL NAVIGATE TO C12 PLATFORM WHEN COMPLETE</p>
+          <p>PLAYING SONG - WILL NAVIGATE TO KLOUDBUGS CAFE WHEN COMPLETE</p>
         </div>
       `;
       songReadyMessage.style.position = 'fixed';
@@ -289,11 +289,11 @@ function App() {
     audioStore.setHitSound(hitSound);
     audioStore.setSuccessSound(successSound);
     
-    console.log("J. Cole beat loaded. Will navigate to C12 Platform after 30 seconds");
+    console.log("J. Cole beat loaded. Will navigate to KLOUDBUGS CAFE after 30 seconds");
     
     // Set up timer for auto-navigation after 30 seconds
     const navigationTimer = setTimeout(() => {
-      console.log("30 seconds elapsed - navigating to C12 Platform");
+      console.log("30 seconds elapsed - navigating to KLOUDBUGS CAFE");
       
       // Show a 3-second countdown notification before navigating
       const countdownNotification = document.createElement('div');
@@ -313,7 +313,7 @@ function App() {
       countdownNotification.style.fontSize = '24px';
       countdownNotification.style.textTransform = 'uppercase';
       countdownNotification.style.textAlign = 'center';
-      countdownNotification.innerHTML = 'Navigating to C12 Platform in 3...';
+      countdownNotification.innerHTML = 'Navigating to KLOUDBUGS CAFE in 3...';
       document.body.appendChild(countdownNotification);
       
       // Countdown from 3 to 1 before navigating
@@ -321,11 +321,11 @@ function App() {
       const countdownInterval = setInterval(() => {
         countdown--;
         if (countdown > 0) {
-          countdownNotification.innerHTML = `Navigating to C12 Platform in ${countdown}...`;
+          countdownNotification.innerHTML = `Navigating to KLOUDBUGS CAFE in ${countdown}...`;
         } else {
           clearInterval(countdownInterval);
-          // Navigate to the C12 Platform
-          window.location.href = '/c12';
+          // Navigate to the KLOUDBUGS CAFE
+          window.location.href = '/cafe';
         }
       }, 1000);
     }, 30000); // 30 seconds timer
@@ -345,7 +345,7 @@ function App() {
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
       
-      {/* Enter C12 Platform button */}
+      {/* Enter KLOUDBUGS CAFE button */}
       <div
         style={{
           position: 'fixed',
@@ -368,9 +368,9 @@ function App() {
           letterSpacing: '1px',
           textAlign: 'center',
         }}
-        onClick={() => window.location.href = '/c12'}
+        onClick={() => window.location.href = '/cafe'}
       >
-        Enter C12 Platform
+        Enter KLOUDBUGS CAFE
       </div>
       
       <ControlPanel />
