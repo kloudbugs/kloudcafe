@@ -27,9 +27,8 @@ const ControlPanel: React.FC = () => {
       )}
       
       {isOpen && (
-        <div className="text-white p-4 rounded-lg w-72 backdrop-blur-sm shadow-lg shadow-[#00ffcc]/20" 
+        <div className="text-white p-4 rounded-lg w-72 backdrop-blur-sm bg-black/80" 
              style={{
-               background: "linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(10, 10, 10, 0.95))",
                border: "1px solid var(--kloud-teal)",
                boxShadow: "0 0 15px rgba(0, 255, 204, 0.3)"
              }}>
