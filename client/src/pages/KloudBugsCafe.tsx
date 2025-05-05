@@ -34,8 +34,11 @@ const KloudBugsCafe: React.FC = () => {
       <div className="c12-content">
         {loading ? (
           <div className="c12-loading">
-            <div className="c12-spinner"></div>
-            <p>Loading KloudBugs Cafe...</p>
+            <h2>KLOUDBUGS CAFE</h2>
+            <div className="c12-loading-bar-container">
+              <div className="c12-loading-bar"></div>
+            </div>
+            <p>Initializing Quantum Mining Protocols...</p>
           </div>
         ) : (
           <div className={`c12-main ${showContent ? 'visible' : ''}`}>
