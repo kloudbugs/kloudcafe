@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Text, Billboard } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useControls } from '../lib/stores/useControls';
@@ -21,6 +21,14 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
   const primaryColor = controls.getColorByScheme('core');
   const secondaryColor = controls.getColorByScheme('tendril');
   const pulseColor = controls.getColorByScheme('pulse');
+  
+  // Debug loading
+  useEffect(() => {
+    console.log('MinerTitle component mounted');
+    console.log('Primary color:', primaryColor);
+    console.log('Secondary color:', secondaryColor);
+    return () => console.log('MinerTitle component unmounted');
+  }, []);
   
   // Animation for the title
   useFrame(({ clock }: { clock: Clock }) => {
