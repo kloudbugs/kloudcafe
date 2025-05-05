@@ -67,7 +67,7 @@ function App() {
       
       <Canvas
         shadows
-        camera={{ position: [0, 0, 12], fov: 50, near: 0.1, far: 1000 }}
+        camera={{ position: [0, 2, 12], fov: 50, near: 0.1, far: 1000 }}
         gl={{ 
           antialias: true,
           powerPreference: "default",
@@ -97,8 +97,8 @@ function App() {
           {/* Mining Grid removed as requested */}
           <MouseInteractionLayer visible={controls.interactionEnabled} />
           
-          {/* KloudBugs Miner Title - 3D version */}
-          <MinerTitle position={[0, 3.5, 0]} scale={1.5} />
+          {/* KloudBugs Miner Title - 3D version (moved higher) */}
+          <MinerTitle position={[0, 5.0, 0]} scale={1.5} />
           
           {/* Orbiting Logo */}
           <OrbitingLogo 
