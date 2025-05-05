@@ -294,9 +294,10 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
     return createConstellationNodes(position, target);
   }, [position, target]);
   
-  // Create lines for each bolt
+  // Create lines for each bolt and constellation lines
   const boltLines = useMemo(() => {
-    return bolts.map(bolt => {
+    // Main lightning bolts
+    const lines = bolts.map(bolt => {
       const geometry = new THREE.BufferGeometry().setFromPoints(bolt.points);
       return {
         geometry,
@@ -304,7 +305,77 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
         color: bolt.color.clone()
       };
     });
-  }, [bolts]);
+    
+    // Add constellation lines connecting stars
+    if (handSegments.length > 8) {
+      // Connect stars in the Taurus pattern
+      
+      // Store references to key star positions
+      const positions = handSegments.map(segment => segment.position);
+      
+      // Face V-shape connection (connect eye to horns)
+      const mainStar = positions[0]; // Center/main star
+      const eyeStar = positions[1]; // Central star (Aldebaran - eye)
+      const rightHornBase = positions[2]; // Right horn base
+      const leftHornBase = positions[3]; // Left horn base
+      
+      // Create connecting lines for the V-shape face
+      const faceLines = [
+        [eyeStar, rightHornBase], // Eye to right horn base
+        [eyeStar, leftHornBase],  // Eye to left horn base
+      ];
+      
+      // Horn extensions
+      if (positions.length > 6) {
+        const rightHornTip1 = positions[4]; // Right horn extension 1
+        const rightHornTip2 = positions[5]; // Right horn extension 2
+        const leftHornTip1 = positions[6];  // Left horn extension 1
+        const leftHornTip2 = positions[7];  // Left horn extension 2
+        
+        // Add horn lines
+        faceLines.push(
+          [rightHornBase, rightHornTip1],  // Right horn first segment
+          [rightHornTip1, rightHornTip2],   // Right horn second segment
+          [leftHornBase, leftHornTip1],    // Left horn first segment
+          [leftHornTip1, leftHornTip2]      // Left horn second segment
+        );
+      }
+      
+      // Create and add constellation lines
+      faceLines.forEach(([start, end]) => {
+        const points = [start, end];
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        lines.push({
+          geometry,
+          width: 0.02,
+          color: new THREE.Color(color).lerp(new THREE.Color('#ffffff'), 0.5)
+        });
+      });
+      
+      // Connect Pleiades stars if they exist
+      if (positions.length > 15) {
+        // Get the first 7 Pleiades stars (positions 8-14)
+        const pleiadesStars = positions.slice(8, 15);
+        
+        // Create a minimally connected pattern (not fully connected)
+        // Connect in a pattern resembling the Seven Sisters
+        const pleiadesCenter = pleiadesStars[0]; // Use first star as center
+        
+        // Connect center to each other star
+        for (let i = 1; i < pleiadesStars.length; i++) {
+          const points = [pleiadesCenter, pleiadesStars[i]];
+          const geometry = new THREE.BufferGeometry().setFromPoints(points);
+          lines.push({
+            geometry,
+            width: 0.01, // Thinner lines for the Pleiades
+            color: new THREE.Color(color).lerp(new THREE.Color('#ffffff'), 0.7)
+          });
+        }
+      }
+    }
+    
+    return lines;
+  }, [bolts, handSegments, color]);
   
   // Initialize refs
   useEffect(() => {
@@ -325,8 +396,8 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
     
     // Animation phases:
     // 0-0.3: Lightning appears and grows
-    // 0.3-0.7: Hand appears at the end of lightning
-    // 0.7-1.0: Lightning and hand fade out
+    // 0.3-0.7: Constellation pattern appears at the end of lightning
+    // 0.7-1.0: Lightning and constellation fade out
     
     // Update lightning bolts
     bolts.forEach((bolt, i) => {
@@ -362,15 +433,15 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
       }
     });
     
-    // Update hand segments
+    // Update constellation segments
     handSegments.forEach((segment, i) => {
       if (progress >= 0.3 && progress <= 1.0) {
         // Calculate progress for this segment
-        const handPhaseProgress = (progress - 0.3) / 0.4; // 0 to 1 during hand phase
+        const constellationPhaseProgress = (progress - 0.3) / 0.4; // 0 to 1 during constellation phase
         
         // Stagger the appearance of segments
         const segmentDelay = i * 0.05;
-        const segmentProgress = Math.max(0, Math.min(1, (handPhaseProgress - segmentDelay) * 2));
+        const segmentProgress = Math.max(0, Math.min(1, (constellationPhaseProgress - segmentDelay) * 2));
         
         segment.progress = segmentProgress;
         
@@ -385,7 +456,7 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
           mesh.visible = segment.progress > 0;
           mesh.scale.setScalar(segment.scale * segment.progress);
           
-          // Make hand segments pulse slightly
+          // Make star nodes pulse slightly
           const pulseFactor = 1 + Math.sin(animationTime.current * 10 + i) * 0.1;
           mesh.scale.multiplyScalar(pulseFactor);
           
@@ -450,34 +521,34 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
         ))}
       </group>
       
-      {/* Hand segments with various robot-like shapes */}
+      {/* Constellation star nodes */}
       {handSegments.map((segment, i) => {
-        // Choose different geometry for different parts
+        // Choose different geometry for different star nodes
         let geometry;
         
-        // First three segments are wrist and palm - use box geometries
+        // Main stars in the constellation use spheres
         if (i < 3) {
-          // Use box for palm and wrist segments (more robotic)
-          geometry = <boxGeometry args={[1.2, 0.8, 0.4]} />;
+          // Main stars - use larger spheres
+          geometry = <sphereGeometry args={[1, 16, 16]} />;
         } 
-        // Finger segments - alternate between different shapes
+        // Different types of stars
         else if (i % 3 === 0) {
-          // Knuckles - use cylindrical shapes
-          geometry = <cylinderGeometry args={[0.5, 0.5, 1.2, 8]} />;
+          // Brighter stars
+          geometry = <sphereGeometry args={[1, 12, 12]} />;
         } 
         else if (i % 3 === 1) {
-          // Middle finger segments - use boxes
-          geometry = <boxGeometry args={[0.6, 0.6, 1.2]} />;
+          // Medium stars - use dodecahedron for interesting shapes
+          geometry = <dodecahedronGeometry args={[1, 0]} />;
         } 
         else {
-          // Finger tips - use cones
-          geometry = <coneGeometry args={[0.5, 1, 8]} />;
+          // Smaller stars - use octahedron for sharp star-like appearance
+          geometry = <octahedronGeometry args={[1, 0]} />;
         }
         
-        // Small connector elements
+        // Smallest stars in the Pleiades cluster
         if (i > 15) {
-          // Small connecting joints
-          geometry = <torusGeometry args={[0.5, 0.2, 8, 8]} />;
+          // Very small stars
+          geometry = <tetrahedronGeometry args={[1, 0]} />;
         }
         
         return (
@@ -496,8 +567,8 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
               transparent
               opacity={0.9}
               toneMapped={false}
-              metalness={0.8} // More metallic for robot look
-              roughness={0.2} // Less rough for shiny robot appearance
+              metalness={0.2} // Less metallic for star-like appearance
+              roughness={0.1} // Very smooth for shiny star appearance
             />
           </mesh>
         );
