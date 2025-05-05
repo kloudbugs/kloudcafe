@@ -92,56 +92,12 @@ const ElectricTendrils: React.FC<ElectricTendrilsProps> = ({
     }
   });
 
-  // Create a pulsing glow effect for the material
-  const shaderMaterial = useMemo(() => {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        color: { value: new THREE.Color(color) },
-        resolution: { value: new THREE.Vector2(1024, 1024) },
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float time;
-        uniform vec3 color;
-        uniform vec2 resolution;
-        varying vec2 vUv;
-        
-        void main() {
-          // Distance from center of line (0.5, 0.5)
-          float dist = distance(vUv, vec2(0.5, 0.5));
-          
-          // Glowing effect
-          float glow = 0.3 / (dist * 5.0);
-          
-          // Electric pulsing effect
-          float pulse = 0.5 + 0.5 * sin(time * 10.0 + vUv.x * 20.0);
-          
-          // Combine effects
-          vec3 finalColor = color * glow * (0.8 + 0.4 * pulse);
-          
-          // Alpha based on distance from center
-          float alpha = smoothstep(0.5, 0.0, dist);
-          
-          gl_FragColor = vec4(finalColor, alpha);
-        }
-      `,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-  }, [color]);
-  
-  // Update the time uniform for the pulsing effect
+  // No need for custom shader material, we'll use meshBasicMaterial instead
   useFrame(({ clock }) => {
-    shaderMaterial.uniforms.time.value = clock.getElapsedTime();
+    // Rotate the entire group slowly
+    if (groupRef.current) {
+      groupRef.current.rotation.y = clock.getElapsedTime() * 0.2;
+    }
   });
 
   return (

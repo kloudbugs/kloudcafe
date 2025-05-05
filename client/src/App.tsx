@@ -1,6 +1,6 @@
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stats, Html } from "@react-three/drei";
+import { OrbitControls, Stats } from "@react-three/drei";
 import Cell from "./components/Cell";
 import Environment from "./components/Environment";
 import BackgroundParticles from "./components/BackgroundParticles";
@@ -9,20 +9,19 @@ import PulseWave from "./components/PulseWave";
 import ControlPanel from "./components/ui/ControlPanel";
 import OrbitingLogo from "./components/OrbitingLogo";
 import StarSparkles from "./components/StarSparkles";
-import BitcoinVoiceEffect from "./components/BitcoinVoiceEffect";
-import VoiceGenerator from "./components/VoiceGenerator";
+import ElectricTendrils from "./components/ElectricTendrils";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
-import { loadAllAudio } from "./lib/audio";
 import * as THREE from "three";
 
 // Main App component
 function App() {
   const [showPerformance, setShowPerformance] = useState(false);
   const { toggleMute, isMuted } = useAudio();
-  const [audioLoaded, setAudioLoaded] = useState(false);
+  const [bitcoinTendrilsActive, setBitcoinTendrilsActive] = useState(false);
+  const welcomeAudioRef = useRef<HTMLAudioElement>(null);
 
-  // Toggle stats with 'p' key
+  // Toggle stats with 'p' key and handle British voice with 'v' key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "p") {
@@ -31,15 +30,42 @@ function App() {
       if (e.key === "m") {
         toggleMute();
       }
+      if (e.key === "v" && welcomeAudioRef.current) {
+        // Play the British voice welcome message
+        playWelcomeVoice();
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleMute]);
 
-  // Load audio elements and Howler audio
+  // Play welcome voice and activate Bitcoin electric tendrils
+  const playWelcomeVoice = () => {
+    if (welcomeAudioRef.current) {
+      welcomeAudioRef.current.play();
+      
+      // Activate Bitcoin tendrils while voice is playing
+      setBitcoinTendrilsActive(true);
+      
+      // Reset after voice is done
+      welcomeAudioRef.current.onended = () => {
+        setBitcoinTendrilsActive(false);
+      };
+    }
+  };
+
+  // Auto-play the welcome message after a delay
   useEffect(() => {
-    // Load traditional audio elements
+    const timer = setTimeout(() => {
+      playWelcomeVoice();
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Load audio elements
+  useEffect(() => {
     const backgroundMusic = new Audio("/sounds/background.mp3");
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.3;
@@ -51,11 +77,6 @@ function App() {
     audioStore.setBackgroundMusic(backgroundMusic);
     audioStore.setHitSound(hitSound);
     audioStore.setSuccessSound(successSound);
-    
-    // Load Howler audio
-    loadAllAudio().then(() => {
-      setAudioLoaded(true);
-    });
     
     // Don't autoplay - user needs to interact first
     console.log("Audio loaded. Press 'M' to toggle sound.");
@@ -73,16 +94,12 @@ function App() {
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
       
-      {/* Voice generator (hidden from view) */}
-      {audioLoaded && (
-        <div style={{ display: 'none' }}>
-          <VoiceGenerator 
-            text="Welcome to the cosmic Bitcoin mining experience. Prepare for an extraordinary journey through digital constellations and blockchain galaxies."
-            outputFileName="welcome-message.mp3"
-            autoGenerate={true}
-          />
-        </div>
-      )}
+      {/* British voice welcome message (hidden audio element) */}
+      <audio
+        ref={welcomeAudioRef}
+        src="/audio/welcome-message.mp3"
+        style={{ display: 'none' }}
+      />
       
       <ControlPanel />
       
@@ -132,11 +149,16 @@ function App() {
             color="#ffffff" 
           />
           
-          {/* British AI voice with electric tendrils effect */}
-          {audioLoaded && (
-            <BitcoinVoiceEffect 
-              bitcoinPosition={new THREE.Vector3(0, 0, 0)} 
-            />
+          {/* Electric tendrils effect for bitcoin core */}
+          {bitcoinTendrilsActive && (
+            <group position={[0, 0, 0]}>
+              <ElectricTendrils 
+                count={12}
+                length={5}
+                color="#00ffff"
+                width={0.15}
+              />
+            </group>
           )}
         </Suspense>
         
