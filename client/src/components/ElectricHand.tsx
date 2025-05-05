@@ -456,14 +456,29 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
           mesh.visible = segment.progress > 0;
           mesh.scale.setScalar(segment.scale * segment.progress);
           
-          // Make star nodes pulse slightly
-          const pulseFactor = 1 + Math.sin(animationTime.current * 10 + i) * 0.1;
-          mesh.scale.multiplyScalar(pulseFactor);
+          // Make stars shimmer and twinkle
+          const baseFrequency = 6 + (i % 5); // Different frequencies for variety
+          const shimmerFactor = 1 + Math.sin(animationTime.current * baseFrequency + i * 2.1) * 0.15;
+          mesh.scale.multiplyScalar(shimmerFactor);
           
-          // Glow intensity based on progress
+          // Glow intensity based on progress with some twinkling
           const material = mesh.material as THREE.MeshStandardMaterial;
           if (material) {
-            material.emissiveIntensity = 1 * segment.progress;
+            // Make the stars twinkle with varying emissive intensity
+            const twinkleFreq = 3 + (i % 4) * 1.5; // Varied frequencies for natural twinkling
+            const twinkle = Math.sin(animationTime.current * twinkleFreq + i * 3.7) * 0.5 + 0.5;
+            material.emissiveIntensity = (1.5 + twinkle * 1.5) * segment.progress;
+            
+            // Occasionally switch colors for some stars to enhance variety
+            if (i % 4 === 0) {
+              const colorShift = Math.sin(animationTime.current * 1.5 + i) * 0.5 + 0.5;
+              material.color.lerpColors(
+                new THREE.Color(color),
+                new THREE.Color(secondaryColor),
+                colorShift
+              );
+              material.emissive.copy(material.color);
+            }
           }
         }
       } else {
@@ -481,15 +496,38 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
         const lineMesh = lineGroupRef.current.children[i] as THREE.Line;
         const material = lineMesh.material as THREE.LineBasicMaterial;
         if (material) {
-          material.opacity = bolts[i].life;
-          
-          // Make lightning color pulse between primary and secondary colors
-          const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
-          material.color.lerpColors(
-            new THREE.Color(color),
-            new THREE.Color(secondaryColor),
-            colorMix
-          );
+          // Check if this is a main lightning bolt or a constellation line
+          if (i < bolts.length) {
+            // This is a main lightning bolt
+            material.opacity = bolts[i].life;
+            
+            // Make lightning color pulse between primary and secondary colors
+            const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
+            material.color.lerpColors(
+              new THREE.Color(color),
+              new THREE.Color(secondaryColor),
+              colorMix
+            );
+          } else {
+            // This is a constellation line - fade with the stars
+            const constellationPhaseProgress = (progress - 0.3) / 0.4; // 0 to 1 during constellation phase
+            let lineOpacity = 0;
+            
+            if (progress >= 0.3 && progress <= 1.0) {
+              lineOpacity = Math.max(0, Math.min(1, constellationPhaseProgress * 3));
+              
+              // Fade out during final phase
+              if (progress > 0.7) {
+                lineOpacity *= 1 - (progress - 0.7) / 0.3;
+              }
+              
+              // Make constellation lines sparkle
+              const sparkle = Math.sin(animationTime.current * 8 + i * 2.7) * 0.5 + 0.5;
+              material.opacity = lineOpacity * (0.6 + sparkle * 0.4);
+            } else {
+              material.opacity = 0;
+            }
+          }
         }
       }
     });
