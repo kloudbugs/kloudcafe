@@ -64,15 +64,6 @@ function App() {
       
       <ControlPanel />
       
-      <div className="absolute top-4 right-4 z-10 flex items-center space-x-4">
-        <button
-          onClick={toggleMute}
-          className="control-btn"
-        >
-          {isMuted ? "Unmute" : "Mute"}
-        </button>
-      </div>
-      
       <Canvas
         shadows
         camera={{ position: [0, 0, 12], fov: 50, near: 0.1, far: 1000 }}
