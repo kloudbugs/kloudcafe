@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useControls } from '../../lib/stores/useControls';
 import { useAudio } from '../../lib/stores/useAudio';
-import { Volume2, VolumeX, BarChart2, Sliders, Hash, Activity, Clock, Zap } from 'lucide-react';
+import { Volume2, VolumeX, BarChart2, Sliders, Hash, Activity, Clock, Zap, Radio } from 'lucide-react';
 
 const ControlPanel: React.FC = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const controls = useControls();
@@ -103,6 +105,28 @@ const ControlPanel: React.FC = () => {
           <span className="flex items-center justify-center">
             {audio.isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </span>
+        </button>
+      </div>
+      
+      {/* Galactic News button */}
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
+        <button
+          onClick={() => navigate('/news')}
+          className="cosmic-main-btn"
+          style={{ 
+            width: '64px',
+            height: '64px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 204, 255, 0.3)',
+            boxShadow: '0 0 15px rgba(0, 204, 255, 0.5)',
+            border: '2px solid #00ccff'
+          }}
+        >
+          <Radio className="w-5 h-5 mb-1 text-cyan-400" />
+          <span className="text-[10px]">News</span>
         </button>
       </div>
       

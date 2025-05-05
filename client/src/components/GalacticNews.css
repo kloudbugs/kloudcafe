@@ -1,0 +1,320 @@
+/* GalacticNews.css - Futuristic cosmic news broadcast styling */
+
+/* Main container */
+.galactic-news {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Orbitron', 'Arial', sans-serif;
+  color: #ffffff;
+}
+
+/* 3D cosmic background */
+.cosmic-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* News overlay */
+.news-overlay {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.news-header {
+  background: rgba(15, 20, 40, 0.8);
+  border-bottom: 2px solid #00ccff;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 25px rgba(0, 204, 255, 0.6);
+}
+
+.news-header h1 {
+  font-size: 24px;
+  color: #00ccff;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: 2px;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(0, 204, 255, 0.8);
+  text-align: center;
+}
+
+.back-button {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #00ccff;
+  color: #00ccff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(0, 204, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 204, 255, 0.5);
+}
+
+.broadcast-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 12px;
+}
+
+.anchor-name {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+.broadcast-time {
+  color: #cccccc;
+}
+
+/* Main content area */
+.news-content {
+  flex: 1;
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  overflow: auto;
+}
+
+/* Video section */
+.news-video-container {
+  flex: 2;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  border: 1px solid #00ccff;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 204, 255, 0.3);
+}
+
+.breaking-news-banner {
+  background: linear-gradient(90deg, #ff0000, #cc0000);
+  color: white;
+  padding: 8px 15px;
+  font-weight: bold;
+  font-size: 16px;
+  animation: pulse 2s infinite;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes pulse {
+  0% { background: linear-gradient(90deg, #ff0000, #cc0000); }
+  50% { background: linear-gradient(90deg, #cc0000, #880000); }
+  100% { background: linear-gradient(90deg, #ff0000, #cc0000); }
+}
+
+.video-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.video-wrapper video.loaded {
+  opacity: 1;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.play-button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(0, 204, 255, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  border: 2px solid #00ccff;
+  box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.play-overlay:hover .play-button {
+  transform: scale(1.1);
+  background: rgba(0, 204, 255, 0.5);
+}
+
+.play-overlay span {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.video-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.control-button {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #00ccff;
+  color: #00ccff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-button:hover {
+  background: rgba(0, 204, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 204, 255, 0.6);
+}
+
+/* Sidebar */
+.news-sidebar {
+  flex: 1;
+  background: rgba(15, 20, 40, 0.8);
+  border-radius: 10px;
+  border: 1px solid #00ccff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 204, 255, 0.3);
+}
+
+.news-sidebar h2 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #00ccff;
+  text-align: center;
+  letter-spacing: 1.5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 204, 255, 0.5);
+}
+
+.news-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+}
+
+.news-item {
+  background: rgba(0, 0, 0, 0.5);
+  border-left: 3px solid #00ccff;
+  padding: 12px;
+  border-radius: 0 5px 5px 0;
+}
+
+.news-item h3 {
+  font-size: 14px;
+  margin: 0 0 8px 0;
+  color: #ffcc00;
+}
+
+.news-item p {
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.5;
+  color: #cccccc;
+}
+
+/* News ticker */
+.news-ticker {
+  background: rgba(15, 20, 40, 0.8);
+  border-top: 2px solid #00ccff;
+  padding: 12px 0;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0, 204, 255, 0.6);
+}
+
+.ticker-content {
+  white-space: nowrap;
+  animation: ticker 60s linear infinite;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .news-content {
+    flex-direction: column;
+  }
+  
+  .news-video-container, .news-sidebar {
+    flex: none;
+  }
+  
+  .news-sidebar {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .news-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .back-button, .broadcast-info {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .broadcast-info {
+    align-items: center;
+  }
+}
