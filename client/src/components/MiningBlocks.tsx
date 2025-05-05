@@ -329,7 +329,7 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
                 position={[0, 0.3, 0]}
               >
                 <spriteMaterial
-                  map={new THREE.TextureLoader().load("/images/bitcoin_symbol.png")}
+                  map={new THREE.TextureLoader().load("/images/bitcoin_symbol.svg")}
                   transparent
                   opacity={0.8}
                   color="#ffcc00"

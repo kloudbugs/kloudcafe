@@ -183,7 +183,7 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
   onComplete
 }) => {
   const groupRef = useRef<THREE.Group>(null);
-  const lineRef = useRef<THREE.Line>(null);
+  const lineGroupRef = useRef<THREE.Group>(null);
   const handSegmentRefs = useRef<THREE.Mesh[]>([]);
   
   const controls = useControls();
@@ -196,13 +196,13 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
   
   // Create lightning bolts
   const bolts = useMemo<LightningBolt[]>(() => {
-    const bolts = [];
+    const boltsArray: LightningBolt[] = [];
     const mainBoltCount = 3;
     const branchBoltCount = 5;
     
     // Create main bolts from position to target
     for (let i = 0; i < mainBoltCount; i++) {
-      bolts.push(createLightningBolt(
+      boltsArray.push(createLightningBolt(
         position, 
         target, 
         10 + Math.floor(Math.random() * 5),
@@ -213,9 +213,9 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
       // Create branch bolts
       for (let j = 0; j < branchBoltCount; j++) {
         // Pick a random point along the main bolt to start branch
-        const mainBolt = bolts[bolts.length - 1];
-        const startIndex = 1 + Math.floor(Math.random() * (mainBolt.segments - 1));
-        const startPoint = mainBolt.points[startIndex];
+        const currentMainBolt = boltsArray[boltsArray.length - 1];
+        const startIndex = 1 + Math.floor(Math.random() * (currentMainBolt.segments - 1));
+        const branchStartPoint = currentMainBolt.points[startIndex].clone();
         
         // Create a random end point for branch
         const branchLength = 0.5 + Math.random() * 1.0;
@@ -225,13 +225,13 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
           Math.random() * 2 - 1
         ).normalize();
         
-        const endPoint = startPoint.clone().add(
+        const endPoint = branchStartPoint.clone().add(
           branchDirection.multiplyScalar(branchLength)
         );
         
         // Create and add branch bolt
-        bolts.push(createLightningBolt(
-          startPoint,
+        boltsArray.push(createLightningBolt(
+          branchStartPoint,
           endPoint,
           3 + Math.floor(Math.random() * 3),
           0.1 + Math.random() * 0.2,
@@ -240,7 +240,7 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
       }
     }
     
-    return bolts;
+    return boltsArray;
   }, [position, target, color, secondaryColor]);
   
   // Create hand segments
@@ -360,17 +360,20 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
     
     // Update material opacity for all lightning lines
     boltLines.forEach((line, i) => {
-      const material = lineRef.current?.children[i]?.material as THREE.LineBasicMaterial;
-      if (material) {
-        material.opacity = bolts[i].life;
-        
-        // Make lightning color pulse between primary and secondary colors
-        const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
-        material.color.lerpColors(
-          new THREE.Color(color),
-          new THREE.Color(secondaryColor),
-          colorMix
-        );
+      if (lineGroupRef.current && lineGroupRef.current.children[i]) {
+        const lineMesh = lineGroupRef.current.children[i] as THREE.Line;
+        const material = lineMesh.material as THREE.LineBasicMaterial;
+        if (material) {
+          material.opacity = bolts[i].life;
+          
+          // Make lightning color pulse between primary and secondary colors
+          const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
+          material.color.lerpColors(
+            new THREE.Color(color),
+            new THREE.Color(secondaryColor),
+            colorMix
+          );
+        }
       }
     });
     
@@ -386,16 +389,18 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
   return (
     <group ref={groupRef}>
       {/* Lightning bolts */}
-      <group ref={lineRef}>
+      <group ref={lineGroupRef}>
         {boltLines.map((line, i) => (
-          <line key={i} geometry={line.geometry}>
+          <mesh key={i}>
+            <bufferGeometry attach="geometry" {...line.geometry} />
             <lineBasicMaterial
+              attach="material"
               color={line.color}
               linewidth={line.width}
               transparent
               opacity={1}
             />
-          </line>
+          </mesh>
         ))}
       </group>
       
