@@ -167,10 +167,7 @@ const ControlPanel: React.FC = () => {
             <div>
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-purple-200" style={{ textShadow: "0 0 5px rgba(153, 0, 255, 0.5)" }}>
-                  Sound
-                  <span className="ml-2 opacity-75 text-xs">
-                    {audio.isMuted ? "(Muted)" : "(On)"}
-                  </span>
+                  Sound Effects
                 </label>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -179,14 +176,7 @@ const ControlPanel: React.FC = () => {
                     onChange={() => audio.toggleMute()}
                     className="sr-only peer"
                   />
-                  <div className="w-12 h-6 bg-gray-700 rounded-full peer peer-checked:bg-[#ffcc00] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-purple-200 after:to-purple-400 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:shadow-[0_0_12px_rgba(255,204,0,0.7)]">
-                    <span className="absolute inset-0 flex items-center justify-center">
-                      {audio.isMuted ? 
-                        <VolumeX className="w-3 h-3 text-gray-400 absolute left-7" /> : 
-                        <Volume2 className="w-3 h-3 text-purple-900 absolute left-2" />
-                      }
-                    </span>
-                  </div>
+                  <div className="w-12 h-6 bg-gray-700 rounded-full peer peer-checked:bg-[#9900ff] peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gradient-to-br after:from-yellow-200 after:to-yellow-400 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:shadow-[0_0_12px_rgba(153,0,255,0.7)]"></div>
                 </label>
               </div>
             </div>
