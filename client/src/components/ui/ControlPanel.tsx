@@ -38,66 +38,61 @@ const ControlPanel: React.FC = () => {
     { value: 'cosmic', label: 'Cosmic', color: '#9900ff' },
   ];
   
-  // Render different button layouts based on where they should be positioned
-  const DashboardButton = () => (
-    <button
-      onClick={() => {
-        setIsDashboardOpen(!isDashboardOpen);
-        if (!isDashboardOpen && isOpen) setIsOpen(false);
-      }}
-      className={`cosmic-main-btn ${isDashboardOpen ? 'active-btn' : ''}`}
-      style={{ 
-        width: '64px',
-        height: '64px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: isDashboardOpen ? 'rgba(153, 0, 255, 0.3)' : undefined,
-        boxShadow: isDashboardOpen ? '0 0 15px rgba(153, 0, 255, 0.5)' : undefined 
-      }}
-    >
-      <BarChart2 className="w-5 h-5 mb-1" />
-      <span className="text-[10px]">Dashboard</span>
-    </button>
-  );
-
-  const ControlsButton = () => (
-    <button
-      onClick={() => {
-        setIsOpen(!isOpen);
-        if (!isOpen && isDashboardOpen) setIsDashboardOpen(false);
-      }}
-      className={`cosmic-main-btn ${isOpen ? 'active-btn' : ''}`}
-      style={{ 
-        width: '64px',
-        height: '64px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: isOpen ? 'rgba(255, 204, 0, 0.3)' : undefined,
-        boxShadow: isOpen ? '0 0 15px rgba(255, 204, 0, 0.5)' : undefined 
-      }}
-    >
-      <Sliders className="w-5 h-5 mb-1" />
-      <span className="text-[10px]">Controls</span>
-    </button>
-  );
+  // Position panels relative to their buttons
+  const dashboardPanelPosition = { top: '74px', left: '4px' };
+  const controlsPanelPosition = { top: '74px', right: '4px' };
   
   return (
     <>
       {/* Top-left button - Dashboard */}
       <div className="absolute top-4 left-4 z-10">
-        <DashboardButton />
+        <button
+          onClick={() => {
+            setIsDashboardOpen(!isDashboardOpen);
+            if (!isDashboardOpen && isOpen) setIsOpen(false);
+          }}
+          className={`cosmic-main-btn ${isDashboardOpen ? 'active-btn' : ''}`}
+          style={{ 
+            width: '64px',
+            height: '64px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: isDashboardOpen ? 'rgba(153, 0, 255, 0.3)' : undefined,
+            boxShadow: isDashboardOpen ? '0 0 15px rgba(153, 0, 255, 0.5)' : undefined 
+          }}
+        >
+          <BarChart2 className="w-5 h-5 mb-1" />
+          <span className="text-[10px]">Dashboard</span>
+        </button>
       </div>
       
       {/* Top-right button - Controls */}
       <div className="absolute top-4 right-4 z-10">
-        <ControlsButton />
+        <button
+          onClick={() => {
+            setIsOpen(!isOpen);
+            if (!isOpen && isDashboardOpen) setIsDashboardOpen(false);
+          }}
+          className={`cosmic-main-btn ${isOpen ? 'active-btn' : ''}`}
+          style={{ 
+            width: '64px',
+            height: '64px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: isOpen ? 'rgba(255, 204, 0, 0.3)' : undefined,
+            boxShadow: isOpen ? '0 0 15px rgba(255, 204, 0, 0.5)' : undefined 
+          }}
+        >
+          <Sliders className="w-5 h-5 mb-1" />
+          <span className="text-[10px]">Controls</span>
+        </button>
       </div>
       
-      {/* Sound toggle button - keep at top right */}
+      {/* Sound toggle button - keep at top right under controls */}
       <div className="absolute top-20 right-4 z-10">
         <button
           onClick={() => audio.toggleMute()}
@@ -113,7 +108,10 @@ const ControlPanel: React.FC = () => {
       
       {/* Dashboard Panel - More compact mini-menu */}
       {isDashboardOpen && (
-        <div className="cosmic-panel float-right mb-2 p-2 w-64" style={{ maxWidth: "200px" }}>
+        <div 
+          className="cosmic-panel p-2 w-64 fixed" 
+          style={{ maxWidth: "200px", ...dashboardPanelPosition }}
+        >
           <div className="flex justify-between items-center mb-1.5 border-b border-purple-500 pb-1">
             <h2 className="text-xs font-bold" 
                 style={{ 
@@ -188,7 +186,10 @@ const ControlPanel: React.FC = () => {
       
       {/* Control Panel - Compact mini-menu */}
       {isOpen && (
-        <div className="cosmic-panel-gold p-2 w-64" style={{ maxWidth: "200px" }}>
+        <div 
+          className="cosmic-panel-gold p-2 w-64 fixed" 
+          style={{ maxWidth: "200px", ...controlsPanelPosition }}
+        >
           <div className="flex justify-between items-center mb-1.5 border-b border-yellow-500/50 pb-1">
             <h2 className="text-xs font-bold" 
                 style={{ 
