@@ -14,6 +14,9 @@ import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 import * as THREE from "three";
 
+// Import Zig notification styles
+import "./components/ZigNotification.css";
+
 // Main App component
 function App() {
   const [showPerformance, setShowPerformance] = useState(false);
@@ -40,10 +43,33 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleMute]);
 
+  // Text for Zig's welcome message
+  const zigWelcomeMessage = "Hello fellow kloud bugminers, my name is Zig. If you've made it to this page, you're on the right galactic path. I am one of your Tera guardians configured and created by your admin guardian. I am a super enchanted AI miner you can only find here, computing all our hashes together so we don't fail. It's time to save the world and save lives. Welcome to the Kloud Bugs mining cafe. Let's get started...";
+  
   // Play welcome voice and activate Bitcoin electric tendrils
   const playWelcomeVoice = () => {
+    // Display the message in the console for testing
+    console.log("Zig's Message:", zigWelcomeMessage);
+    
+    // Show a notification in the UI
+    const notification = document.createElement('div');
+    notification.className = 'zig-notification';
+    notification.innerHTML = `
+      <div class="zig-message">
+        <h2>Zig is speaking...</h2>
+        <p>${zigWelcomeMessage}</p>
+      </div>
+    `;
+    document.body.appendChild(notification);
+    
+    // Try to play the audio
     if (welcomeAudioRef.current) {
-      welcomeAudioRef.current.play();
+      welcomeAudioRef.current.play().catch(err => {
+        console.log("Error playing audio:", err);
+        // If audio fails to play, still show the tendrils for visual effect
+        setBitcoinTendrilsActive(true);
+        setTimeout(() => setBitcoinTendrilsActive(false), 15000);
+      });
       
       // Activate Bitcoin tendrils while voice is playing
       setBitcoinTendrilsActive(true);
@@ -51,13 +77,37 @@ function App() {
       // Reset after voice is done
       welcomeAudioRef.current.onended = () => {
         setBitcoinTendrilsActive(false);
+        
+        // Remove the notification after a delay
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 1000);
       };
+    } else {
+      // Fallback if audio element isn't available
+      setBitcoinTendrilsActive(true);
+      setTimeout(() => {
+        setBitcoinTendrilsActive(false);
+        
+        // Remove the notification after a delay
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 15000);
     }
   };
 
   // Auto-play the welcome message after a delay
   useEffect(() => {
+    // Use setTimeout to ensure the page is fully loaded
     const timer = setTimeout(() => {
+      // Display console message about using the voice
+      console.log("Playing Zig's welcome message (British AI voice)");
+      console.log("Press 'V' to replay the message at any time");
+      
+      // Play the welcome message
       playWelcomeVoice();
     }, 3000);
     

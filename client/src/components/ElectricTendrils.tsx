@@ -7,6 +7,7 @@ interface ElectricTendrilsProps {
   length?: number;
   color?: string;
   width?: number;
+  messageDisplayTime?: number;
 }
 
 const ElectricTendrils: React.FC<ElectricTendrilsProps> = ({
