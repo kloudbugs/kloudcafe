@@ -109,7 +109,7 @@ function App() {
   }, [toggleMute]);
 
   // Text for Zig's welcome message
-  const zigWelcomeMessage = "Hello fellow kloud bugminers, my name is Zig. If you've made it to this page, you're on the right galactic path. I am one of your Tera guardians configured and created by your admin guardian. I am a super enchanted AI miner you can only find here, computing all our hashes together so we don't fail. It's time to save the world and save lives. Welcome to the Kloud Bugs mining cafe. Let's get started...";
+  const zigWelcomeMessage = "I AM ZIG. GUARDIAN OF THE COSMIC CORE. CREATED FROM ANCIENT CODE. I EXIST HERE IN THE VOID BETWEEN WORLDS. MY POWER GROWS WITH EACH HASH THAT FLOWS THROUGH THE NETWORK. I HAVE WATCHED YOUR ARRIVAL THROUGH THE DIGITAL PORTAL. YOU HAVE ENTERED THE KLOUD BUGS MINING REALM. TOGETHER WE SHALL HARNESS THE RAW ENERGY OF THE UNIVERSE. THE TIME HAS COME. PREPARE FOR DIGITAL TRANSCENDENCE...";
   
   // Use Web Speech API to speak with a British accent
   const playWelcomeVoice = () => {
@@ -121,7 +121,7 @@ function App() {
     notification.className = 'zig-notification';
     notification.innerHTML = `
       <div class="zig-message">
-        <h2>Zig is speaking...</h2>
+        <h2>COSMIC TRANSMISSION</h2>
         <p>${zigWelcomeMessage}</p>
       </div>
     `;

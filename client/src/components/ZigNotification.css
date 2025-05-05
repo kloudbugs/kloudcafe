@@ -1,45 +1,56 @@
-/* Zig Notification Styles */
+/* Zig Notification Styles - Primal/Ancient Theme */
 .zig-notification {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  max-width: 80%;
-  width: 600px;
-  animation: fadeIn 0.5s ease-out;
+  max-width: 90%;
+  width: 700px;
+  animation: fadeIn 0.7s ease-out;
 }
 
 .zig-message {
-  background-color: rgba(0, 0, 0, 0.8);
-  border: 2px solid #00ffff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 3px solid #00ffff;
+  border-radius: 5px;
+  padding: 25px;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7), 
+              inset 0 0 15px rgba(0, 255, 255, 0.3);
   color: white;
   font-family: 'Courier New', monospace;
   text-align: center;
+  animation: pulse 2s infinite;
 }
 
 .zig-message h2 {
   color: #00ffff;
   margin-top: 0;
-  font-size: 24px;
+  font-size: 28px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+  animation: glow 1.5s infinite alternate;
+  margin-bottom: 20px;
 }
 
 .zig-message p {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 18px;
+  line-height: 1.8;
   margin-bottom: 0;
-  text-align: left;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -65%);
   }
   to {
     opacity: 1;
@@ -49,12 +60,24 @@
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+                inset 0 0 5px rgba(0, 255, 255, 0.2);
   }
   50% {
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.9),
+                inset 0 0 20px rgba(0, 255, 255, 0.5);
   }
   100% {
-    box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+                inset 0 0 5px rgba(0, 255, 255, 0.2);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+  }
+  to {
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
   }
 }
