@@ -5,18 +5,18 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  max-width: 90%;
-  width: 650px;
+  max-width: 50%;
+  width: 325px; /* Half of the original 650px */
   animation: fadeIn 0.7s ease-out;
 }
 
 .zig-message {
   background-color: rgba(0, 0, 0, 0.7); /* More transparent to see through to the core ball */
-  border: 2px solid #00ffff;
-  border-radius: 5px;
-  padding: 18px;
-  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7), 
-              inset 0 0 15px rgba(0, 255, 255, 0.3);
+  border: 1px solid #00ffff; /* Reduced border size */
+  border-radius: 3px; /* Reduced from 5px */
+  padding: 10px; /* Reduced from 18px */
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.7), 
+              inset 0 0 10px rgba(0, 255, 255, 0.3);
   color: white;
   font-family: 'Courier New', monospace;
   text-align: center;
@@ -26,24 +26,24 @@
 .zig-message h2 {
   color: #00ffff;
   margin-top: 0;
-  font-size: 24px;
+  font-size: 16px; /* Reduced from 24px */
   text-transform: uppercase;
-  letter-spacing: 3px;
+  letter-spacing: 2px; /* Reduced slightly */
   font-weight: 800;
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
   animation: glow 1.5s infinite alternate;
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Reduced slightly */
 }
 
 .zig-message p {
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 10px; /* Adjusted from 8px for better readability */
+  line-height: 1.4; /* Adjusted from 1.5 */
   margin-bottom: 0;
   text-align: center;
   color: #ffffff;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
 }
 
