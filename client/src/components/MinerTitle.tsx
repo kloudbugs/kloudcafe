@@ -23,7 +23,7 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
   const pulseColor = controls.getColorByScheme('pulse');
   
   // Animation for the title
-  useFrame(({ clock }) => {
+  useFrame(({ clock }: { clock: Clock }) => {
     if (titleRef.current) {
       // Subtle floating animation
       const t = clock.getElapsedTime();
@@ -31,6 +31,24 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
       
       // Subtle rotation
       titleRef.current.rotation.y = Math.sin(t * 0.3) * 0.05;
+      
+      // Access and update text materials for pulsing glow effect
+      titleRef.current.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material) {
+          // Find the text meshes by checking if they have emissive property
+          if (child.material.emissive) {
+            // Pulsing effect by modulating emissive intensity
+            // Different frequencies for each text element
+            if (child.position.y > 0) { // Main title
+              (child.material as THREE.MeshStandardMaterial).emissiveIntensity = 
+                0.6 + Math.sin(t * 2.5) * 0.4; // Range from 0.2 to 1.0
+            } else { // Subtitle
+              (child.material as THREE.MeshStandardMaterial).emissiveIntensity = 
+                0.5 + Math.sin(t * 3.5 + 1) * 0.3; // Range from 0.2 to 0.8 with phase offset
+            }
+          }
+        }
+      });
     }
   });
   
@@ -68,7 +86,7 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
           <Text
             position={[0, -0.25, 0]}
             fontSize={0.35}
-            font="/fonts/Orbitron-Medium.ttf"
+            font="https://fonts.gstatic.com/s/orbitron/v31/yMJMMIlzdpvBhQQL_SC3X9yhF25-T1nyGy6xpmIyXw.woff"
             color={secondaryColor}
             outlineWidth={0.03}
             outlineColor="#000000"
@@ -81,7 +99,7 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
               new THREE.MeshStandardMaterial({
                 color: secondaryColor,
                 emissive: secondaryColor,
-                emissiveIntensity: 0.6,
+                emissiveIntensity: 0.7,
                 metalness: 0.6,
                 roughness: 0.3,
               })
