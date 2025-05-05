@@ -43,7 +43,7 @@ const ControlPanel: React.FC = () => {
                   color: "#ffcc00", 
                   textShadow: "0 0 10px rgba(255, 204, 0, 0.5)",
                   letterSpacing: "1px"
-                }}>ZIG MINER CONTROLS</h2>
+                }}>ZIG-MINER CONTROLS</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="text-yellow-400 hover:text-yellow-300 hover:scale-110 transition-all"

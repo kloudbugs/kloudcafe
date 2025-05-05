@@ -131,7 +131,9 @@ function App() {
                   fontWeight: 'bold',
                   letterSpacing: '1px',
                   filter: 'drop-shadow(0 0 8px rgba(153, 0, 255, 0.8))'
-                }}>KLOUDBUGS</h1>
+                }}>
+                  KLOUDBUGS CAFE
+                </h1>
                 <p style={{ 
                   fontSize: '1.5rem', 
                   margin: '0.5rem 0 0',
@@ -139,7 +141,7 @@ function App() {
                   textShadow: '0 0 10px #ffcc00, 0 0 20px #ffcc00',
                   fontWeight: 'bold',
                   letterSpacing: '2px'
-                }}>CAFE ZIG MINER</p>
+                }}>ZIG-MINER</p>
               </div>
             </Html>
           </group>
