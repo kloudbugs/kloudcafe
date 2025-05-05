@@ -117,152 +117,43 @@ function App() {
   // Background beat audio element (will play after Zig finishes speaking)
   const [backgroundBeat] = useState<HTMLAudioElement | null>(null);
   
-  // Use Web Speech API to speak with a British accent
+  // Skip voice and only play background music
   const playWelcomeVoice = () => {
-    // Display the message in the console for testing
-    console.log("Zig's Message:", zigWelcomeMessage);
+    // Skip voice synthesis completely and go straight to playing music
+    console.log("Skipping AI voice, only playing music");
     
-    // Show a notification in the UI
+    // Show a minimal notification in the UI
     const notification = document.createElement('div');
     notification.className = 'zig-notification';
     notification.innerHTML = `
       <div class="zig-message">
-        <h2>TRANSMISSION FOR JUSTICE</h2>
-        <p>${zigWelcomeMessage}</p>
+        <h2>KLOUDBUGS MINING COLLECTIVE</h2>
+        <p>Transforming digital power into social change</p>
       </div>
     `;
     document.body.appendChild(notification);
     
-    // Activate Bitcoin tendrils immediately
+    // Activate Bitcoin tendrils briefly
     setBitcoinTendrilsActive(true);
     
-    // Create speech synthesis utterance
-    const utterance = new SpeechSynthesisUtterance(zigWelcomeMessage);
-    
-    // Try to find British voices and use a specific one
-    const voices = window.speechSynthesis.getVoices();
-    console.log("Available voices:", voices.length);
-    
-    // Filter British voices
-    const britishVoices = voices.filter(voice => 
-      voice.lang.includes('en-GB') || 
-      voice.name.includes('British') ||
-      voice.name.includes('UK')
-    );
-    
-    console.log("British voices available:", britishVoices.map(v => v.name).join(", "));
-    
-    // Try different British voices - prefer female voices as requested
-    let selectedVoice = null;
-    
-    // Try to find female British voices first (Libby, Maisie, or Sonia)
-    selectedVoice = britishVoices.find(voice => 
-      voice.name.includes("Libby") || voice.name.includes("Maisie") || voice.name.includes("Sonia")
-    );
-    
-    // If not found, try any British voice
-    if (!selectedVoice && britishVoices.length > 0) {
-      selectedVoice = britishVoices[0];
+    // Start playing the J. Cole beat immediately
+    const audioStore = useAudio.getState();
+    if (audioStore.backgroundMusic) {
+      audioStore.backgroundMusic.currentTime = 0; // Start from the beginning
+      audioStore.backgroundMusic.play().catch(e => {
+        console.log("Could not auto-play music:", e);
+      });
+      console.log("Playing J. Cole beat");
     }
     
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-      console.log("Using British voice:", selectedVoice.name);
-    } else {
-      console.log("No British voice found, using default voice");
-    }
-    
-    // Set voice parameters
-    utterance.pitch = 1.0; 
-    utterance.rate = 1.1;  // Slightly faster as requested
-    
-    // When done speaking
-    utterance.onend = () => {
-      console.log("Speech finished");
-      // Deactivate tendrils
+    // Remove notification and deactivate tendrils after 3 seconds
+    setTimeout(() => {
       setBitcoinTendrilsActive(false);
       
-      // Remove notification
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-      }, 1000);
-      
-      // Display a message to indicate song is now playing
-      console.log("ZIG SPEECH COMPLETE - PLAYING J. COLE BEAT (WILL NAVIGATE TO KLOUDBUGS CAFE WHEN DONE)");
-      
-      // Add a visual indicator that speech is done and song is playing
-      const songReadyMessage = document.createElement('div');
-      songReadyMessage.className = 'song-ready-message';
-      songReadyMessage.innerHTML = `
-        <div class="song-message">
-          <p>PLAYING SONG - WILL NAVIGATE TO KLOUDBUGS CAFE WHEN COMPLETE</p>
-        </div>
-      `;
-      songReadyMessage.style.position = 'fixed';
-      songReadyMessage.style.bottom = '80px';
-      songReadyMessage.style.right = '20px';
-      songReadyMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-      songReadyMessage.style.color = '#00ffff';
-      songReadyMessage.style.padding = '10px 15px';
-      songReadyMessage.style.borderRadius = '5px';
-      songReadyMessage.style.border = '1px solid #00ffff';
-      songReadyMessage.style.zIndex = '1000';
-      songReadyMessage.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.5)';
-      songReadyMessage.style.fontFamily = 'Courier New, monospace';
-      songReadyMessage.style.fontSize = '14px';
-      songReadyMessage.style.textTransform = 'uppercase';
-      document.body.appendChild(songReadyMessage);
-      
-      // Start playing the J. Cole beat
-      const audioStore = useAudio.getState();
-      if (audioStore.backgroundMusic) {
-        audioStore.backgroundMusic.currentTime = 0; // Start from the beginning
-        audioStore.backgroundMusic.play().catch(e => {
-          console.log("Could not auto-play music after speech:", e);
-        });
-        console.log("Started playing J. Cole beat after Zig's speech");
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
       }
-      
-      // Remove the message after 10 seconds
-      setTimeout(() => {
-        if (songReadyMessage.parentNode) {
-          songReadyMessage.parentNode.removeChild(songReadyMessage);
-        }
-      }, 10000);
-    };
-    
-    // If speech synthesis fails or takes too long, set a maximum time for the effect
-    const maxDuration = 25000; // 25 seconds
-    const tendrilTimeout = setTimeout(() => {
-      if (bitcoinTendrilsActive) {
-        setBitcoinTendrilsActive(false);
-        
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-        
-        window.speechSynthesis.cancel(); // Cancel any ongoing speech
-      }
-    }, maxDuration);
-    
-    // Speak the text
-    try {
-      window.speechSynthesis.cancel(); // Cancel any previous speech
-      window.speechSynthesis.speak(utterance);
-      console.log("Starting to speak...");
-    } catch (error) {
-      console.error("Speech synthesis error:", error);
-      // Keep the tendrils and notification for a shorter time if speech fails
-      setTimeout(() => {
-        setBitcoinTendrilsActive(false);
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-        clearTimeout(tendrilTimeout);
-      }, 15000);
-    }
+    }, 3000);
   };
 
   // Remove auto-play (now handled in the voice initialization effect)
