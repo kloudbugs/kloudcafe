@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useControls } from '../lib/stores/useControls';
@@ -11,14 +11,13 @@ interface MiningGridProps {
   maxBlockSize?: number;
 }
 
-// This component creates a grid-like structure of mining blocks
-// Similar to the mempool visualization in the reference image
+// This component creates a 3D cube structure of mining blocks
 const MiningGrid: React.FC<MiningGridProps> = ({
   width = 10,
   height = 10,
-  depth = 0.1,
+  depth = 10,
   cellSize = 0.2,
-  maxBlockSize = 4, // Maximum block size in cells
+  maxBlockSize = 2, // Maximum block size in cells
 }) => {
   const gridRef = useRef<THREE.Group>(null);
   const controls = useControls();
@@ -60,141 +59,240 @@ const MiningGrid: React.FC<MiningGridProps> = ({
     }), 
   [accentColor]);
   
+  const goldMaterial = useMemo(() => 
+    new THREE.MeshStandardMaterial({
+      color: new THREE.Color('#ffd700'), // Gold for special blocks
+      emissive: new THREE.Color('#ffd700'),
+      emissiveIntensity: 0.3,
+      metalness: 1.0,
+      roughness: 0.1,
+      transparent: true,
+      opacity: 0.95,
+    }), 
+  []);
+  
   interface BlockData {
     position: THREE.Vector3;
     size: THREE.Vector3;
-    isHighlighted: boolean;
+    type: 'normal' | 'highlight' | 'gold';
+    rotationSpeed?: THREE.Vector3;
+    pulseFrequency?: number;
+    pulsePhase?: number;
   }
   
-  // Generate grid data using a space-filling algorithm
+  // Generate 3D mining cube
   const gridBlocks = useMemo(() => {
     const blocks: BlockData[] = [];
-    const grid = Array(width).fill(0).map(() => Array(height).fill(false));
+    const grid = Array(width).fill(0).map(() => 
+      Array(height).fill(0).map(() => 
+        Array(depth).fill(false)
+      )
+    );
     
-    // Fill grid with blocks of different sizes
-    const fillGrid = (remainingCells: number, depth = 0) => {
-      if (remainingCells <= 0 || depth > 100) return;
+    // Create cube frame edges
+    const halfWidth = width * cellSize / 2;
+    const halfHeight = height * cellSize / 2;
+    const halfDepth = depth * cellSize / 2;
+    
+    // Add frame corners (gold blocks)
+    const cornerPositions = [
+      [-halfWidth, -halfHeight, -halfDepth],
+      [halfWidth, -halfHeight, -halfDepth],
+      [-halfWidth, halfHeight, -halfDepth],
+      [halfWidth, halfHeight, -halfDepth],
+      [-halfWidth, -halfHeight, halfDepth],
+      [halfWidth, -halfHeight, halfDepth],
+      [-halfWidth, halfHeight, halfDepth],
+      [halfWidth, halfHeight, halfDepth],
+    ];
+    
+    cornerPositions.forEach(pos => {
+      blocks.push({
+        position: new THREE.Vector3(pos[0], pos[1], pos[2]),
+        size: new THREE.Vector3(cellSize * 1.2, cellSize * 1.2, cellSize * 1.2),
+        type: 'gold',
+        pulseFrequency: 0.5 + Math.random() * 1.0,
+        pulsePhase: Math.random() * Math.PI * 2
+      });
+    });
+    
+    // Fill interior with random blocks
+    const totalCells = width * height * depth;
+    const desiredFillPercentage = 0.05; // Only fill 5% of the volume with blocks
+    const targetBlockCount = Math.floor(totalCells * desiredFillPercentage);
+    
+    for (let i = 0; i < targetBlockCount; i++) {
+      // Find a random empty spot
+      let attempts = 0;
+      let placed = false;
       
-      // Find an empty spot
-      let startX = -1, startY = -1;
-      outerLoop: 
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          if (!grid[x][y]) {
-            startX = x;
-            startY = y;
-            break outerLoop;
-          }
-        }
-      }
-      
-      if (startX === -1) return; // Grid is full
-      
-      // Determine maximum possible block size at this position
-      let blockSize = 1;
-      let canExpand = true;
-      
-      while (canExpand && blockSize < maxBlockSize) {
-        // Try to expand in both directions
-        const newSize = blockSize + 1;
+      while (!placed && attempts < 100) {
+        const x = Math.floor(Math.random() * (width - maxBlockSize));
+        const y = Math.floor(Math.random() * (height - maxBlockSize));
+        const z = Math.floor(Math.random() * (depth - maxBlockSize));
         
-        // Check if we can expand
-        if (startX + newSize > width || startY + newSize > height) {
-          canExpand = false;
-          continue;
-        }
+        // Check if space is available
+        let isEmpty = true;
+        let sizeX = 1 + Math.floor(Math.random() * (maxBlockSize - 1));
+        let sizeY = 1 + Math.floor(Math.random() * (maxBlockSize - 1));
+        let sizeZ = 1 + Math.floor(Math.random() * (maxBlockSize - 1));
         
-        // Check if all cells in expanded area are empty
-        for (let x = startX; x < startX + newSize; x++) {
-          for (let y = startY; y < startY + newSize; y++) {
-            if (grid[x][y]) {
-              canExpand = false;
-              break;
+        for (let dx = 0; dx < sizeX && isEmpty; dx++) {
+          for (let dy = 0; dy < sizeY && isEmpty; dy++) {
+            for (let dz = 0; dz < sizeZ && isEmpty; dz++) {
+              if (x + dx >= width || y + dy >= height || z + dz >= depth || grid[x + dx][y + dy][z + dz]) {
+                isEmpty = false;
+              }
             }
           }
-          if (!canExpand) break;
         }
         
-        if (canExpand) blockSize = newSize;
-      }
-      
-      // Mark cells as filled
-      for (let x = startX; x < startX + blockSize; x++) {
-        for (let y = startY; y < startY + blockSize; y++) {
-          grid[x][y] = true;
+        if (isEmpty) {
+          // Mark as filled
+          for (let dx = 0; dx < sizeX; dx++) {
+            for (let dy = 0; dy < sizeY; dy++) {
+              for (let dz = 0; dz < sizeZ; dz++) {
+                grid[x + dx][y + dy][z + dz] = true;
+              }
+            }
+          }
+          
+          // Add the block
+          const blockWidth = sizeX * cellSize;
+          const blockHeight = sizeY * cellSize;
+          const blockDepth = sizeZ * cellSize;
+          
+          const posX = x * cellSize - halfWidth + (blockWidth / 2);
+          const posY = y * cellSize - halfHeight + (blockHeight / 2);
+          const posZ = z * cellSize - halfDepth + (blockDepth / 2);
+          
+          // Determine block type (most normal, some highlighted)
+          const blockType = Math.random() < 0.2 ? 'highlight' : 'normal';
+          
+          blocks.push({
+            position: new THREE.Vector3(posX, posY, posZ),
+            size: new THREE.Vector3(
+              blockWidth * 0.9, // Slightly smaller than cell for spacing
+              blockHeight * 0.9,
+              blockDepth * 0.9
+            ),
+            type: blockType,
+            rotationSpeed: new THREE.Vector3(
+              (Math.random() - 0.5) * 0.01,
+              (Math.random() - 0.5) * 0.01,
+              (Math.random() - 0.5) * 0.01
+            ),
+            pulseFrequency: 0.2 + Math.random() * 0.5,
+            pulsePhase: Math.random() * Math.PI * 2
+          });
+          
+          placed = true;
         }
+        
+        attempts++;
       }
-      
-      // Calculate block position and dimensions
-      const blockWidth = blockSize * cellSize;
-      const blockHeight = blockSize * cellSize;
-      const posX = startX * cellSize - (width * cellSize / 2) + (blockWidth / 2);
-      const posY = startY * cellSize - (height * cellSize / 2) + (blockHeight / 2);
-      
-      // Add some randomization to the blocks
-      const isHighlighted = Math.random() < 0.2; // 20% chance to be highlighted
-      const blockDepth = depth * (0.8 + Math.random() * 0.4); // Randomize depth a bit
-      
-      blocks.push({
-        position: new THREE.Vector3(posX, posY, 0),
-        size: new THREE.Vector3(blockWidth - 0.02, blockHeight - 0.02, blockDepth),
-        isHighlighted,
-      });
-      
-      // Continue filling remaining cells
-      fillGrid(remainingCells - blockSize * blockSize, depth + 1);
-    };
-    
-    // Start filling grid
-    fillGrid(width * height);
+    }
     
     return blocks;
-  }, [width, height, cellSize, maxBlockSize, depth]);
+  }, [width, height, depth, cellSize, maxBlockSize, goldMaterial]);
   
-  // Animation
-  useFrame((_, delta) => {
-    if (!gridRef.current) return;
-    
-    // Rotate the entire grid slightly based on autoRotate setting
-    if (controls.autoRotate) {
-      gridRef.current.rotation.y += delta * controls.rotationSpeed * 0.05;
-      gridRef.current.rotation.x += delta * controls.rotationSpeed * 0.02;
-    }
-  });
-  
-  // Create the edges of the entire grid
-  const gridEdges = useMemo(() => {
-    const gridWidth = width * cellSize;
-    const gridHeight = height * cellSize;
+  // Create cube frame edges
+  const cubeEdges = useMemo(() => {
+    const halfWidth = width * cellSize / 2;
+    const halfHeight = height * cellSize / 2;
+    const halfDepth = depth * cellSize / 2;
     
     const vertices = [
-      // Bottom face
-      -gridWidth/2, -gridHeight/2, 0,
-      gridWidth/2, -gridHeight/2, 0,
-      gridWidth/2, gridHeight/2, 0,
-      -gridWidth/2, gridHeight/2, 0,
-      -gridWidth/2, -gridHeight/2, 0,
+      // Bottom face (z = -halfDepth)
+      -halfWidth, -halfHeight, -halfDepth,
+      halfWidth, -halfHeight, -halfDepth,
+      halfWidth, halfHeight, -halfDepth,
+      -halfWidth, halfHeight, -halfDepth,
+      -halfWidth, -halfHeight, -halfDepth,
+      
+      // Top face (z = halfDepth)
+      -halfWidth, -halfHeight, halfDepth,
+      halfWidth, -halfHeight, halfDepth,
+      halfWidth, halfHeight, halfDepth,
+      -halfWidth, halfHeight, halfDepth,
+      -halfWidth, -halfHeight, halfDepth,
+      
+      // Connect bottom to top
+      -halfWidth, -halfHeight, -halfDepth,
+      -halfWidth, -halfHeight, halfDepth,
+      
+      // Move to another corner
+      halfWidth, -halfHeight, -halfDepth,
+      halfWidth, -halfHeight, halfDepth,
+      
+      // Move to another corner
+      halfWidth, halfHeight, -halfDepth,
+      halfWidth, halfHeight, halfDepth,
+      
+      // Move to last corner
+      -halfWidth, halfHeight, -halfDepth,
+      -halfWidth, halfHeight, halfDepth,
     ];
     
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
     
     return geometry;
-  }, [width, height, cellSize]);
+  }, [width, height, depth, cellSize]);
+  
+  // Handle animations
+  const [time, setTime] = useState(0);
+  
+  useFrame((_, delta) => {
+    if (!gridRef.current) return;
+    
+    // Update time
+    setTime(prevTime => prevTime + delta);
+    
+    // Rotate the entire grid based on autoRotate setting
+    if (controls.autoRotate) {
+      gridRef.current.rotation.y += delta * controls.rotationSpeed * 0.05;
+      gridRef.current.rotation.x = Math.sin(time * 0.1) * 0.05;
+    }
+    
+    // Animate individual blocks
+    gridRef.current.children.forEach((child, index) => {
+      if (index > 0) { // Skip the cube edges which is the first child
+        const block = gridBlocks[index - 1];
+        
+        // Apply rotation if this block has rotation speed
+        if (block.rotationSpeed) {
+          child.rotation.x += block.rotationSpeed.x;
+          child.rotation.y += block.rotationSpeed.y;
+          child.rotation.z += block.rotationSpeed.z;
+        }
+        
+        // Apply pulsing effect if block has pulse frequency
+        if (block.pulseFrequency && block.pulsePhase !== undefined) {
+          const scale = 1 + 0.05 * Math.sin(time * block.pulseFrequency + block.pulsePhase);
+          child.scale.set(scale, scale, scale);
+        }
+      }
+    });
+  });
   
   return (
-    <group ref={gridRef} position={[0, 0, -5]}>
-      {/* Grid outline - creating a custom-positioned line */}
-      <group>
-        <primitive object={new THREE.Line(gridEdges, edgeMaterial)} />
-      </group>
+    <group ref={gridRef} position={[0, 0, 0]} rotation={[0.2, 0.3, 0]}>
+      {/* Cube frame edges */}
+      <primitive object={new THREE.LineSegments(cubeEdges, edgeMaterial)} />
       
       {/* Grid blocks */}
       {gridBlocks.map((block, index) => (
         <mesh 
           key={index}
           position={block.position}
-          material={block.isHighlighted ? highlightMaterial : blockMaterial}
+          material={
+            block.type === 'gold' 
+              ? goldMaterial
+              : block.type === 'highlight' 
+                ? highlightMaterial 
+                : blockMaterial
+          }
         >
           <boxGeometry args={[block.size.x, block.size.y, block.size.z]} />
         </mesh>
