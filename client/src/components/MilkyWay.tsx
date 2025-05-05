@@ -27,10 +27,10 @@ const MilkyWay: React.FC<MilkyWayProps> = ({
     const sizes = new Float32Array(particleCount);
     const phases = new Float32Array(particleCount);
     
-    const armCount = 5;
-    const armWidth = 0.15;
-    const coreSize = 0.6;
-    const spiralFactor = 3;
+    const armCount = 4;
+    const armWidth = 0.2;
+    const coreSize = 0.4; // Smaller core for more prominence of spiral arms
+    const spiralFactor = 4; // More pronounced spiral
     
     const coreColorVec = new THREE.Color(coreColor);
     const outerColorVec = new THREE.Color(outerColor);
@@ -92,6 +92,17 @@ const MilkyWay: React.FC<MilkyWayProps> = ({
   
   return (
     <group ref={galaxyRef} rotation={[Math.PI / 6, 0, 0]}>
+      {/* Purple haze effect to match reference image */}
+      <mesh>
+        <sphereGeometry args={[radius * 0.7, 32, 32]} />
+        <meshBasicMaterial 
+          color="#8800cc" 
+          transparent 
+          opacity={0.15} 
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute

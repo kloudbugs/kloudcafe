@@ -44,8 +44,8 @@ function App() {
           THREE.MathUtils.randFloatSpread(20)
         );
         
-        // Random color from cosmic palette
-        const colors = ['#00ffff', '#9900ff', '#ffcc00', '#ff00cc'];
+        // Random color from cosmic palette, matching the red/purple theme
+        const colors = ['#ff3366', '#9900ff', '#8800cc', '#ff1a75'];
         const color = colors[Math.floor(Math.random() * colors.length)];
         
         const radius = 2 + Math.random() * 4;
@@ -136,13 +136,13 @@ function App() {
         <color attach="background" args={["#0a0a0a"]} /> {/* using cosmic-black from the guide */}
         
         <Suspense fallback={null}>
-          {/* Milky Way background - large galaxy effect */}
+          {/* Milky Way background - large galaxy effect, styled after reference image */}
           <MilkyWay 
             radius={150}
             particleCount={5000}
-            coreColor="#9900ff"
-            outerColor="#00ffcc"
-            opacity={0.4}
+            coreColor="#ffffff" 
+            outerColor="#ff1a75" // More vibrant pink/red like the reference image
+            opacity={0.5}
           />
           
           <Cell />
@@ -187,7 +187,7 @@ function App() {
           <SpaceStorm 
             position={new THREE.Vector3(40, 20, -40)}
             radius={10}
-            color="#ff00cc"
+            color="#9900ff" // Match the purple theme from reference image
             duration={100000} // Effectively permanent
             speed={0.3}
             intensity={0.3}
