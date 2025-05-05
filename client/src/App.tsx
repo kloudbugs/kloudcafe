@@ -70,46 +70,6 @@ function App() {
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
       
-      {/* Fallback big flashy title outside of Three.js */}
-      <div style={{
-        position: 'absolute',
-        top: '20%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 100,
-        textAlign: 'center',
-        fontFamily: 'Orbitron, sans-serif',
-        animation: 'pulse 2s infinite'
-      }}>
-        <div style={{
-          background: 'linear-gradient(45deg, rgba(0,0,0,0.7), rgba(0,0,0,0.3))',
-          padding: '20px 40px',
-          borderRadius: '15px',
-          border: '2px solid #9900ff',
-          boxShadow: '0 0 30px rgba(153,0,255,0.6), 0 0 60px rgba(0,255,204,0.3)'
-        }}>
-          <h1 style={{
-            fontSize: '4rem',
-            background: 'linear-gradient(to right, #9900ff, #00ffcc)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            margin: '0 0 10px 0',
-            fontWeight: 'bold',
-            letterSpacing: '3px',
-            textShadow: '0 0 5px rgba(153,0,255,0.5)',
-          }}>KLOUDBUGS CAFE</h1>
-          <h2 style={{
-            fontSize: '2.5rem',
-            color: '#ffcc00',
-            margin: 0,
-            fontWeight: 'bold',
-            textShadow: '0 0 10px rgba(255,204,0,0.7), 0 0 20px rgba(255,100,0,0.5)',
-            letterSpacing: '2px',
-          }}>ZIG-MINER</h2>
-        </div>
-      </div>
-      
       <ControlPanel />
       
       <Canvas
