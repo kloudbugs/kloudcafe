@@ -1,7 +1,7 @@
 /* Zig Notification Styles - Primal/Ancient Theme */
 .zig-notification {
   position: fixed;
-  top: 50%;
+  top: 65%; /* Moved down from 50% to 65% to better see the orbit and core ball */
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
@@ -11,7 +11,7 @@
 }
 
 .zig-message {
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.7); /* More transparent to see through to the core ball */
   border: 2px solid #00ffff;
   border-radius: 5px;
   padding: 18px;
@@ -50,7 +50,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -65%);
+    transform: translate(-50%, -75%); /* Adjusted to match the new position */
   }
   to {
     opacity: 1;
