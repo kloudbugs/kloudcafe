@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import App from '../App';
-import ControlsTutorial from '../components/ControlsTutorial';
+import FeatureManager from '../components/FeatureManager';
 
 const Experience: React.FC = () => {
   const navigate = useNavigate();
-  const [showTutorial, setShowTutorial] = useState(true);
-  const [tutorialCompleted, setTutorialCompleted] = useState(false);
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
   
-  const handleTutorialComplete = () => {
-    // Mark tutorial as completed and hide it
-    setTutorialCompleted(true);
-    setShowTutorial(false);
+  const handleOnboardingComplete = () => {
+    setOnboardingComplete(true);
+    // Could navigate elsewhere or just allow free exploration
   };
   
   return (
     <>
       <App />
-      {showTutorial && !tutorialCompleted && (
-        <ControlsTutorial onComplete={handleTutorialComplete} />
+      {!onboardingComplete && (
+        <FeatureManager onComplete={handleOnboardingComplete} />
       )}
     </>
   );
