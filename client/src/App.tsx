@@ -21,6 +21,7 @@ import "./components/FixedStyles.css"; // Override styles to fix UI issues
 
 // Main App component
 function App() {
+  // Always keep performance stats hidden
   const [showPerformance, setShowPerformance] = useState(false);
   const { toggleMute, isMuted } = useAudio();
   const [bitcoinTendrilsActive, setBitcoinTendrilsActive] = useState(false);

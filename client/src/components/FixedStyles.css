@@ -18,6 +18,24 @@ div[style*="position: fixed"][style*="bottom: 0"][style*="left: 0"]:not(.cosmic-
   display: none !important;
 }
 
+/* More aggressive fix for bottom left box */
+div[style*="bottom:"][style*="left:"]:not([class]),
+div[style*="bottom"][style*="left"]:not([class]),
+div[style*="bottom:"][style*="left"][role="tooltip"],
+div:has(> button) + div[role="tooltip"][style*="bottom"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Hide r3f-perf performance monitor if it's in the bottom left */
+div[style*="position: fixed"][style*="bottom: 0"][style*="left: 0"] canvas,
+div.r3f-perf[style*="bottom: 0"][style*="left: 0"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
 /* Make sure control panels are always visible */
 .cosmic-panel, .cosmic-panel-gold {
   display: block !important;

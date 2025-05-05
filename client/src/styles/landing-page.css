@@ -302,6 +302,12 @@ img, svg {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
   }
+  
+  .button-pulse {
+    /* Ensure pulse effect is visible on small screens */
+    top: -20px;
+    right: -10px;
+  }
 }
 
 @media (max-width: 480px) {
