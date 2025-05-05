@@ -346,37 +346,7 @@ function App() {
         Start Experience (Voice & Music)
       </div>
       
-      {/* C12 Platform Link Button */}
-      <a 
-        href="https://github.com/kloudbugs/C12.git"
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="cosmic-main-btn"
-        style={{
-          position: 'fixed',
-          top: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 1000,
-          backgroundColor: 'rgba(0, 204, 255, 0.3)',
-          padding: '12px 18px',
-          borderRadius: '8px',
-          border: '2px solid #00ccff',
-          color: 'white',
-          cursor: 'pointer',
-          fontSize: '14px',
-          fontWeight: 'bold',
-          boxShadow: '0 0 15px rgba(0, 204, 255, 0.6)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          textDecoration: 'none',
-          width: 'fit-content'
-        }}
-      >
-        <span style={{ fontSize: '18px' }}>📡</span>
-        KloudBugs C12 Platform
-      </a>
+      {/* Removed C12 Platform Link Button */}
       
       <ControlPanel />
       
