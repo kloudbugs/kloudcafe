@@ -1,75 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
-  <defs>
-    <linearGradient id="helmet-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#003366" />
-      <stop offset="100%" stop-color="#001133" />
-    </linearGradient>
-    <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFCC00" />
-      <stop offset="100%" stop-color="#FF9900" />
-    </linearGradient>
-    <radialGradient id="light-gradient" cx="50%" cy="50%" r="50%" fx="20%" fy="20%">
-      <stop offset="0%" stop-color="#00FFFF" />
-      <stop offset="100%" stop-color="#0088FF" />
-    </radialGradient>
-    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="5" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-    <filter id="lightning" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="5" />
-      <feDisplacementMap in="SourceGraphic" scale="10" />
-    </filter>
-  </defs>
-  
-  <!-- Background Glow -->
-  <rect width="400" height="400" fill="#000022" />
-  
-  <!-- Lightning Background -->
-  <g filter="url(#neon-glow)">
-    <path d="M100,100 L150,50 L200,150 L250,75 L300,150 L350,100" 
-          stroke="#00AAFF" stroke-width="4" fill="none" />
-    <path d="M50,200 L100,150 L150,225 L200,175 L250,250 L300,150" 
-          stroke="#00AAFF" stroke-width="4" fill="none" />
-    <path d="M75,300 L125,250 L175,325 L225,275 L275,325 L325,250" 
-          stroke="#00AAFF" stroke-width="4" fill="none" />
-  </g>
-  
-  <!-- Cloud Elements -->
-  <ellipse cx="100" cy="350" rx="50" ry="25" fill="#00AAFF" fill-opacity="0.3" />
-  <ellipse cx="150" cy="360" rx="45" ry="20" fill="#00AAFF" fill-opacity="0.3" />
-  <ellipse cx="200" cy="350" rx="55" ry="25" fill="#00AAFF" fill-opacity="0.3" />
-  <ellipse cx="250" cy="360" rx="50" ry="20" fill="#00AAFF" fill-opacity="0.3" />
-  <ellipse cx="300" cy="350" rx="45" ry="25" fill="#00AAFF" fill-opacity="0.3" />
-  
-  <!-- Miner Robot Head -->
-  <circle cx="200" cy="200" r="70" fill="url(#helmet-gradient)" stroke="#00AAFF" stroke-width="3" />
-  
-  <!-- Helmet Details -->
-  <path d="M160,150 C160,120 240,120 240,150" fill="none" stroke="#00AAFF" stroke-width="3" />
-  <path d="M150,180 C150,150 250,150 250,180" fill="none" stroke="#00AAFF" stroke-width="3" />
-  <path d="M140,210 C140,180 260,180 260,210" fill="none" stroke="#00AAFF" stroke-width="3" />
-  
-  <!-- Miner's Helmet -->
-  <path d="M170,130 L230,130 L240,150 L160,150 Z" fill="url(#gold-gradient)" />
-  <circle cx="200" cy="140" r="10" fill="url(#light-gradient)" filter="url(#neon-glow)" />
-  
-  <!-- Robot Eyes -->
-  <circle cx="175" cy="190" r="15" fill="#000000" stroke="#00AAFF" stroke-width="2" />
-  <circle cx="225" cy="190" r="15" fill="#000000" stroke="#00AAFF" stroke-width="2" />
-  <circle cx="175" cy="190" r="8" fill="url(#light-gradient)" filter="url(#neon-glow)" />
-  <circle cx="225" cy="190" r="8" fill="url(#light-gradient)" filter="url(#neon-glow)" />
-  
-  <!-- Robot Mouth -->
-  <path d="M180,225 C180,235 220,235 220,225" fill="none" stroke="#00AAFF" stroke-width="3" />
-  
-  <!-- Mining Pickaxe -->
-  <path d="M130,100 L100,70 L120,50 L150,80 Z" fill="#333333" stroke="#00AAFF" stroke-width="2" />
-  <path d="M150,80 L270,200" fill="none" stroke="#555555" stroke-width="6" />
-  
-  <!-- Bitcoin Box -->
-  <rect x="250" y="250" width="50" height="50" rx="5" fill="#001133" stroke="#00AAFF" stroke-width="2" />
-  <circle cx="275" cy="275" r="20" fill="url(#gold-gradient)" />
-  <text x="275" y="282" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#000000">₿</text>
+  <circle cx="200" cy="200" r="180" fill="#001133"/>
+  <ellipse cx="200" cy="120" rx="120" ry="40" fill="#FFCC00"/>
+  <circle cx="200" cy="110" r="20" fill="#00FFFF"/>
+  <circle cx="150" cy="200" r="30" fill="#00CCFF"/>
+  <circle cx="250" cy="200" r="30" fill="#00CCFF"/>
+  <text x="200" y="330" font-family="Arial" font-size="36" font-weight="bold" text-anchor="middle" fill="#FFCC00">MINER</text>
 </svg>

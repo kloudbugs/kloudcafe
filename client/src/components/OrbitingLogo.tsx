@@ -30,31 +30,26 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
     }
   }, []);
   
-  // Create an array of logos with their own properties
+  // Use only the original uploaded logos
+  // Define static image paths directly using the assets from attached_assets
   const logos = [
     { 
-      image: pngUrls['/images/kloudbugs_logo.png'] || '/images/kloudbugs_logo.svg', 
+      image: '/attached_assets/IMG_0031.jpeg', 
       size: 0.8, 
       offset: 0, 
       height: 0 
     },
     { 
-      image: pngUrls['/images/bitcoin_miner.png'] || '/images/bitcoin_miner.svg', 
+      image: '/attached_assets/IMG_0004.png', 
       size: 0.7, 
       offset: Math.PI * 0.5, 
       height: 0.2 
     },
     { 
-      image: pngUrls['/images/bitcoin_coin.png'] || '/images/bitcoin_coin.svg', 
+      image: '/attached_assets/IMG_0027.png', 
       size: 0.6, 
       offset: Math.PI, 
       height: -0.3 
-    },
-    { 
-      image: pngUrls['/images/cosmic_bean.png'] || '/images/cosmic_bean.svg', 
-      size: 0.65, 
-      offset: Math.PI * 1.5, 
-      height: 0.1 
     }
   ];
 
@@ -65,10 +60,7 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
     }
   });
 
-  // Only render once images are loaded
-  if (!imagesLoaded) {
-    return null;
-  }
+  // Always render - don't wait for images as the user might not see anything otherwise
   
   return (
     <group ref={groupRef}>
@@ -146,6 +138,19 @@ const OrbitingItem: React.FC<OrbitingItemProps> = ({
   
   return (
     <group ref={itemRef}>
+      {/* Fallback 3D object in case images don't load */}
+      <mesh>
+        <sphereGeometry args={[0.5, 16, 16]} />
+        <meshStandardMaterial 
+          color={image.includes('bitcoin') ? "#FFCC00" : "#9900FF"} 
+          metalness={0.7}
+          roughness={0.3}
+          emissive={image.includes('bitcoin') ? "#FF9900" : "#00FFCC"}
+          emissiveIntensity={0.3}
+        />
+      </mesh>
+      
+      {/* HTML Logo wrapper */}
       <Html transform center>
         <div style={{
           width: `${size * 150}px`,
@@ -173,6 +178,10 @@ const OrbitingItem: React.FC<OrbitingItemProps> = ({
               objectFit: 'contain',
               borderRadius: '50%',
               padding: '2px',
+            }}
+            onError={(e) => {
+              // Hide broken image
+              (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
         </div>
