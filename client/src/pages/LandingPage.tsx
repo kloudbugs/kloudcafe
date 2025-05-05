@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import LandingPageScene from './LandingPageScene';
 import '../styles/landing-page.css';
 
 const LandingPage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
+  const [showEntryButton, setShowEntryButton] = useState(false);
 
   useEffect(() => {
     // Add animation class after component mounts
@@ -11,12 +13,21 @@ const LandingPage: React.FC = () => {
       setLoaded(true);
     }, 100);
 
-    return () => clearTimeout(timer);
+    // Show entry button after a short delay to create dramatic effect
+    const entryTimer = setTimeout(() => {
+      setShowEntryButton(true);
+    }, 2500);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(entryTimer);
+    };
   }, []);
 
   return (
     <div className={`landing-page ${loaded ? 'loaded' : ''}`}>
-      <div className="stars-background"></div>
+      {/* 3D Background Scene */}
+      <LandingPageScene />
       
       <div className="landing-content">
         <div className="logo-container">
@@ -32,19 +43,21 @@ const LandingPage: React.FC = () => {
           <p>FOR SOCIAL JUSTICE</p>
         </div>
         
-        <div className="description">
-          <p>KLOUD MINERS GENERATE FINANCIAL WEALTH</p>
-          <p>AND SUPPORT SOCIAL JUSTICE PROJECTS</p>
-          <p>EACH HASH WE MINE STRENGTHENS OUR FIGHT FOR JUSTICE</p>
+        <div className="info-boxes">
+          <div className="description">
+            <p>KLOUD MINERS GENERATE FINANCIAL WEALTH</p>
+            <p>AND SUPPORT SOCIAL JUSTICE PROJECTS</p>
+            <p>EACH HASH WE MINE STRENGTHENS OUR FIGHT FOR JUSTICE</p>
+          </div>
+          
+          <div className="dedication">
+            <p>THIS PLATFORM EXISTS TO HONOR TERA ANN HARRIS</p>
+            <p>MOTHER OF SEVEN WHOSE VOICE WAS SILENCED</p>
+            <p>BY LAW ENFORCEMENT AND MEDICAL NEGLECT</p>
+          </div>
         </div>
         
-        <div className="dedication">
-          <p>THIS PLATFORM EXISTS TO HONOR TERA ANN HARRIS</p>
-          <p>MOTHER OF SEVEN WHOSE VOICE WAS SILENCED</p>
-          <p>BY LAW ENFORCEMENT AND MEDICAL NEGLECT</p>
-        </div>
-        
-        <div className="cta-buttons">
+        <div className={`cta-buttons ${showEntryButton ? 'visible' : ''}`}>
           <Link to="/experience" className="enter-button">
             <span className="button-glow"></span>
             ENTER ZIG MINING PORTAL
