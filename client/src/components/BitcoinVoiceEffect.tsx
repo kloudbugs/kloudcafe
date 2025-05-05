@@ -141,12 +141,12 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
         )}
       </group>
       
-      {/* Star notification that appears in the corner when speech ends */}
+      {/* Star notification that appears in the top left corner when speech ends */}
       <StarNotification 
         visible={showStarNotification}
-        position="top-right"
+        position="top-left"
         pulseColor="#ffcc00"
-        size={70}
+        size={90}
         message="DISCOVER FEATURES!"
         onClick={handleStarClick}
       />

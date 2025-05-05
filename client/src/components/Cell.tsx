@@ -24,8 +24,8 @@ const Cell: React.FC = () => {
   
   return (
     <group ref={(ref) => ref && (cellGroup.copy(ref), ref.clear(), ref.add(cellGroup))}>
-      {/* The bitcoin core with electric grid - add className for DOM access */}
-      <group className="bitcoin-core">
+      {/* The bitcoin core with electric grid */}
+      <group>
         <ElectricGrid 
           size={3} 
           gridDivisions={4}
