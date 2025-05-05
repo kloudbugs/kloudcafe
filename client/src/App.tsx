@@ -9,7 +9,6 @@ import PulseWave from "./components/PulseWave";
 import ControlPanel from "./components/ui/ControlPanel";
 import OrbitingLogo from "./components/OrbitingLogo";
 import StarSparkles from "./components/StarSparkles";
-import MinerTitle from "./components/MinerTitle";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 
@@ -96,9 +95,6 @@ function App() {
           />
           {/* Mining Grid removed as requested */}
           <MouseInteractionLayer visible={controls.interactionEnabled} />
-          
-          {/* KloudBugs Miner Title - 3D version (moved higher) */}
-          <MinerTitle position={[0, 5.0, 0]} scale={1.5} />
           
           {/* Orbiting Logo */}
           <OrbitingLogo 
