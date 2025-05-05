@@ -2,10 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/landing-page.css';
 
+// Preload images for better quality
+const preloadImages = () => {
+  const imageUrls = [
+    '/images/kloudbugs_logo.svg',
+    '/images/bitcoin_symbol.svg',
+    '/images/bitcoin_coin.svg',
+    '/images/bitcoin_miner.svg',
+    '/images/cosmic_bean.svg'
+  ];
+  
+  imageUrls.forEach(url => {
+    const img = new Image();
+    img.src = url;
+  });
+};
+
 const LandingPage: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    // Preload images for better quality
+    preloadImages();
+    
     // Add animation class after component mounts
     const timer = setTimeout(() => {
       setLoaded(true);
@@ -20,7 +39,7 @@ const LandingPage: React.FC = () => {
       
       <div className="landing-content">
         <div className="logo-container">
-          <img src="/images/kloudbugs-logo.svg" alt="KloudBugs Cafe" className="logo" />
+          <img src="/images/kloudbugs_logo.svg" alt="KloudBugs Cafe" className="logo" />
         </div>
         
         <h1 className="title">KLOUDBUGS CAFE</h1>

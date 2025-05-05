@@ -1,4 +1,14 @@
 /* Landing Page Styles */
+
+/* Global image optimization for all SVG and bitmap images */
+img, svg {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
 .landing-page {
   width: 100vw;
   height: 100vh;
@@ -81,6 +91,11 @@
   width: 100%;
   height: auto;
   filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+  image-rendering: -webkit-optimize-contrast; /* For WebKit browsers */
+  image-rendering: crisp-edges; /* For Firefox */
+  -ms-interpolation-mode: nearest-neighbor; /* For IE */
+  transform: translateZ(0); /* Triggers hardware acceleration */
+  backface-visibility: hidden; /* Reduces blur on some browsers */
 }
 
 @keyframes float {

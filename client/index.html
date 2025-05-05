@@ -7,7 +7,23 @@
     <meta name="description" content="An immersive 3D cosmic visualization for KloudBugs mining equipment" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" />
+    
+    <!-- Preload SVG images for better quality -->
+    <link rel="preload" href="/images/kloudbugs_logo.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="/images/bitcoin_symbol.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="/images/bitcoin_coin.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="/images/bitcoin_miner.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="/images/cosmic_bean.svg" as="image" type="image/svg+xml" />
     <style>
+      /* Global image quality improvements */
+      img, svg { 
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        -ms-interpolation-mode: nearest-neighbor;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+      }
+      
       body {
         margin: 0;
         padding: 0;
