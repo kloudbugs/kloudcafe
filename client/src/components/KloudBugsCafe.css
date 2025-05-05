@@ -356,6 +356,73 @@ cite {
   box-shadow: 0 0 20px rgba(0, 204, 255, 0.7);
 }
 
+/* GitHub section */
+.c12-github-section {
+  text-align: center;
+  background: linear-gradient(to bottom, rgba(15, 20, 40, 0.8), rgba(15, 20, 40, 0.9));
+  border: 1px solid rgba(0, 204, 255, 0.4);
+}
+
+.c12-github-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.c12-github-info {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.c12-github-stats {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.c12-github-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 15px;
+}
+
+.c12-github-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.c12-github-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #333, #111);
+  color: #00ccff;
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  border: 1px solid #00ccff;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.c12-github-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 15px rgba(0, 204, 255, 0.6);
+  background: linear-gradient(135deg, #444, #222);
+}
+
+.c12-github-icon {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .c12-hero-content,

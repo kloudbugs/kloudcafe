@@ -162,6 +162,31 @@ const KloudBugsCafe: React.FC = () => {
                 <button className="c12-join-button">JOIN THE COLLECTIVE</button>
               </div>
             </section>
+            
+            <section className="c12-github-section">
+              <h3>CONTRIBUTE TO OUR MISSION</h3>
+              <p>Join our open source movement. Help us build technology that amplifies marginalized voices.</p>
+              
+              <div className="c12-github-container">
+                <div className="c12-github-info">
+                  <h4>KLOUDBUGS C12 REPOSITORY</h4>
+                  <p>Collaborative blockchain-based platform for social justice initiatives</p>
+                  <div className="c12-github-stats">
+                    <div className="c12-github-stat">
+                      <span className="c12-stat-label">Repository</span>
+                      <span className="c12-stat-value">kloudbugs/C12</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="c12-github-links">
+                  <a href="https://github.com/kloudbugs/C12" target="_blank" rel="noopener noreferrer" className="c12-github-button">
+                    <span className="c12-github-icon">🔗</span>
+                    VISIT REPOSITORY
+                  </a>
+                </div>
+              </div>
+            </section>
           </div>
         )}
       </div>
