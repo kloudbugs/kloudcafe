@@ -197,17 +197,28 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
   // Create lightning bolts
   const bolts = useMemo<LightningBolt[]>(() => {
     const boltsArray: LightningBolt[] = [];
-    const mainBoltCount = 3;
-    const branchBoltCount = 5;
+    const mainBoltCount = 5; // Increased for more dramatic effect
+    const branchBoltCount = 7; // Increased for more dramatic effect
+    
+    // Define more cosmic colors for a richer effect
+    const boltColors = [
+      color,
+      secondaryColor,
+      '#00ffee', // Cyan
+      '#9900ff', // Purple
+      '#ff00cc', // Pink
+    ];
     
     // Create main bolts from position to target
     for (let i = 0; i < mainBoltCount; i++) {
+      const boltColor = boltColors[i % boltColors.length];
+      
       boltsArray.push(createLightningBolt(
         position, 
         target, 
-        10 + Math.floor(Math.random() * 5),
-        0.3 + Math.random() * 0.2,
-        i % 2 === 0 ? color : secondaryColor
+        10 + Math.floor(Math.random() * 8), // More segments
+        0.4 + Math.random() * 0.3, // More displacement for wilder effect
+        boltColor
       ));
       
       // Create branch bolts
@@ -218,7 +229,7 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
         const branchStartPoint = currentMainBolt.points[startIndex].clone();
         
         // Create a random end point for branch
-        const branchLength = 0.5 + Math.random() * 1.0;
+        const branchLength = 0.7 + Math.random() * 1.2; // Longer branches
         const branchDirection = new THREE.Vector3(
           Math.random() * 2 - 1,
           Math.random() * 2 - 1,
@@ -229,13 +240,15 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
           branchDirection.multiplyScalar(branchLength)
         );
         
-        // Create and add branch bolt
+        // Create and add branch bolt with varied colors
+        const branchColor = boltColors[Math.floor(Math.random() * boltColors.length)];
+        
         boltsArray.push(createLightningBolt(
           branchStartPoint,
           endPoint,
-          3 + Math.floor(Math.random() * 3),
-          0.1 + Math.random() * 0.2,
-          j % 2 === 0 ? color : secondaryColor
+          3 + Math.floor(Math.random() * 5), // More varied segments
+          0.15 + Math.random() * 0.25, // More displacement
+          branchColor
         ));
       }
     }

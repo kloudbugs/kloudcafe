@@ -12,6 +12,7 @@ interface BitcoinParticle {
   rotationSpeed: THREE.Vector3;
   life: number;
   maxLife: number;
+  color: string; // Added color property for individual particle colors
 }
 
 interface BitcoinExplosionProps {
@@ -23,7 +24,7 @@ interface BitcoinExplosionProps {
 
 const BitcoinExplosion: React.FC<BitcoinExplosionProps> = ({
   position,
-  count = 15,
+  count = 25, // Increased number of particles
   color = '#ffcc00',
   onComplete
 }) => {
@@ -33,31 +34,44 @@ const BitcoinExplosion: React.FC<BitcoinExplosionProps> = ({
   
   // Generate particles with random velocities
   const particles = useMemo<BitcoinParticle[]>(() => {
+    // Define cosmic colors for particles
+    const colors = [
+      '#ffcc00', // Gold
+      '#9900ff', // Purple
+      '#00ffee', // Cyan
+      '#ff00cc', // Pink
+    ];
+    
     const particles = [];
     for (let i = 0; i < count; i++) {
-      // Random direction
+      // Random direction with more upward bias for dramatic effect
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       
-      // Random velocity
-      const speed = 0.05 + Math.random() * 0.15;
+      // Enhanced random velocity with more variance
+      const speed = 0.07 + Math.random() * 0.2;
+      const upwardBias = 0.05; // Add upward bias
       const vx = Math.sin(phi) * Math.cos(theta) * speed;
-      const vy = Math.sin(phi) * Math.sin(theta) * speed;
+      const vy = Math.sin(phi) * Math.sin(theta) * speed + upwardBias;
       const vz = Math.cos(phi) * speed;
       
-      // Random rotation speed
-      const rotX = (Math.random() - 0.5) * 0.1;
-      const rotY = (Math.random() - 0.5) * 0.1;
-      const rotZ = (Math.random() - 0.5) * 0.1;
+      // Faster and more varied rotation for dramatic effect
+      const rotX = (Math.random() - 0.5) * 0.2;
+      const rotY = (Math.random() - 0.5) * 0.2;
+      const rotZ = (Math.random() - 0.5) * 0.2;
       
-      // Random life duration
-      const life = 1.0;
-      const maxLife = 1.0;
+      // Longer, varied life duration for more interesting explosion
+      const lifeVariance = 0.5 + Math.random() * 1.0;
+      const life = lifeVariance;
+      const maxLife = lifeVariance;
+      
+      // Random particle color
+      const particleColor = colors[Math.floor(Math.random() * colors.length)];
       
       particles.push({
         position: new THREE.Vector3(0, 0, 0),
         velocity: new THREE.Vector3(vx, vy, vz),
-        scale: 0.3 + Math.random() * 0.3,
+        scale: 0.25 + Math.random() * 0.4, // More varied scales
         rotation: new THREE.Euler(
           Math.random() * Math.PI * 2,
           Math.random() * Math.PI * 2,
@@ -65,7 +79,8 @@ const BitcoinExplosion: React.FC<BitcoinExplosionProps> = ({
         ),
         rotationSpeed: new THREE.Vector3(rotX, rotY, rotZ),
         life,
-        maxLife
+        maxLife,
+        color: particleColor // Store color for each particle
       });
     }
     return particles;
@@ -136,11 +151,12 @@ const BitcoinExplosion: React.FC<BitcoinExplosionProps> = ({
           <mesh>
             <circleGeometry args={[0.3, 32]} />
             <meshStandardMaterial 
-              color={color} 
-              emissive={color}
-              emissiveIntensity={0.5}
-              metalness={0.7}
+              color={particle.color} 
+              emissive={particle.color}
+              emissiveIntensity={1.2} // Increased emissive intensity for brighter effect
+              metalness={0.8}
               roughness={0.2}
+              toneMapped={false} // Makes colors more vibrant
             />
             <Text
               fontSize={0.35}
@@ -148,6 +164,9 @@ const BitcoinExplosion: React.FC<BitcoinExplosionProps> = ({
               anchorX="center"
               anchorY="middle"
               userData={{ keepAlive: true }} // Prevents Text from being culled
+              outlineWidth={0.02} // Add outline for better visibility
+              outlineColor="#000000"
+              font="https://fonts.gstatic.com/s/audiowide/v16/l7gdbjpo0cum0ckerWCtkQ.woff" // Use Audiowide font
             >
               ₿
             </Text>
