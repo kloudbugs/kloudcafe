@@ -139,10 +139,10 @@ function App() {
           {/* Milky Way background - large galaxy effect */}
           <MilkyWay 
             radius={150}
-            particleCount={10000}
+            particleCount={5000}
             coreColor="#9900ff"
             outerColor="#00ffcc"
-            opacity={0.5}
+            opacity={0.4}
           />
           
           <Cell />
@@ -176,7 +176,7 @@ function App() {
               color={storm.color}
               duration={15}
               speed={0.8}
-              particleCount={800}
+              particleCount={300} // Reduced for better performance
               onComplete={() => {
                 setSpaceStorms(prev => prev.filter(s => s.id !== storm.id));
               }}
@@ -190,7 +190,8 @@ function App() {
             color="#ff00cc"
             duration={100000} // Effectively permanent
             speed={0.3}
-            intensity={0.5}
+            intensity={0.3}
+            particleCount={200} // Reduced for better performance
           />
           
           {/* Sparkle stars around the scene */}

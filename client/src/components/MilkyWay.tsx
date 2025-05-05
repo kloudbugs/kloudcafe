@@ -25,6 +25,7 @@ const MilkyWay: React.FC<MilkyWayProps> = ({
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     const sizes = new Float32Array(particleCount);
+    const phases = new Float32Array(particleCount);
     
     const armCount = 5;
     const armWidth = 0.15;
@@ -71,11 +72,12 @@ const MilkyWay: React.FC<MilkyWayProps> = ({
       colors[i3 + 1] = tempColor.g;
       colors[i3 + 2] = tempColor.b;
       
-      // Random sizes
+      // Random sizes and phases
       sizes[i] = (armRadius < coreSize ? 3.0 : 1.5) * (Math.random() * 0.5 + 0.5);
+      phases[i] = Math.random() * Math.PI * 2;
     }
     
-    return { positions, colors, sizes };
+    return { positions, colors, sizes, phases };
   }, [particleCount, radius, coreColor, outerColor]);
   
   // Animate the galaxy
@@ -85,16 +87,7 @@ const MilkyWay: React.FC<MilkyWayProps> = ({
       galaxyRef.current.rotation.y += delta * 0.03;
     }
     
-    if (pointsRef.current) {
-      // Make particles twinkle
-      const sizes = pointsRef.current.geometry.attributes.size as THREE.BufferAttribute;
-      for (let i = 0; i < particleCount; i++) {
-        // Apply a slow sine wave to make stars twinkle
-        const sinOffset = Math.sin(Date.now() * 0.001 + i) * 0.1 + 0.9;
-        sizes.array[i] = particles.sizes[i] * sinOffset;
-      }
-      sizes.needsUpdate = true;
-    }
+    // Skip twinkling effect to save performance
   });
   
   return (
