@@ -182,6 +182,39 @@ function App() {
           notification.parentNode.removeChild(notification);
         }
       }, 1000);
+      
+      // Display a message to indicate song can be played now
+      console.log("ZIG SPEECH COMPLETE - READY FOR SONG");
+      
+      // Add a visual indicator that speech is done and song can be played
+      const songReadyMessage = document.createElement('div');
+      songReadyMessage.className = 'song-ready-message';
+      songReadyMessage.innerHTML = `
+        <div class="song-message">
+          <p>ZIG'S MESSAGE COMPLETE - READY FOR SONG</p>
+        </div>
+      `;
+      songReadyMessage.style.position = 'fixed';
+      songReadyMessage.style.bottom = '80px';
+      songReadyMessage.style.right = '20px';
+      songReadyMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+      songReadyMessage.style.color = '#00ffff';
+      songReadyMessage.style.padding = '10px 15px';
+      songReadyMessage.style.borderRadius = '5px';
+      songReadyMessage.style.border = '1px solid #00ffff';
+      songReadyMessage.style.zIndex = '1000';
+      songReadyMessage.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.5)';
+      songReadyMessage.style.fontFamily = 'Courier New, monospace';
+      songReadyMessage.style.fontSize = '14px';
+      songReadyMessage.style.textTransform = 'uppercase';
+      document.body.appendChild(songReadyMessage);
+      
+      // Remove the message after 10 seconds
+      setTimeout(() => {
+        if (songReadyMessage.parentNode) {
+          songReadyMessage.parentNode.removeChild(songReadyMessage);
+        }
+      }, 10000);
     };
     
     // If speech synthesis fails or takes too long, set a maximum time for the effect
