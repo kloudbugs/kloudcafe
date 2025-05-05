@@ -58,7 +58,7 @@ const LandingPage: React.FC = () => {
         </div>
         
         <div className={`cta-buttons ${showEntryButton ? 'visible' : ''}`}>
-          <Link to="/experience" className="enter-button">
+          <Link to="/message" className="enter-button">
             <span className="button-glow"></span>
             ENTER ZIG MINING PORTAL
           </Link>
