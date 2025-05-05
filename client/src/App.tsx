@@ -6,7 +6,6 @@ import Environment from "./components/Environment";
 import BackgroundParticles from "./components/BackgroundParticles";
 import MouseInteractionLayer from "./components/MouseInteractionLayer";
 import PulseWave from "./components/PulseWave";
-import MiningGrid from "./components/MiningGrid";
 import ControlPanel from "./components/ui/ControlPanel";
 import Crown from "./components/Crown";
 import StarSparkles from "./components/StarSparkles";
@@ -103,12 +102,7 @@ function App() {
             intensity={controls.pulseIntensity}
             baseColor={controls.getColorByScheme('pulse')}
           />
-          <MiningGrid
-            width={24}
-            height={18}
-            cellSize={0.15}
-            maxBlockSize={5}
-          />
+          {/* Mining Grid removed as requested */}
           <MouseInteractionLayer visible={controls.interactionEnabled} />
           
           {/* KloudBugs Title */}
