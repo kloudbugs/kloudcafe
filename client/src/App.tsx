@@ -9,6 +9,7 @@ import PulseWave from "./components/PulseWave";
 import ControlPanel from "./components/ui/ControlPanel";
 import OrbitingLogo from "./components/OrbitingLogo";
 import StarSparkles from "./components/StarSparkles";
+import MinerTitle from "./components/MinerTitle";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
 
@@ -96,46 +97,8 @@ function App() {
           {/* Mining Grid removed as requested */}
           <MouseInteractionLayer visible={controls.interactionEnabled} />
           
-          {/* KloudBugs Title */}
-          <group position={[0, 7, 0]}>
-            <Html
-              transform
-              center
-              style={{
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-                color: 'white',
-                textShadow: '0 0 10px #00ffcc, 0 0 20px #4cccff',
-                width: '300px',
-                textAlign: 'center',
-                pointerEvents: 'none'
-              }}
-            >
-              <div>
-                <h1 style={{ 
-                  fontSize: '3rem', 
-                  margin: '0',
-                  background: 'linear-gradient(to bottom, white, #ffcc00)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 10px #9900ff, 0 0 20px #9900ff',
-                  fontWeight: 'bold',
-                  letterSpacing: '1px',
-                  filter: 'drop-shadow(0 0 8px rgba(153, 0, 255, 0.8))'
-                }}>
-                  KLOUDBUGS CAFE
-                </h1>
-                <p style={{ 
-                  fontSize: '1.5rem', 
-                  margin: '0.5rem 0 0',
-                  color: '#ffcc00',
-                  textShadow: '0 0 10px #ffcc00, 0 0 20px #ffcc00',
-                  fontWeight: 'bold',
-                  letterSpacing: '2px'
-                }}>ZIG-MINER</p>
-              </div>
-            </Html>
-          </group>
+          {/* KloudBugs Miner Title - 3D version */}
+          <MinerTitle position={[0, 3.5, 0]} scale={1.5} />
           
           {/* Orbiting Logo */}
           <OrbitingLogo 

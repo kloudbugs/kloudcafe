@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
@@ -13,29 +13,45 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
   speed = 0.3
 }) => {
   const groupRef = useRef<THREE.Group>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [pngUrls, setPngUrls] = useState<Record<string, string | null>>({});
+  
+  // Load PNG images when component mounts
+  useEffect(() => {
+    // Try to access the global image loader
+    if (typeof window !== 'undefined' && (window as any).loadOrbitingLogos) {
+      const urls = (window as any).loadOrbitingLogos();
+      setPngUrls(urls);
+      setImagesLoaded(true);
+      console.log('Loaded orbiting logo images');
+    } else {
+      console.log('PNG loader not available, falling back to SVGs');
+      setImagesLoaded(true);
+    }
+  }, []);
   
   // Create an array of logos with their own properties
   const logos = [
     { 
-      image: '/images/kloudbugs_logo.png', 
+      image: pngUrls['/images/kloudbugs_logo.png'] || '/images/kloudbugs_logo.svg', 
       size: 0.8, 
       offset: 0, 
       height: 0 
     },
     { 
-      image: '/images/bitcoin_miner.png', 
+      image: pngUrls['/images/bitcoin_miner.png'] || '/images/bitcoin_miner.svg', 
       size: 0.7, 
       offset: Math.PI * 0.5, 
       height: 0.2 
     },
     { 
-      image: '/images/bitcoin_coin.png', 
+      image: pngUrls['/images/bitcoin_coin.png'] || '/images/bitcoin_coin.svg', 
       size: 0.6, 
       offset: Math.PI, 
       height: -0.3 
     },
     { 
-      image: '/images/cosmic_bean.png', 
+      image: pngUrls['/images/cosmic_bean.png'] || '/images/cosmic_bean.svg', 
       size: 0.65, 
       offset: Math.PI * 1.5, 
       height: 0.1 
@@ -49,6 +65,11 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
     }
   });
 
+  // Only render once images are loaded
+  if (!imagesLoaded) {
+    return null;
+  }
+  
   return (
     <group ref={groupRef}>
       {logos.map((logo, index) => (
@@ -71,7 +92,7 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
           metalness={0.8}
           roughness={0.2}
           emissive="#ff9900"
-          emissiveIntensity={0.2}
+          emissiveIntensity={0.5}
         />
         <Html position={[0, 0, 0.5]} transform center>
           <div style={{ 
