@@ -40,11 +40,15 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
     }, 10000);
   };
   
-  // Handle notification click
+  // Create a global event for feature discovery
   const handleStarClick = () => {
     // Show features or tooltips when star is clicked
-    console.log('Star clicked - show features!');
+    console.log('Star clicked - showing features!');
     setShowStarNotification(false);
+    
+    // Dispatch a custom event to trigger feature discovery
+    const event = new CustomEvent('showFeatureTour', { detail: { activated: true } });
+    window.dispatchEvent(event);
   };
   
   // Clean up on unmount

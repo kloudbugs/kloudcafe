@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './StarNotification.css';
+import './MoonNotification.css';
 
-interface StarNotificationProps {
+interface MoonNotificationProps {
   visible: boolean;
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   pulseColor?: string;
@@ -10,16 +10,16 @@ interface StarNotificationProps {
   onClick?: () => void;
 }
 
-const StarNotification: React.FC<StarNotificationProps> = ({
+const MoonNotification: React.FC<MoonNotificationProps> = ({
   visible,
-  position = 'top-right',
-  pulseColor = '#ffcc00',
+  position = 'top-left',
+  pulseColor = '#60a5fa',
   size = 50,
-  message = 'New Feature!',
+  message = 'Start AI Voice',
   onClick
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const starRef = useRef<HTMLDivElement>(null);
+  const moonRef = useRef<HTMLDivElement>(null);
 
   // Start animation when component becomes visible
   useEffect(() => {
@@ -30,27 +30,30 @@ const StarNotification: React.FC<StarNotificationProps> = ({
     }
   }, [visible, isAnimating]);
 
-  // Handle click on star
+  // Handle click on moon
   const handleClick = () => {
     if (onClick) onClick();
   };
 
   return (
     <div 
-      className={`star-notification ${position} ${isAnimating ? 'visible' : ''}`}
+      className={`moon-notification ${position} ${isAnimating ? 'visible' : ''}`}
       style={{ 
         '--pulse-color': pulseColor,
-        '--star-size': `${size}px`
+        '--moon-size': `${size}px`
       } as React.CSSProperties}
       onClick={handleClick}
-      ref={starRef}
+      ref={moonRef}
     >
       {/* Click here arrow */}
-      <div className="click-arrow">CLICK HERE</div>
+      <div className="click-arrow">CLICK TO START</div>
       
-      <div className="star-shape">
+      <div className="moon-shape">
         <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-          <path d="M25 0 L31.5 17.5 L50 17.5 L35 28.5 L40 45 L25 35 L10 45 L15 28.5 L0 17.5 L18.5 17.5 Z" />
+          <path d="M25,0 C11.193,0 0,11.193 0,25 C0,38.807 11.193,50 25,50 C38.807,50 50,38.807 50,25 C50,25 45,10 35,5 C25,0 25,0 25,0 Z" />
+          <circle cx="15" cy="15" r="2" fill="#333" />
+          <circle cx="20" cy="25" r="3" fill="#333" />
+          <circle cx="30" cy="15" r="1.5" fill="#333" />
         </svg>
       </div>
       <div className="notification-message">{message}</div>
@@ -58,4 +61,4 @@ const StarNotification: React.FC<StarNotificationProps> = ({
   );
 };
 
-export default StarNotification;
+export default MoonNotification;

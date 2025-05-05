@@ -4,6 +4,7 @@ import SimpleFeatureTooltip from './SimpleFeatureTooltip';
 
 interface FeatureManagerProps {
   onComplete?: () => void;
+  startWithTour?: boolean;
 }
 
 // Define tooltips data
