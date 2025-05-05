@@ -21,7 +21,7 @@ const ControlPanel: React.FC = () => {
   ];
   
   return (
-    <div className="absolute right-4 bottom-4 z-10">
+    <div className="absolute right-3 bottom-3 z-10">
       {/* Menu buttons - always shown in a horizontal row */}
       <div className="flex gap-2 mb-3 justify-end">
         <button
@@ -32,7 +32,7 @@ const ControlPanel: React.FC = () => {
           }}
           className={`cosmic-main-btn ${isDashboardOpen ? 'active-btn' : ''}`}
           style={{ 
-            minWidth: '140px',
+            minWidth: '110px',
             backgroundColor: isDashboardOpen ? 'rgba(153, 0, 255, 0.3)' : undefined,
             boxShadow: isDashboardOpen ? '0 0 15px rgba(153, 0, 255, 0.5)' : undefined 
           }}
@@ -51,7 +51,7 @@ const ControlPanel: React.FC = () => {
           }}
           className={`cosmic-main-btn ${isOpen ? 'active-btn' : ''}`}
           style={{ 
-            minWidth: '140px',
+            minWidth: '110px',
             backgroundColor: isOpen ? 'rgba(255, 204, 0, 0.3)' : undefined,
             boxShadow: isOpen ? '0 0 15px rgba(255, 204, 0, 0.5)' : undefined 
           }}
@@ -65,17 +65,17 @@ const ControlPanel: React.FC = () => {
       
       {/* Dashboard Panel */}
       {isDashboardOpen && (
-        <div className="text-white p-5 mb-3 rounded-lg w-96 backdrop-blur-md bg-black/90 overflow-hidden float-right" 
+        <div className="text-white p-3 mb-2 rounded-lg w-72 backdrop-blur-md bg-black/90 overflow-hidden float-right" 
              style={{
-               border: "2px solid #9900ff",
-               boxShadow: "0 0 25px rgba(255, 204, 0, 0.5)",
+               border: "1px solid #9900ff",
+               boxShadow: "0 0 15px rgba(255, 204, 0, 0.4)",
                background: "linear-gradient(145deg, rgba(10,10,20,0.9), rgba(26,26,46,0.9))"
              }}>
-          <div className="flex justify-between items-center mb-4 border-b border-yellow-500 pb-3">
-            <h2 className="text-xl font-bold" 
+          <div className="flex justify-between items-center mb-2 border-b border-yellow-500 pb-2">
+            <h2 className="text-base font-bold" 
                 style={{ 
                   color: "#9900ff", 
-                  textShadow: "0 0 10px rgba(153, 0, 255, 0.5)",
+                  textShadow: "0 0 5px rgba(153, 0, 255, 0.5)",
                   letterSpacing: "1px"
                 }}>MINING DASHBOARD</h2>
             <button
@@ -133,17 +133,17 @@ const ControlPanel: React.FC = () => {
       )}
       
       {isOpen && (
-        <div className="text-white p-5 rounded-lg w-80 backdrop-blur-md bg-black/90" 
+        <div className="text-white p-3 rounded-lg w-64 backdrop-blur-md bg-black/90" 
              style={{
-               border: "2px solid #ffcc00",
-               boxShadow: "0 0 25px rgba(153, 0, 255, 0.5)",
+               border: "1px solid #ffcc00",
+               boxShadow: "0 0 15px rgba(153, 0, 255, 0.4)",
                background: "linear-gradient(145deg, rgba(10,10,20,0.9), rgba(26,26,46,0.9))"
              }}>
-          <div className="flex justify-between items-center mb-4 border-b border-purple-500 pb-3">
-            <h2 className="text-xl font-bold" 
+          <div className="flex justify-between items-center mb-2 border-b border-purple-500 pb-2">
+            <h2 className="text-base font-bold" 
                 style={{ 
                   color: "#ffcc00", 
-                  textShadow: "0 0 10px rgba(255, 204, 0, 0.5)",
+                  textShadow: "0 0 5px rgba(255, 204, 0, 0.5)",
                   letterSpacing: "1px"
                 }}>ZIG-MINER CONTROLS</h2>
             <button
