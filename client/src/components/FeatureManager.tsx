@@ -21,7 +21,7 @@ const tooltips = [
   {
     title: 'QUANTUM TENDRILS',
     description: 'Electric tendrils represent the connections to the neural network.',
-    position: { bottom: '100px', left: '50px' }
+    position: { top: '30%', left: '20px' }
   },
   {
     title: 'ZIG AI VOICE',
@@ -31,12 +31,12 @@ const tooltips = [
   {
     title: 'MUSIC CONTROL',
     description: 'Toggle the J. Cole beat soundtrack on/off with the M key.',
-    position: { bottom: '150px', right: '50px' }
+    position: { top: '150px', right: '50px' }
   },
   {
     title: 'MINING CONTROLS',
     description: 'Adjust cosmic parameters in the control panel to customize your mining experience.',
-    position: { bottom: '200px', right: '100px' }
+    position: { top: '200px', right: '50px' }
   }
 ];
 

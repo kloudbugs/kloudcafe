@@ -1,8 +1,7 @@
 /* Override styles to fix UI issues */
 
-/* Hide unwanted tooltip in bottom left */
+/* Hide unwanted tooltip in bottom left only */
 .feature-tooltip:not(.visible) {
-  display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
 }
@@ -13,7 +12,18 @@
   z-index: 1000;
 }
 
-/* Hide any floating elements that might be in unwanted positions */
-div[style*="position: fixed"][style*="bottom:"][style*="left:"] {
+/* Only hide the unknown tooltip in bottom left corner */
+/* This is a very targeted fix that won't affect other UI elements */
+div[style*="position: fixed"][style*="bottom: 0"][style*="left: 0"]:not(.cosmic-panel):not(.cosmic-panel-gold):not(.interaction-button):not(.cosmic-main-btn):not(.cosmic-mini-btn) {
   display: none !important;
+}
+
+/* Make sure control panels are always visible */
+.cosmic-panel, .cosmic-panel-gold {
+  display: block !important;
+}
+
+/* Make sure buttons are always visible */
+.cosmic-main-btn, .cosmic-mini-btn, .interaction-button {
+  display: flex !important;
 }

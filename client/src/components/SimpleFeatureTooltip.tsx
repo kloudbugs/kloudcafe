@@ -14,7 +14,7 @@ interface SimpleFeatureTooltipProps {
 const SimpleFeatureTooltip: React.FC<SimpleFeatureTooltipProps> = ({
   title,
   description,
-  position = { bottom: '20px', right: '20px' },
+  position = { top: '20px', right: '20px' }, // Changed default position from bottom to top
   onClose,
   showDelay = 500,
   autoHideDelay = 8000,
