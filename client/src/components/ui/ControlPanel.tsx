@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useControls } from '../../lib/stores/useControls';
 import { useAudio } from '../../lib/stores/useAudio';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, BarChart2, Settings } from 'lucide-react';
 
 const ControlPanel: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const controls = useControls();
   const audio = useAudio();
   
@@ -20,13 +21,105 @@ const ControlPanel: React.FC = () => {
   ];
   
   return (
-    <div className="absolute right-4 bottom-4 z-10">
+    <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-3 items-end">
+      {/* Always show Dashboard button */}
+      <button
+        onClick={() => {
+          setIsDashboardOpen(!isDashboardOpen);
+          // Close control panel if dashboard is opening
+          if (!isDashboardOpen) setIsOpen(false);
+        }}
+        className="cosmic-main-btn"
+      >
+        <span className="flex items-center gap-2">
+          <BarChart2 className="w-4 h-4" />
+          Dashboard
+        </span>
+      </button>
+      
+      {/* Dashboard Panel */}
+      {isDashboardOpen && (
+        <div className="text-white p-5 mb-3 rounded-lg w-96 backdrop-blur-md bg-black/90 overflow-hidden" 
+             style={{
+               border: "2px solid #9900ff",
+               boxShadow: "0 0 25px rgba(255, 204, 0, 0.5)",
+               background: "linear-gradient(145deg, rgba(10,10,20,0.9), rgba(26,26,46,0.9))"
+             }}>
+          <div className="flex justify-between items-center mb-4 border-b border-yellow-500 pb-3">
+            <h2 className="text-xl font-bold" 
+                style={{ 
+                  color: "#9900ff", 
+                  textShadow: "0 0 10px rgba(153, 0, 255, 0.5)",
+                  letterSpacing: "1px"
+                }}>MINING DASHBOARD</h2>
+            <button
+              onClick={() => setIsDashboardOpen(false)}
+              className="text-purple-400 hover:text-purple-300 hover:scale-110 transition-all"
+              style={{ 
+                textShadow: "0 0 8px rgba(153, 0, 255, 0.6)" 
+              }}
+            >
+              ✕
+            </button>
+          </div>
+          
+          <div className="space-y-4">
+            {/* Mining Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
+                <div className="text-sm text-purple-200 mb-1">Hash Rate</div>
+                <div className="text-xl font-bold text-yellow-300">248.3 TH/s</div>
+              </div>
+              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
+                <div className="text-sm text-purple-200 mb-1">Daily Earnings</div>
+                <div className="text-xl font-bold text-yellow-300">0.0023 ₿</div>
+              </div>
+              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
+                <div className="text-sm text-purple-200 mb-1">Efficiency</div>
+                <div className="text-xl font-bold text-yellow-300">92.8%</div>
+              </div>
+              <div className="bg-purple-900/40 p-3 rounded-lg border border-purple-700">
+                <div className="text-sm text-purple-200 mb-1">Uptime</div>
+                <div className="text-xl font-bold text-yellow-300">99.1%</div>
+              </div>
+            </div>
+            
+            {/* Recent Activity */}
+            <div className="mt-4">
+              <h3 className="text-md font-semibold text-yellow-300 mb-2">Recent Activity</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between border-b border-purple-800/50 pb-1">
+                  <span className="text-purple-200">Block #729043 mined</span>
+                  <span className="text-yellow-400">+0.00012 ₿</span>
+                </div>
+                <div className="flex justify-between border-b border-purple-800/50 pb-1">
+                  <span className="text-purple-200">Block #729042 mined</span>
+                  <span className="text-yellow-400">+0.00015 ₿</span>
+                </div>
+                <div className="flex justify-between border-b border-purple-800/50 pb-1">
+                  <span className="text-purple-200">Block #729040 mined</span>
+                  <span className="text-yellow-400">+0.00011 ₿</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Control Panel button (only shown when panel is closed) */}
       {!isOpen && (
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            setIsOpen(true);
+            // Close dashboard if control panel is opening
+            if (isDashboardOpen) setIsDashboardOpen(false);
+          }}
           className="cosmic-main-btn"
         >
-          <span>Control Panel</span>
+          <span className="flex items-center gap-2">
+            <Settings className="w-4 h-4" />
+            Control Panel
+          </span>
         </button>
       )}
       
