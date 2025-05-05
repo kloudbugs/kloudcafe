@@ -146,7 +146,7 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
         visible={showStarNotification}
         position="top-left"
         pulseColor="#ffcc00"
-        size={90}
+        size={80}
         message="DISCOVER FEATURES!"
         onClick={handleStarClick}
       />

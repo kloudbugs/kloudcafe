@@ -19,8 +19,8 @@
 
 /* Positioning classes */
 .star-notification.top-left {
-  top: 30px;
-  left: 30px;
+  top: 15px;
+  left: 15px;
   transform-origin: left top;
 }
 
