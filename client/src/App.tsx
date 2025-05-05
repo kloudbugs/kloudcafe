@@ -9,13 +9,18 @@ import PulseWave from "./components/PulseWave";
 import ControlPanel from "./components/ui/ControlPanel";
 import OrbitingLogo from "./components/OrbitingLogo";
 import StarSparkles from "./components/StarSparkles";
+import BitcoinVoiceEffect from "./components/BitcoinVoiceEffect";
+import VoiceGenerator from "./components/VoiceGenerator";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
+import { loadAllAudio } from "./lib/audio";
+import * as THREE from "three";
 
 // Main App component
 function App() {
   const [showPerformance, setShowPerformance] = useState(false);
   const { toggleMute, isMuted } = useAudio();
+  const [audioLoaded, setAudioLoaded] = useState(false);
 
   // Toggle stats with 'p' key
   useEffect(() => {
@@ -32,8 +37,9 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleMute]);
 
-  // Load audio elements
+  // Load audio elements and Howler audio
   useEffect(() => {
+    // Load traditional audio elements
     const backgroundMusic = new Audio("/sounds/background.mp3");
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.3;
@@ -45,6 +51,11 @@ function App() {
     audioStore.setBackgroundMusic(backgroundMusic);
     audioStore.setHitSound(hitSound);
     audioStore.setSuccessSound(successSound);
+    
+    // Load Howler audio
+    loadAllAudio().then(() => {
+      setAudioLoaded(true);
+    });
     
     // Don't autoplay - user needs to interact first
     console.log("Audio loaded. Press 'M' to toggle sound.");
@@ -61,6 +72,17 @@ function App() {
     <>
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
+      
+      {/* Voice generator (hidden from view) */}
+      {audioLoaded && (
+        <div style={{ display: 'none' }}>
+          <VoiceGenerator 
+            text="Welcome to the cosmic Bitcoin mining experience. Prepare for an extraordinary journey through digital constellations and blockchain galaxies."
+            outputFileName="welcome-message.mp3"
+            autoGenerate={true}
+          />
+        </div>
+      )}
       
       <ControlPanel />
       
@@ -109,6 +131,13 @@ function App() {
             size={0.15} 
             color="#ffffff" 
           />
+          
+          {/* British AI voice with electric tendrils effect */}
+          {audioLoaded && (
+            <BitcoinVoiceEffect 
+              bitcoinPosition={new THREE.Vector3(0, 0, 0)} 
+            />
+          )}
         </Suspense>
         
         <OrbitControls 

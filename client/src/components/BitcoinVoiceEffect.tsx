@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { playWelcomeMessage } from '../lib/audio';
-import VoiceGenerator from './VoiceGenerator';
 import ElectricTendrils from './ElectricTendrils';
 
 interface BitcoinVoiceEffectProps {
@@ -13,27 +13,10 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
   bitcoinPosition = new THREE.Vector3(0, 0, 0)
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audioGenerated, setAudioGenerated] = useState(false);
   const [tendrilsActive, setTendrilsActive] = useState(false);
   const tendrilsRef = useRef<THREE.Group>(null);
   const effectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Define the welcome message
-  const welcomeMessage = "Welcome to the cosmic Bitcoin mining experience. Prepare for an extraordinary journey through digital constellations and blockchain galaxies.";
-
-  // Handle audio generation
-  const handleAudioGenerated = (audioUrl: string) => {
-    setAudioGenerated(true);
-    
-    // Create a download link for the generated audio
-    const link = document.createElement('a');
-    link.href = audioUrl;
-    link.download = 'welcome-message.mp3';
-    link.click();
-    
-    console.log('British AI voice message generated. You can find it in your downloads folder.');
-  };
-  
   // Play the effect when audio starts
   const playEffect = () => {
     setIsPlaying(true);
@@ -61,7 +44,7 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
     };
   }, []);
 
-  // Handle voice playback after audios are loaded
+  // Handle voice playback
   useEffect(() => {
     const keyHandler = (e: KeyboardEvent) => {
       // Press 'V' to play the welcome message
@@ -74,6 +57,7 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
     
     // Auto-play when the component mounts (after a delay to ensure audio is ready)
     const timer = setTimeout(() => {
+      console.log("Auto-playing welcome message...");
       playWelcomeMessage(playEffect);
     }, 3000);
     
@@ -84,27 +68,17 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
   }, [isPlaying]);
 
   return (
-    <>
-      {/* Generate the welcome message audio file */}
-      <VoiceGenerator 
-        text={welcomeMessage}
-        outputFileName="welcome-message.mp3"
-        onGenerated={handleAudioGenerated}
-        autoGenerate={!audioGenerated}
-      />
-      
-      {/* Show tendrils when the voice is playing */}
+    <group position={bitcoinPosition} ref={tendrilsRef}>
+      {/* Place HTML elements outside the Canvas in App.tsx, not here */}
       {tendrilsActive && (
-        <group position={bitcoinPosition} ref={tendrilsRef}>
-          <ElectricTendrils 
-            count={12}
-            length={5}
-            color="#00ffff"
-            width={0.15}
-          />
-        </group>
+        <ElectricTendrils 
+          count={12}
+          length={5}
+          color="#00ffff"
+          width={0.15}
+        />
       )}
-    </>
+    </group>
   );
 };
 
