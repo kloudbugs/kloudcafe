@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'CosmicFont';
+  src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Backup fonts */
+@font-face {
+  font-family: 'CosmicFontBackup';
+  src: url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+  font-weight: normal;
+  font-style: normal;
+}
