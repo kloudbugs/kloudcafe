@@ -150,7 +150,7 @@ function App() {
     
     // Set voice parameters
     utterance.pitch = 1.0; 
-    utterance.rate = 0.9;  // Slightly slower for clarity
+    utterance.rate = 1.1;  // Slightly faster as requested
     
     // When done speaking
     utterance.onend = () => {
