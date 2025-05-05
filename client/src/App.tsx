@@ -7,7 +7,7 @@ import BackgroundParticles from "./components/BackgroundParticles";
 import MouseInteractionLayer from "./components/MouseInteractionLayer";
 import PulseWave from "./components/PulseWave";
 import ControlPanel from "./components/ui/ControlPanel";
-import Crown from "./components/Crown";
+import OrbitingLogo from "./components/OrbitingLogo";
 import StarSparkles from "./components/StarSparkles";
 import { useAudio } from "./lib/stores/useAudio";
 import { useControls } from "./lib/stores/useControls";
@@ -137,13 +137,10 @@ function App() {
             </Html>
           </group>
           
-          {/* Crown at the top */}
-          <Crown 
-            size={1.2} 
-            pointCount={7} 
-            color="#ffcc00" 
-            gemColor="#9900ff"
-            position={[0, 5, 0]}
+          {/* Orbiting Logo */}
+          <OrbitingLogo 
+            radius={3} 
+            speed={0.3}
           />
           
           {/* Sparkle stars around the scene */}

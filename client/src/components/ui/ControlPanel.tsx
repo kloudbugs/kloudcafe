@@ -21,25 +21,51 @@ const ControlPanel: React.FC = () => {
   ];
   
   return (
-    <div className="absolute right-4 bottom-4 z-10 flex flex-col gap-3 items-end">
-      {/* Always show Dashboard button */}
-      <button
-        onClick={() => {
-          setIsDashboardOpen(!isDashboardOpen);
-          // Close control panel if dashboard is opening
-          if (!isDashboardOpen) setIsOpen(false);
-        }}
-        className="cosmic-main-btn"
-      >
-        <span className="flex items-center gap-2">
-          <BarChart2 className="w-4 h-4" />
-          Dashboard
-        </span>
-      </button>
+    <div className="absolute right-4 bottom-4 z-10">
+      {/* Menu buttons - always shown in a horizontal row */}
+      <div className="flex gap-2 mb-3 justify-end">
+        <button
+          onClick={() => {
+            setIsDashboardOpen(!isDashboardOpen);
+            // Close control panel if dashboard is opening
+            if (!isDashboardOpen && isOpen) setIsOpen(false);
+          }}
+          className={`cosmic-main-btn ${isDashboardOpen ? 'active-btn' : ''}`}
+          style={{ 
+            minWidth: '140px',
+            backgroundColor: isDashboardOpen ? 'rgba(153, 0, 255, 0.3)' : undefined,
+            boxShadow: isDashboardOpen ? '0 0 15px rgba(153, 0, 255, 0.5)' : undefined 
+          }}
+        >
+          <span className="flex items-center gap-2 justify-center">
+            <BarChart2 className="w-4 h-4" />
+            Dashboard
+          </span>
+        </button>
+        
+        <button
+          onClick={() => {
+            setIsOpen(!isOpen);
+            // Close dashboard if control panel is opening
+            if (!isOpen && isDashboardOpen) setIsDashboardOpen(false);
+          }}
+          className={`cosmic-main-btn ${isOpen ? 'active-btn' : ''}`}
+          style={{ 
+            minWidth: '140px',
+            backgroundColor: isOpen ? 'rgba(255, 204, 0, 0.3)' : undefined,
+            boxShadow: isOpen ? '0 0 15px rgba(255, 204, 0, 0.5)' : undefined 
+          }}
+        >
+          <span className="flex items-center gap-2 justify-center">
+            <Settings className="w-4 h-4" />
+            Control Panel
+          </span>
+        </button>
+      </div>
       
       {/* Dashboard Panel */}
       {isDashboardOpen && (
-        <div className="text-white p-5 mb-3 rounded-lg w-96 backdrop-blur-md bg-black/90 overflow-hidden" 
+        <div className="text-white p-5 mb-3 rounded-lg w-96 backdrop-blur-md bg-black/90 overflow-hidden float-right" 
              style={{
                border: "2px solid #9900ff",
                boxShadow: "0 0 25px rgba(255, 204, 0, 0.5)",
@@ -104,23 +130,6 @@ const ControlPanel: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
-      
-      {/* Control Panel button (only shown when panel is closed) */}
-      {!isOpen && (
-        <button
-          onClick={() => {
-            setIsOpen(true);
-            // Close dashboard if control panel is opening
-            if (isDashboardOpen) setIsDashboardOpen(false);
-          }}
-          className="cosmic-main-btn"
-        >
-          <span className="flex items-center gap-2">
-            <Settings className="w-4 h-4" />
-            Control Panel
-          </span>
-        </button>
       )}
       
       {isOpen && (

@@ -80,6 +80,13 @@
     0 0 20px var(--space-purple);
 }
 
+.cosmic-main-btn.active-btn {
+  transform: translateY(-3px);
+  border-width: 3px;
+  font-weight: bold;
+  animation: ultra-glow 1.5s infinite, nebula-shift 4s infinite;
+}
+
 .cosmic-main-btn:before {
   content: '';
   position: absolute;
