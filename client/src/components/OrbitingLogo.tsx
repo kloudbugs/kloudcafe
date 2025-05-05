@@ -30,26 +30,31 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
     }
   }, []);
   
-  // Use only the original uploaded logos
-  // Define static image paths directly using the assets from attached_assets
+  // Use only the specific PNG logo files you uploaded
   const logos = [
     { 
-      image: '/attached_assets/IMG_0031.jpeg', 
-      size: 0.8, 
+      image: '/attached_assets/146DFB52-35C2-46E6-966A-ABDA69B3A96A.png', 
+      size: 0.85, 
       offset: 0, 
       height: 0 
     },
     { 
-      image: '/attached_assets/IMG_0004.png', 
-      size: 0.7, 
-      offset: Math.PI * 0.5, 
+      image: '/attached_assets/4D8F4D50-6BB4-4CA8-B4FF-07639180B7CD.png', 
+      size: 0.8, 
+      offset: Math.PI * 0.67, 
       height: 0.2 
     },
     { 
-      image: '/attached_assets/IMG_0027.png', 
-      size: 0.6, 
-      offset: Math.PI, 
-      height: -0.3 
+      image: '/attached_assets/DE2097B5-8651-4353-A8B0-58F7193A6A35.png', 
+      size: 0.75, 
+      offset: Math.PI * 1.33, 
+      height: -0.1 
+    },
+    { 
+      image: '/attached_assets/F67167C2-A805-40EF-A76C-93BA70792E11.png', 
+      size: 0.8, 
+      offset: Math.PI * 2, 
+      height: 0.15 
     }
   ];
 
@@ -138,19 +143,7 @@ const OrbitingItem: React.FC<OrbitingItemProps> = ({
   
   return (
     <group ref={itemRef}>
-      {/* Fallback 3D object in case images don't load */}
-      <mesh>
-        <sphereGeometry args={[0.5, 16, 16]} />
-        <meshStandardMaterial 
-          color={image.includes('bitcoin') ? "#FFCC00" : "#9900FF"} 
-          metalness={0.7}
-          roughness={0.3}
-          emissive={image.includes('bitcoin') ? "#FF9900" : "#00FFCC"}
-          emissiveIntensity={0.3}
-        />
-      </mesh>
-      
-      {/* HTML Logo wrapper */}
+      {/* HTML Logo wrapper - Just your original images */}
       <Html transform center>
         <div style={{
           width: `${size * 150}px`,
@@ -171,17 +164,13 @@ const OrbitingItem: React.FC<OrbitingItemProps> = ({
         className="logo-container">
           <img
             src={image}
-            alt="Logo"
+            alt="KloudBugs Logo"
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'contain',
               borderRadius: '50%',
               padding: '2px',
-            }}
-            onError={(e) => {
-              // Hide broken image
-              (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
         </div>
