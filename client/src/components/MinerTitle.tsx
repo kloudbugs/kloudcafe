@@ -77,27 +77,37 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
       const progress = Math.min(time / 2.5, 1);
       setEntranceProgress(progress);
       
-      // Dramatic zoom from distance
+      // Dramatic zoom from distance with 3D jump effect
       if (groupRef.current) {
-        const entranceScale = THREE.MathUtils.lerp(0.1, 1, progress);
+        // More dramatic entrance with nonlinear scaling and overshoot
+        const entranceScale = THREE.MathUtils.lerp(0.01, 1.2, easeOutBack(progress));
         groupRef.current.scale.set(
           scale * entranceScale, 
           scale * entranceScale, 
           scale * entranceScale
         );
         
-        // Move from behind the camera to final position
-        const startZ = -10;
-        const endZ = 0;
+        // Move from far behind the camera to a position that extends toward the viewer
+        const startZ = -15;
+        const endZ = 1.5; // Push slightly toward viewer for 3D effect
         const easedProgress = easeOutElastic(progress);
         groupRef.current.position.z = THREE.MathUtils.lerp(startZ, endZ, easedProgress);
         
-        // Add some dramatic wobble
-        if (progress > 0.2) {
-          const wobbleAmount = (1 - progress) * 0.2;
-          groupRef.current.rotation.x = Math.sin(time * 10) * wobbleAmount;
-          groupRef.current.rotation.y = Math.cos(time * 8) * wobbleAmount;
+        // More intense wobble that settles
+        if (progress > 0.1) {
+          const wobbleAmount = (1 - progress) * 0.8; // Increased wobble amount
+          groupRef.current.rotation.x = Math.sin(time * 15) * wobbleAmount;
+          groupRef.current.rotation.y = Math.cos(time * 12) * wobbleAmount;
+          groupRef.current.rotation.z = Math.sin(time * 10) * wobbleAmount * 0.3;
         }
+        
+        // Add flash of brightness at entry
+        if (progress < 0.3) {
+          setGlowIntensity(3.0 * (1 - progress / 0.3) + 1.0);
+        }
+        
+        // Make text thicker during entrance animation
+        setTextScale(1.0 + (1.0 - progress) * 0.4);
       }
     } else {
       // Reset entrance effects when animation is complete
@@ -245,6 +255,12 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
       : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
   };
   
+  // Back easing function for overshoot effect (stronger "jump out" effect)
+  const easeOutBack = (x: number): number => {
+    const c1 = 2.5; // Higher value = more overshoot
+    return 1 + c1 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+  };
+  
   return (
     <Billboard position={position} follow={true} lockX={false} lockY={false} lockZ={false}>
       <group ref={groupRef} scale={scale}>
@@ -252,11 +268,11 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
         <Text
           ref={mainTitleRef}
           position={[0, 0.25, 0]}
-          fontSize={0.6} // Increased size more
+          fontSize={0.65} // Even larger size
           font="https://fonts.gstatic.com/s/audiowide/v16/l7gdbjpo0cum0ckerWCtkQ.woff"
           color={mainTitleColor}
           fillOpacity={1}
-          outlineWidth={0.065} // Much thicker outline
+          outlineWidth={0.085} // Much thicker outline for galactic look
           outlineColor="#000000"
           outlineOpacity={1}
           textAlign="center"
@@ -265,6 +281,7 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
           userData={{ keepAlive: true }}
           scale={[textScale, textScale, textScale]}
           rotation={[0, 0, mainTitleRotation]} // Subtle rotation animation
+          letterSpacing={0.05} // Spread the letters a bit for more impact
         >
           KLOUDBUGS CAFE
         </Text>
@@ -273,11 +290,11 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
         <Text
           ref={subTitleRef}
           position={[0, -0.25, 0]}
-          fontSize={0.48} // Increased size more
+          fontSize={0.52} // Even larger size
           font="https://fonts.gstatic.com/s/audiowide/v16/l7gdbjpo0cum0ckerWCtkQ.woff"
           color={subTitleColor}
           fillOpacity={1}
-          outlineWidth={0.055} // Much thicker outline
+          outlineWidth={0.075} // Much thicker outline for galactic look
           outlineColor="#000000"
           outlineOpacity={1}
           textAlign="center"
@@ -286,6 +303,7 @@ const MinerTitle: React.FC<MinerTitleProps> = ({
           userData={{ keepAlive: true }}
           scale={[textScale, textScale, textScale]}
           rotation={[0, 0, subTitleRotation]} // Subtle rotation animation
+          letterSpacing={0.05} // Spread the letters a bit for more impact
         >
           iNDX0-ZIGMINZER
         </Text>
