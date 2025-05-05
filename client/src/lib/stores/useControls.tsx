@@ -11,7 +11,7 @@ interface ControlsState {
   particleCount: number;
   pulseIntensity: number;
   blockCount: number;
-  colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner' | 'kloud';
+  colorScheme: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner' | 'kloud' | 'cosmic';
   interactionEnabled: boolean;
   
   // Action functions
@@ -22,7 +22,7 @@ interface ControlsState {
   setParticleCount: (value: number) => void;
   setPulseIntensity: (value: number) => void;
   setBlockCount: (value: number) => void;
-  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner' | 'kloud') => void;
+  setColorScheme: (value: 'orange' | 'blue' | 'green' | 'purple' | 'bioluminescent' | 'miner' | 'kloud' | 'cosmic') => void;
   toggleInteraction: () => void;
   
   // Helper function to get color by scheme
