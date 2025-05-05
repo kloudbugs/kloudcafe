@@ -1,12 +1,12 @@
 /* Zig Notification Styles - Primal/Ancient Theme */
 .zig-notification {
   position: fixed;
-  bottom: 15px; /* Position at the bottom instead of top */
+  top: 65%; /* Back to top positioning, but lower to see the core */
   left: 50%;
-  transform: translateX(-50%); /* Only translate X axis */
+  transform: translate(-50%, -50%); /* Go back to both axis translation */
   z-index: 1000;
   max-width: 90%;
-  width: 450px; /* Reduced width */
+  width: 450px; /* Keep the smaller width */
   animation: fadeIn 0.7s ease-out;
 }
 
@@ -52,11 +52,11 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(20px); /* Slide up from below */
+    transform: translate(-50%, -60%); /* Slight fade from a bit higher */
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translate(-50%, -50%);
   }
 }
 
