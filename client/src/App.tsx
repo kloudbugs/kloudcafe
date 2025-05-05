@@ -190,14 +190,14 @@ function App() {
       }, 1000);
       
       // Display a message to indicate song is now playing
-      console.log("ZIG SPEECH COMPLETE - PLAYING J. COLE BEAT");
+      console.log("ZIG SPEECH COMPLETE - PLAYING J. COLE BEAT (WILL NAVIGATE TO C12 WHEN DONE)");
       
       // Add a visual indicator that speech is done and song is playing
       const songReadyMessage = document.createElement('div');
       songReadyMessage.className = 'song-ready-message';
       songReadyMessage.innerHTML = `
         <div class="song-message">
-          <p>ZIG'S MESSAGE COMPLETE - PLAYING J. COLE BEAT</p>
+          <p>PLAYING SONG - WILL NAVIGATE TO C12 PLATFORM WHEN COMPLETE</p>
         </div>
       `;
       songReadyMessage.style.position = 'fixed';
@@ -267,16 +267,25 @@ function App() {
 
   // Remove auto-play (now handled in the voice initialization effect)
 
-  // Load audio elements
+  // Load audio elements and set up auto-navigation
   useEffect(() => {
     // Load the J. Cole beat as background music
     const backgroundMusic = new Audio("/sounds/background-beat.mp3");
-    backgroundMusic.loop = true;
+    
+    // Disable the loop to allow the music to end naturally
+    backgroundMusic.loop = false; // Changed from true
     backgroundMusic.volume = 0.3;
+    
+    // Add the event listener for when the music ends
+    backgroundMusic.addEventListener('ended', () => {
+      console.log("Background music ended - navigating to C12 Platform");
+      // Navigate to the C12 Platform
+      window.location.href = '/c12';
+    });
     
     // Try to play background music immediately (will be allowed after user interaction)
     backgroundMusic.play().catch(e => {
-      console.log("Auto-play prevented. Click the button to enable audio:", e);
+      console.log("Auto-play prevented. Music will play after user interaction:", e);
     });
     
     const hitSound = new Audio("/sounds/hit.mp3");
@@ -287,9 +296,11 @@ function App() {
     audioStore.setHitSound(hitSound);
     audioStore.setSuccessSound(successSound);
     
-    console.log("J. Cole beat loaded. Press 'M' to toggle sound.");
+    console.log("J. Cole beat loaded. When it ends, it will navigate to the C12 Platform");
     
     return () => {
+      // Remove event listener and clean up
+      backgroundMusic.removeEventListener('ended', () => {});
       backgroundMusic.pause();
       backgroundMusic.src = "";
     };
