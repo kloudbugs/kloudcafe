@@ -24,6 +24,70 @@ function App() {
   const [bitcoinTendrilsActive, setBitcoinTendrilsActive] = useState(false);
   const welcomeAudioRef = useRef<HTMLAudioElement>(null);
 
+  // Initialize speech synthesis voices and force speech
+  useEffect(() => {
+    let voicesLoaded = false;
+    
+    // Create a function to handle the voices loading
+    const handleVoicesLoaded = () => {
+      if (voicesLoaded) return; // Only run once
+      voicesLoaded = true;
+      
+      const voices = window.speechSynthesis.getVoices();
+      console.log("Available voices:", voices.length);
+      
+      // Check for British voices
+      const britishVoices = voices.filter(voice => 
+        voice.lang.includes('en-GB') || 
+        voice.name.includes('British') ||
+        voice.name.includes('UK')
+      );
+      
+      if (britishVoices.length > 0) {
+        console.log("British voices available:", britishVoices.map(v => v.name).join(', '));
+      } else {
+        console.log("No British voice found, will use default voice");
+      }
+      
+      // Attempt to speak after voices are loaded
+      console.log("Playing Zig's welcome message (British AI voice)");
+      console.log("Press 'V' to replay the message at any time");
+      
+      setTimeout(() => {
+        playWelcomeVoice();
+      }, 1000);
+    };
+
+    // This helps load voices in some browsers
+    window.speechSynthesis.onvoiceschanged = handleVoicesLoaded;
+    
+    // Try to load voices immediately
+    if (window.speechSynthesis.getVoices().length > 0) {
+      handleVoicesLoaded();
+    }
+    
+    // Force a test utterance to activate speech API
+    try {
+      const testUtterance = new SpeechSynthesisUtterance("");
+      testUtterance.volume = 0;
+      window.speechSynthesis.speak(testUtterance);
+    } catch (e) {
+      console.log("Speech API test failed:", e);
+    }
+    
+    // Backup plan - try again after 2 seconds if voices haven't loaded
+    const backupTimer = setTimeout(() => {
+      if (!voicesLoaded) {
+        console.log("Using backup plan to trigger speech...");
+        handleVoicesLoaded();
+      }
+    }, 2000);
+    
+    return () => {
+      clearTimeout(backupTimer);
+    };
+  }, []);
+
   // Toggle stats with 'p' key and handle British voice with 'v' key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -33,9 +97,10 @@ function App() {
       if (e.key === "m") {
         toggleMute();
       }
-      if (e.key === "v" && welcomeAudioRef.current) {
+      if (e.key === "v") {
         // Play the British voice welcome message
         playWelcomeVoice();
+        console.log("Voice triggered by 'V' key");
       }
     };
 
@@ -46,7 +111,7 @@ function App() {
   // Text for Zig's welcome message
   const zigWelcomeMessage = "Hello fellow kloud bugminers, my name is Zig. If you've made it to this page, you're on the right galactic path. I am one of your Tera guardians configured and created by your admin guardian. I am a super enchanted AI miner you can only find here, computing all our hashes together so we don't fail. It's time to save the world and save lives. Welcome to the Kloud Bugs mining cafe. Let's get started...";
   
-  // Play welcome voice and activate Bitcoin electric tendrils
+  // Use Web Speech API to speak with a British accent
   const playWelcomeVoice = () => {
     // Display the message in the console for testing
     console.log("Zig's Message:", zigWelcomeMessage);
@@ -62,57 +127,78 @@ function App() {
     `;
     document.body.appendChild(notification);
     
-    // Try to play the audio
-    if (welcomeAudioRef.current) {
-      welcomeAudioRef.current.play().catch(err => {
-        console.log("Error playing audio:", err);
-        // If audio fails to play, still show the tendrils for visual effect
-        setBitcoinTendrilsActive(true);
-        setTimeout(() => setBitcoinTendrilsActive(false), 15000);
-      });
-      
-      // Activate Bitcoin tendrils while voice is playing
-      setBitcoinTendrilsActive(true);
-      
-      // Reset after voice is done
-      welcomeAudioRef.current.onended = () => {
-        setBitcoinTendrilsActive(false);
-        
-        // Remove the notification after a delay
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        }, 1000);
-      };
+    // Activate Bitcoin tendrils immediately
+    setBitcoinTendrilsActive(true);
+    
+    // Create speech synthesis utterance
+    const utterance = new SpeechSynthesisUtterance(zigWelcomeMessage);
+    
+    // Try to find a British voice
+    const voices = window.speechSynthesis.getVoices();
+    const britishVoice = voices.find(voice => 
+      voice.lang.includes('en-GB') || 
+      voice.name.includes('British') ||
+      voice.name.includes('UK')
+    );
+    
+    if (britishVoice) {
+      utterance.voice = britishVoice;
+      console.log("Using British voice:", britishVoice.name);
     } else {
-      // Fallback if audio element isn't available
-      setBitcoinTendrilsActive(true);
+      console.log("No British voice found, using default voice");
+    }
+    
+    // Set voice parameters
+    utterance.pitch = 1.0; 
+    utterance.rate = 0.9;  // Slightly slower for clarity
+    
+    // When done speaking
+    utterance.onend = () => {
+      console.log("Speech finished");
+      // Deactivate tendrils
+      setBitcoinTendrilsActive(false);
+      
+      // Remove notification
       setTimeout(() => {
-        setBitcoinTendrilsActive(false);
-        
-        // Remove the notification after a delay
         if (notification.parentNode) {
           notification.parentNode.removeChild(notification);
         }
+      }, 1000);
+    };
+    
+    // If speech synthesis fails or takes too long, set a maximum time for the effect
+    const maxDuration = 25000; // 25 seconds
+    const tendrilTimeout = setTimeout(() => {
+      if (bitcoinTendrilsActive) {
+        setBitcoinTendrilsActive(false);
+        
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+        
+        window.speechSynthesis.cancel(); // Cancel any ongoing speech
+      }
+    }, maxDuration);
+    
+    // Speak the text
+    try {
+      window.speechSynthesis.cancel(); // Cancel any previous speech
+      window.speechSynthesis.speak(utterance);
+      console.log("Starting to speak...");
+    } catch (error) {
+      console.error("Speech synthesis error:", error);
+      // Keep the tendrils and notification for a shorter time if speech fails
+      setTimeout(() => {
+        setBitcoinTendrilsActive(false);
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+        clearTimeout(tendrilTimeout);
       }, 15000);
     }
   };
 
-  // Auto-play the welcome message after a delay
-  useEffect(() => {
-    // Use setTimeout to ensure the page is fully loaded
-    const timer = setTimeout(() => {
-      // Display console message about using the voice
-      console.log("Playing Zig's welcome message (British AI voice)");
-      console.log("Press 'V' to replay the message at any time");
-      
-      // Play the welcome message
-      playWelcomeVoice();
-    }, 3000);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  // Remove auto-play (now handled in the voice initialization effect)
 
   // Load audio elements
   useEffect(() => {
@@ -144,12 +230,40 @@ function App() {
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
       
-      {/* British voice welcome message (hidden audio element) */}
-      <audio
-        ref={welcomeAudioRef}
-        src="/audio/welcome-message.mp3"
-        style={{ display: 'none' }}
-      />
+      {/* Add an initial interaction button to enable audio in browsers */}
+      <div 
+        className="interaction-button"
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          zIndex: 1000,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          color: '#00ffff',
+          padding: '10px 15px',
+          borderRadius: '5px',
+          border: '1px solid #00ffff',
+          cursor: 'pointer',
+          fontSize: '14px',
+          boxShadow: '0 0 10px rgba(0, 255, 255, 0.5)',
+          userSelect: 'none'
+        }}
+        onClick={() => {
+          // This helps with browser policies that require user interaction
+          const synth = window.speechSynthesis;
+          synth.cancel(); // Clear any previous speech
+          
+          // Try a short test speech to enable the API
+          const testUtterance = new SpeechSynthesisUtterance(".");
+          testUtterance.volume = 0; // Silent test
+          synth.speak(testUtterance);
+          
+          // Try to activate the welcome message
+          playWelcomeVoice();
+        }}
+      >
+        Click to Activate Zig
+      </div>
       
       <ControlPanel />
       
