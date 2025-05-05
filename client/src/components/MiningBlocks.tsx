@@ -3,8 +3,8 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useControls } from '../lib/stores/useControls';
 import { useAudio } from '../lib/stores/useAudio';
-import BitcoinExplosionSimple from './BitcoinExplosionSimple';
-import ElectricHandSimple from './ElectricHandSimple';
+import BitcoinExplosion from './BitcoinExplosion';
+import ElectricHand from './ElectricHand';
 
 interface MiningBlocksProps {
   count?: number;
@@ -344,7 +344,7 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
       
       {/* Render active explosions */}
       {explosions.map((explosion) => (
-        <BitcoinExplosionSimple
+        <BitcoinExplosion
           key={explosion.id}
           position={explosion.position}
           color={explosion.color}
@@ -354,7 +354,7 @@ const MiningBlocks: React.FC<MiningBlocksProps> = ({
       
       {/* Render electric hand effects */}
       {electricHands.map((hand) => (
-        <ElectricHandSimple
+        <ElectricHand
           key={hand.id}
           position={hand.position}
           target={hand.target}

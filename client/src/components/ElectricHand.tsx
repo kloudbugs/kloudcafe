@@ -184,7 +184,7 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
 }) => {
   const groupRef = useRef<THREE.Group>(null);
   const lineGroupRef = useRef<THREE.Group>(null);
-  const handSegmentRefs = useRef<THREE.Group[]>([]);
+  const handSegmentRefs = useRef<THREE.Mesh[]>([]);
   
   const controls = useControls();
   
@@ -256,10 +256,9 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
     return boltsArray;
   }, [position, target, color, secondaryColor]);
   
-  // Create hand segments with more dramatic cosmic styling
+  // Create hand segments
   const handSegments = useMemo<HandSegment[]>(() => {
-    // More fingers for a more dramatic effect
-    return createHandSegments(position, target, 7);
+    return createHandSegments(position, target, 5);
   }, [position, target]);
   
   // Create lines for each bolt
@@ -348,48 +347,19 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
         }
         
         // Update segment mesh
-        const groupMesh = handSegmentRefs.current[i];
-        if (groupMesh) {
-          groupMesh.visible = segment.progress > 0;
+        const mesh = handSegmentRefs.current[i];
+        if (mesh) {
+          mesh.visible = segment.progress > 0;
+          mesh.scale.setScalar(segment.scale * segment.progress);
           
-          // Set the initial scale based on segment progress
-          const baseScale = segment.scale * segment.progress;
+          // Make hand segments pulse slightly
+          const pulseFactor = 1 + Math.sin(animationTime.current * 10 + i) * 0.1;
+          mesh.scale.multiplyScalar(pulseFactor);
           
-          // Add different pulse effects for different segments
-          const isPalm = i === 0;
-          const isFingertip = i > 1 && i % 2 === 0;
-          
-          // Make each segment pulse with different frequencies
-          const pulseFrequency = isPalm ? 8 : isFingertip ? 12 : 10;
-          const pulsePhase = i * 0.7; // Offset phases for interesting pattern
-          const pulseFactor = 1 + Math.sin(animationTime.current * pulseFrequency + pulsePhase) * 0.15;
-          
-          // Apply scale
-          groupMesh.scale.setScalar(baseScale * pulseFactor);
-          
-          // Update materials for both meshes in the group
-          if (groupMesh.children && groupMesh.children.length >= 2) {
-            // Outer mesh
-            const outerMesh = groupMesh.children[0] as THREE.Mesh;
-            const outerMaterial = outerMesh.material as THREE.MeshStandardMaterial;
-            if (outerMaterial) {
-              // Pulse the emissive intensity
-              const emissivePulse = 1.5 + Math.sin(animationTime.current * 15 + i * 2) * 0.5;
-              outerMaterial.emissiveIntensity = emissivePulse * segment.progress;
-            }
-            
-            // Inner glow mesh
-            const innerMesh = groupMesh.children[1] as THREE.Mesh;
-            const innerMaterial = innerMesh.material as THREE.MeshStandardMaterial;
-            if (innerMaterial) {
-              // More intense pulse for inner glow
-              const glowPulse = 2.5 + Math.sin(animationTime.current * 20 + i * 3) * 1.0;
-              innerMaterial.emissiveIntensity = glowPulse * segment.progress;
-              
-              // Pulse the scale of inner mesh for interesting effect
-              const innerPulse = 0.7 + Math.sin(animationTime.current * 12 + i) * 0.1;
-              innerMesh.scale.setScalar(innerPulse);
-            }
+          // Glow intensity based on progress
+          const material = mesh.material as THREE.MeshStandardMaterial;
+          if (material) {
+            material.emissiveIntensity = 1 * segment.progress;
           }
         }
       } else {
@@ -401,47 +371,24 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
       }
     });
     
-    // Update lightning bolts
-    if (lineGroupRef.current) {
-      bolts.forEach((bolt, i) => {
-        if (lineGroupRef.current.children[i]) {
-          const pointsMesh = lineGroupRef.current.children[i] as THREE.Points;
-          if (pointsMesh && pointsMesh.material) {
-            const material = pointsMesh.material as THREE.PointsMaterial;
-            
-            // Update opacity based on bolt life
-            material.opacity = bolt.life;
-            
-            // Make lightning color pulse between primary and secondary colors
-            const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
-            material.color.lerpColors(
-              new THREE.Color(color),
-              new THREE.Color(secondaryColor),
-              colorMix
-            );
-            
-            // Update point positions for jitter effect during full intensity phase
-            if (progress > 0.3 && progress < 0.7 && i % 3 === 0) {
-              const jitterAmount = 0.1;
-              
-              // Create new position array with jitter
-              const positions = new Float32Array(bolt.points.length * 3);
-              bolt.points.forEach((point, j) => {
-                const idx = j * 3;
-                positions[idx] = point.x + (Math.random() - 0.5) * jitterAmount;
-                positions[idx + 1] = point.y + (Math.random() - 0.5) * jitterAmount;
-                positions[idx + 2] = point.z + (Math.random() - 0.5) * jitterAmount;
-              });
-              
-              // Update geometry
-              if (pointsMesh.geometry) {
-                pointsMesh.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-              }
-            }
-          }
+    // Update material opacity for all lightning lines
+    boltLines.forEach((line, i) => {
+      if (lineGroupRef.current && lineGroupRef.current.children[i]) {
+        const lineMesh = lineGroupRef.current.children[i] as THREE.Line;
+        const material = lineMesh.material as THREE.LineBasicMaterial;
+        if (material) {
+          material.opacity = bolts[i].life;
+          
+          // Make lightning color pulse between primary and secondary colors
+          const colorMix = Math.sin(animationTime.current * 15 + i) * 0.5 + 0.5;
+          material.color.lerpColors(
+            new THREE.Color(color),
+            new THREE.Color(secondaryColor),
+            colorMix
+          );
         }
-      });
-    }
+      }
+    });
     
     // Check if animation is complete
     if (progress >= 1.0 && !completed.current) {
@@ -456,96 +403,40 @@ const ElectricHand: React.FC<ElectricHandProps> = ({
     <group ref={groupRef}>
       {/* Lightning bolts */}
       <group ref={lineGroupRef}>
-        {bolts.map((bolt, i) => (
-          <points key={i}>
-            <bufferGeometry>
-              <float32BufferAttribute 
-                attach="attributes-position" 
-                args={[Float32Array.from(bolt.points.flatMap(p => [p.x, p.y, p.z])), 3]} 
-              />
-            </bufferGeometry>
-            <pointsMaterial 
-              color={bolt.color} 
-              size={bolt.width * 8} 
-              transparent 
-              opacity={bolt.life}
-              sizeAttenuation
+        {boltLines.map((line, i) => (
+          <mesh key={i}>
+            <bufferGeometry attach="geometry" {...line.geometry} />
+            <lineBasicMaterial
+              attach="material"
+              color={line.color}
+              linewidth={line.width}
+              transparent
+              opacity={1}
             />
-          </points>
+          </mesh>
         ))}
       </group>
       
-      {/* Hand segments with more dramatic cosmic styling */}
-      {handSegments.map((segment, i) => {
-        // Use a more varied set of cosmic colors
-        const cosmicColors = [
-          '#00ffee', // Cyan
-          '#9900ff', // Purple
-          '#ffcc00', // Gold
-          '#ff00cc', // Pink
-          '#6600ff', // Deep purple
-        ];
-        
-        // Choose color based on segment index with some variation
-        const segmentColor = cosmicColors[i % cosmicColors.length];
-        
-        // Determine geometry based on segment type
-        const isPalm = i === 0;
-        const isFingertip = i > 1 && i % 2 === 0;
-        
-        return (
-          <group
-            key={i}
-            ref={el => el && (handSegmentRefs.current[i] = el)}
-            position={segment.position}
-            rotation={segment.rotation}
-            scale={0} // Start with zero scale, will be animated
-          >
-            {/* Main segment shape */}
-            <mesh>
-              {isPalm ? (
-                // Palm is a larger, more complex shape
-                <dodecahedronGeometry args={[1, 1]} />
-              ) : isFingertip ? (
-                // Fingertips are smaller icosahedrons
-                <icosahedronGeometry args={[1, 1]} />
-              ) : (
-                // Regular segments are spheres
-                <sphereGeometry args={[1, 16, 16]} />
-              )}
-              <meshStandardMaterial
-                color={segmentColor}
-                emissive={segmentColor}
-                emissiveIntensity={1.5}
-                transparent
-                opacity={0.9}
-                toneMapped={false}
-                metalness={0.7}
-                roughness={0.2}
-              />
-            </mesh>
-            
-            {/* Add an inner glow effect with a slightly smaller mesh */}
-            <mesh scale={0.7}>
-              {isPalm ? (
-                <dodecahedronGeometry args={[1, 1]} />
-              ) : isFingertip ? (
-                <icosahedronGeometry args={[1, 1]} />
-              ) : (
-                <sphereGeometry args={[1, 16, 16]} />
-              )}
-              <meshStandardMaterial
-                color="#ffffff"
-                emissive={segmentColor}
-                emissiveIntensity={2.5}
-                transparent
-                opacity={0.6}
-                toneMapped={false}
-              />
-            </mesh>
-          </group>
-        );
-      })}
+      {/* Hand segments */}
+      {handSegments.map((segment, i) => (
+        <mesh
+          key={i}
+          ref={el => el && (handSegmentRefs.current[i] = el)}
+          position={segment.position}
+          rotation={segment.rotation}
+          scale={0} // Start with zero scale, will be animated
+        >
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial
+            color={i % 2 === 0 ? color : secondaryColor}
+            emissive={i % 2 === 0 ? color : secondaryColor}
+            emissiveIntensity={1}
+            transparent
+            opacity={0.9}
+            toneMapped={false}
+          />
+        </mesh>
+      ))}
     </group>
   );
 };
