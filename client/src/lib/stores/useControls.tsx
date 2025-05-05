@@ -32,7 +32,7 @@ interface ControlsState {
 export const useControls = create<ControlsState>((set, get) => ({
   // Default values
   autoRotate: true,
-  rotationSpeed: 0.5,
+  rotationSpeed: 0.35, // Reduced from 0.5 for smoother animation
   tendrilCount: 60,
   coreIntensity: 1.0,
   particleCount: 600,

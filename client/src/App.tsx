@@ -405,11 +405,15 @@ function App() {
         
         <OrbitControls 
           enableDamping
-          dampingFactor={0.05}
-          rotateSpeed={0.5}
+          dampingFactor={0.15} /* Increased from 0.05 for smoother motion */
+          rotateSpeed={0.35} /* Reduced from 0.5 for better control */
           minDistance={5}
           maxDistance={20}
           enablePan={false}
+          enableZoom={true}
+          zoomSpeed={0.7} /* Optimized zoom speed */
+          maxPolarAngle={Math.PI * 0.85} /* Limit vertical rotation */
+          makeDefault
         />
       </Canvas>
     </>
