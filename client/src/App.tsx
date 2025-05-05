@@ -346,9 +346,11 @@ function App() {
         Start Experience (Voice & Music)
       </div>
       
-      {/* Direct News Link Button */}
+      {/* C12 Platform Link Button */}
       <a 
-        href="/news"
+        href="https://github.com/kloudbugs/C12.git"
+        target="_blank" 
+        rel="noopener noreferrer"
         className="cosmic-main-btn"
         style={{
           position: 'fixed',
@@ -373,7 +375,7 @@ function App() {
         }}
       >
         <span style={{ fontSize: '18px' }}>📡</span>
-        Galactic News Broadcast
+        KloudBugs C12 Platform
       </a>
       
       <ControlPanel />

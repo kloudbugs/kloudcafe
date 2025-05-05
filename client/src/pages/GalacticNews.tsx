@@ -210,11 +210,10 @@ const GalacticNews: React.FC = () => {
                 <h3>HISTORICAL SPEECH ARCHIVE RESTORED</h3>
                 <p>The complete "I Have a Dream" speech by Dr. Martin Luther King Jr. has been digitally restored using quantum mining algorithms, preserving this critical moment in civil rights history for future generations.</p>
                 <div className="news-link">
-                  <a href="#" onClick={(e) => {
-                    e.preventDefault();
-                    // Display a message about viewing external content
-                    alert("This would link to Martin Luther King's speech content. External links would connect to historical archives.");
-                  }}>ACCESS HISTORICAL ARCHIVE →</a>
+                  <a href="https://github.com/kloudbugs/C12.git" target="_blank" rel="noopener noreferrer">ACCESS KLOUDBUGS C12 PLATFORM →</a>
+                </div>
+                <div className="source-code">
+                  <p>Repository ID: <span className="code">kloudbugs/C12</span></p>
                 </div>
               </div>
               <div className="news-item">
