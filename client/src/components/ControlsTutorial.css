@@ -1,0 +1,143 @@
+/* ControlsTutorial.css */
+.tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tutorial-content {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid #9900ff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 500px;
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 20px rgba(153, 0, 255, 0.5), inset 0 0 10px rgba(153, 0, 255, 0.3);
+  pointer-events: auto;
+  font-family: 'Orbitron', sans-serif;
+  animation: glow 2s infinite alternate;
+}
+
+.tutorial-header {
+  color: #ffcc00;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+}
+
+.tutorial-task {
+  display: flex;
+  align-items: center;
+  margin: 0.7rem 0;
+  font-size: 1rem;
+}
+
+.tutorial-task.completed {
+  color: #00ffcc;
+  text-decoration: line-through;
+}
+
+.task-checkbox {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ffcc00;
+  display: inline-block;
+  position: relative;
+  border-radius: 3px;
+}
+
+.task-checkbox.checked {
+  background-color: #9900ff;
+  border-color: #00ffcc;
+}
+
+.task-checkbox.checked:after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffcc00;
+  font-size: 14px;
+}
+
+.tutorial-instruction {
+  color: #cccccc;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  line-height: 1.4;
+}
+
+.continue-button {
+  background: linear-gradient(to right, #7700cc, #9900ff);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(153, 0, 255, 0.5);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.continue-button.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.continue-button.active:hover {
+  background: linear-gradient(to right, #9900ff, #bb00ff);
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(153, 0, 255, 0.8);
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px rgba(153, 0, 255, 0.5), inset 0 0 5px rgba(153, 0, 255, 0.3);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(153, 0, 255, 0.8), inset 0 0 10px rgba(153, 0, 255, 0.5);
+  }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+.highlight-area {
+  position: absolute;
+  border: 2px dashed #ffcc00;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  pointer-events: none;
+}
+
+.highlight-text {
+  position: absolute;
+  color: #ffcc00;
+  font-size: 1rem;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
