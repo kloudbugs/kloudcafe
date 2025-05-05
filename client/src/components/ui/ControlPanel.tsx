@@ -13,6 +13,7 @@ const ControlPanel: React.FC = () => {
     { value: 'bioluminescent', label: 'Bio', color: '#c9ff00' },
     { value: 'miner', label: 'Miner', color: '#ffcc00' },
     { value: 'kloud', label: 'KloudBugs', color: '#00ffcc' },
+    { value: 'cosmic', label: 'Cosmic', color: '#9900ff' },
   ];
   
   return (
@@ -29,11 +30,11 @@ const ControlPanel: React.FC = () => {
       {isOpen && (
         <div className="text-white p-4 rounded-lg w-72 backdrop-blur-sm bg-black/80" 
              style={{
-               border: "1px solid var(--kloud-teal)",
-               boxShadow: "0 0 15px rgba(0, 255, 204, 0.3)"
+               border: "1px solid #9900ff",
+               boxShadow: "0 0 15px rgba(153, 0, 255, 0.3)"
              }}>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold" style={{ color: "var(--kloud-teal)" }}>Mining Network Controls</h2>
+            <h2 className="text-lg font-semibold" style={{ color: "#ffcc00" }}>ZIG MINER CONTROLS</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="text-white/80 hover:text-white"

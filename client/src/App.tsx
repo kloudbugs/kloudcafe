@@ -124,22 +124,22 @@ function App() {
                 <h1 style={{ 
                   fontSize: '3rem', 
                   margin: '0',
-                  background: 'linear-gradient(to bottom, white, #4cccff)',
+                  background: 'linear-gradient(to bottom, white, #ffcc00)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 10px #00ffcc, 0 0 20px #00ffcc',
+                  textShadow: '0 0 10px #9900ff, 0 0 20px #9900ff',
                   fontWeight: 'bold',
                   letterSpacing: '1px',
-                  filter: 'drop-shadow(0 0 8px rgba(0, 255, 204, 0.8))'
+                  filter: 'drop-shadow(0 0 8px rgba(153, 0, 255, 0.8))'
                 }}>KLOUDBUGS</h1>
                 <p style={{ 
                   fontSize: '1.5rem', 
                   margin: '0.5rem 0 0',
-                  color: 'white',
-                  textShadow: '0 0 10px #f08030, 0 0 20px #f08030',
+                  color: '#ffcc00',
+                  textShadow: '0 0 10px #ffcc00, 0 0 20px #ffcc00',
                   fontWeight: 'bold',
                   letterSpacing: '2px'
-                }}>CAFE VAULT</p>
+                }}>CAFE ZIG MINER</p>
               </div>
             </Html>
           </group>
@@ -148,8 +148,8 @@ function App() {
           <Crown 
             size={1.2} 
             pointCount={7} 
-            color="#f08030" 
-            gemColor="#4cccff"
+            color="#ffcc00" 
+            gemColor="#9900ff"
             position={[0, 5, 0]}
           />
           
