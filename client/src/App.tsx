@@ -130,24 +130,21 @@ function App() {
                 <h1 style={{ 
                   fontSize: '3rem', 
                   margin: '0',
-                  background: 'linear-gradient(to bottom, #ffd700, #d4af37)',
+                  background: 'linear-gradient(to bottom, white, #4cccff)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 10px rgba(157, 78, 221, 0.8), 0 0 20px rgba(157, 78, 221, 0.5)',
+                  textShadow: '0 0 10px #00ffcc, 0 0 20px #00ffcc',
                   fontWeight: 'bold',
-                  letterSpacing: '2px',
-                  filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))'
+                  letterSpacing: '1px',
+                  filter: 'drop-shadow(0 0 8px rgba(0, 255, 204, 0.8))'
                 }}>KLOUDBUGS</h1>
                 <p style={{ 
                   fontSize: '1.5rem', 
                   margin: '0.5rem 0 0',
                   color: 'white',
-                  background: 'linear-gradient(to right, #9d4edd, #5a189a)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 0 10px rgba(157, 78, 221, 0.8)',
+                  textShadow: '0 0 10px #f08030, 0 0 20px #f08030',
                   fontWeight: 'bold',
-                  letterSpacing: '3px'
+                  letterSpacing: '2px'
                 }}>CAFE VAULT</p>
               </div>
             </Html>
@@ -157,8 +154,8 @@ function App() {
           <Crown 
             size={1.2} 
             pointCount={7} 
-            color="#ffd700" 
-            gemColor="#9d4edd"
+            color="#f08030" 
+            gemColor="#4cccff"
             position={[0, 5, 0]}
           />
           

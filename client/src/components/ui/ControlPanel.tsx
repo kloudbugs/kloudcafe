@@ -12,7 +12,7 @@ const ControlPanel: React.FC = () => {
     { value: 'purple', label: 'Purple', color: '#aa33ff' },
     { value: 'bioluminescent', label: 'Bio', color: '#c9ff00' },
     { value: 'miner', label: 'Miner', color: '#ffcc00' },
-    { value: 'kloud', label: 'Cosmic', color: '#9d4edd' },
+    { value: 'kloud', label: 'KloudBugs', color: '#00ffcc' },
   ];
   
   return (
@@ -27,24 +27,20 @@ const ControlPanel: React.FC = () => {
       )}
       
       {isOpen && (
-        <div className="bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm border-2 border-[#ffd700] shadow-lg shadow-[#9d4edd]/30" 
+        <div className="bg-black/80 text-white p-4 rounded-lg w-72 backdrop-blur-sm border border-[#00ffcc] shadow-lg shadow-[#00ffcc]/20" 
              style={{
-               background: "linear-gradient(135deg, rgba(20, 17, 40, 0.9), rgba(10, 10, 10, 0.98))",
-               boxShadow: "0 0 15px rgba(157, 78, 221, 0.5), 0 0 30px rgba(255, 215, 0, 0.3)"
+               background: "linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(10, 10, 10, 0.95))"
              }}>
           <div className="flex justify-between items-center mb-4"
                style={{
-                 background: "linear-gradient(45deg, #9d4edd, #5a189a)",
+                 background: "linear-gradient(45deg, var(--stellar-blue), var(--space-purple))",
                  margin: "-16px -16px 16px -16px",
                  padding: "12px 16px",
                  borderTopLeftRadius: "8px",
                  borderTopRightRadius: "8px",
-                 borderBottom: "2px solid #ffd700"
+                 borderBottom: "2px solid var(--kloud-teal)"
                }}>
-            <h2 className="text-lg font-semibold" style={{ 
-              color: "#ffd700", 
-              textShadow: "0 0 5px rgba(255, 215, 0, 0.7)" 
-            }}>Cosmic Mining Network</h2>
+            <h2 className="text-lg font-semibold" style={{ color: "var(--kloud-teal)" }}>Mining Network Controls</h2>
             <button
               onClick={() => setIsOpen(false)}
               className="text-white/80 hover:text-white"
