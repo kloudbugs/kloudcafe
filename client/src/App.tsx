@@ -146,12 +146,12 @@ function App() {
     
     console.log("British voices available:", britishVoices.map(v => v.name).join(", "));
     
-    // Try different British voices - prefer Microsoft Ryan or Thomas if available
+    // Try different British voices - prefer female voices as requested
     let selectedVoice = null;
     
-    // Try to find Microsoft Ryan or Thomas first (male British voices)
+    // Try to find female British voices first (Libby, Maisie, or Sonia)
     selectedVoice = britishVoices.find(voice => 
-      voice.name.includes("Ryan") || voice.name.includes("Thomas")
+      voice.name.includes("Libby") || voice.name.includes("Maisie") || voice.name.includes("Sonia")
     );
     
     // If not found, try any British voice
