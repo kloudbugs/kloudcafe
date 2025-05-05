@@ -106,7 +106,7 @@ const GalacticNews: React.FC = () => {
           <div className="news-video-container">
             {/* Breaking news banner */}
             <div className="breaking-news-banner">
-              <span>BREAKING: KLOUD MINERS COLLECTIVE MAKES SIGNIFICANT DISCOVERY</span>
+              <span>BREAKING: HISTORIC "I HAVE A DREAM" SPEECH FULLY RESTORED BY QUANTUM TECHNOLOGY</span>
             </div>
             
             {/* Video Player */}
@@ -161,6 +161,17 @@ const GalacticNews: React.FC = () => {
                 <h3>CRYPTO MINING ADVANCEMENTS</h3>
                 <p>KloudBugs Mining Collective reports unprecedented efficiency gains using new quantum entanglement technology.</p>
               </div>
+              <div className="news-item featured-news-item">
+                <h3>HISTORICAL SPEECH ARCHIVE RESTORED</h3>
+                <p>The complete "I Have a Dream" speech by Dr. Martin Luther King Jr. has been digitally restored using quantum mining algorithms, preserving this critical moment in civil rights history for future generations.</p>
+                <div className="news-link">
+                  <a href="#" onClick={(e) => {
+                    e.preventDefault();
+                    // Display a message about viewing external content
+                    alert("This would link to Martin Luther King's speech content. External links would connect to historical archives.");
+                  }}>ACCESS HISTORICAL ARCHIVE →</a>
+                </div>
+              </div>
               <div className="news-item">
                 <h3>SOCIAL JUSTICE INITIATIVE</h3>
                 <p>Mining profits redirected to support global justice causes, honoring the legacy of Tera Ann Harris.</p>
@@ -180,7 +191,7 @@ const GalacticNews: React.FC = () => {
         {/* Ticker at the bottom */}
         <div className="news-ticker">
           <div className="ticker-content">
-            <span>BITCOIN MINING DIFFICULTIES REACH ALL-TIME HIGH • COSMIC JUSTICE PROTOCOL IMPLEMENTED IN MAJOR BLOCKCHAINS • KLOUDBUGS COLLECTIVE EXPANDS TO LUNAR MINING OPERATIONS • DIGITAL REMEMBRANCE PROJECT APPROVED BY GLOBAL COUNCIL • ZIG AI SYSTEMS SHOW 300% EFFICIENCY IMPROVEMENT • NEURAL MINING TECHNOLOGY PATENT FILED BY COLLECTIVE</span>
+            <span>HISTORIC "I HAVE A DREAM" SPEECH RESTORATION PROJECT COMPLETES PHASE 1 • BITCOIN MINING DIFFICULTIES REACH ALL-TIME HIGH • COSMIC JUSTICE PROTOCOL IMPLEMENTED IN MAJOR BLOCKCHAINS • KLOUDBUGS COLLECTIVE EXPANDS TO LUNAR MINING OPERATIONS • DIGITAL REMEMBRANCE PROJECT APPROVED BY GLOBAL COUNCIL • ZIG AI SYSTEMS SHOW 300% EFFICIENCY IMPROVEMENT • NEURAL MINING TECHNOLOGY PATENT FILED BY COLLECTIVE • MLK SPEECH PRESERVATION FUND REACHES 1000 BTC</span>
           </div>
         </div>
       </div>
