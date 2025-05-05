@@ -158,12 +158,12 @@ function App() {
 
   // Remove auto-play (now handled in the voice initialization effect)
 
-  // Load audio elements and set up auto-navigation
+  // Load audio elements without auto-navigation
   useEffect(() => {
     // Load the J. Cole beat as background music
     const backgroundMusic = new Audio("/sounds/background-beat.mp3");
     
-    // Music can loop since we'll navigate based on timer, not end of music
+    // Music can loop indefinitely
     backgroundMusic.loop = true; 
     backgroundMusic.volume = 0.3;
     
@@ -180,50 +180,10 @@ function App() {
     audioStore.setHitSound(hitSound);
     audioStore.setSuccessSound(successSound);
     
-    console.log("J. Cole beat loaded. Will navigate to KLOUDBUGS CAFE after 30 seconds");
-    
-    // Set up timer for auto-navigation after 30 seconds
-    const navigationTimer = setTimeout(() => {
-      console.log("30 seconds elapsed - navigating to KLOUDBUGS CAFE");
-      
-      // Show a 3-second countdown notification before navigating
-      const countdownNotification = document.createElement('div');
-      countdownNotification.className = 'countdown-notification';
-      countdownNotification.style.position = 'fixed';
-      countdownNotification.style.top = '50%';
-      countdownNotification.style.left = '50%';
-      countdownNotification.style.transform = 'translate(-50%, -50%)';
-      countdownNotification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-      countdownNotification.style.color = '#00ffff';
-      countdownNotification.style.padding = '20px 30px';
-      countdownNotification.style.borderRadius = '5px';
-      countdownNotification.style.border = '2px solid #00ffff';
-      countdownNotification.style.zIndex = '1000';
-      countdownNotification.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.7)';
-      countdownNotification.style.fontFamily = 'Courier New, monospace';
-      countdownNotification.style.fontSize = '24px';
-      countdownNotification.style.textTransform = 'uppercase';
-      countdownNotification.style.textAlign = 'center';
-      countdownNotification.innerHTML = 'Navigating to KLOUDBUGS CAFE in 3...';
-      document.body.appendChild(countdownNotification);
-      
-      // Countdown from 3 to 1 before navigating
-      let countdown = 3;
-      const countdownInterval = setInterval(() => {
-        countdown--;
-        if (countdown > 0) {
-          countdownNotification.innerHTML = `Navigating to KLOUDBUGS CAFE in ${countdown}...`;
-        } else {
-          clearInterval(countdownInterval);
-          // Navigate to the KLOUDBUGS CAFE
-          window.location.href = '/cafe';
-        }
-      }, 1000);
-    }, 30000); // 30 seconds timer
+    console.log("J. Cole beat loaded and playing");
     
     return () => {
       // Clean up
-      clearTimeout(navigationTimer);
       backgroundMusic.pause();
       backgroundMusic.src = "";
     };
@@ -235,34 +195,6 @@ function App() {
     <>
       {/* Twinkling stars background animation */}
       <div className="stars"></div>
-      
-      {/* Enter KLOUDBUGS CAFE button */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '40px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          border: '2px solid #00ffff',
-          borderRadius: '5px',
-          padding: '12px 25px',
-          color: '#00ffff',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
-          zIndex: 1000,
-          boxShadow: '0 0 15px rgba(0, 255, 255, 0.7)',
-          animation: 'pulse 2s infinite',
-          fontFamily: 'Courier New, monospace',
-          letterSpacing: '1px',
-          textAlign: 'center',
-        }}
-        onClick={() => window.location.href = '/cafe'}
-      >
-        Enter KLOUDBUGS CAFE
-      </div>
       
       <ControlPanel />
       
