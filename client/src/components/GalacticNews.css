@@ -151,6 +151,38 @@
   opacity: 1;
 }
 
+/* Video fallback content */
+.video-fallback-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  text-align: center;
+  z-index: 2;
+}
+
+.video-fallback-content h3 {
+  color: #ffcc00;
+  margin-bottom: 10px;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.video-fallback-content p {
+  font-size: 14px;
+  max-width: 80%;
+  color: #cccccc;
+}
+
 .play-overlay {
   position: absolute;
   top: 0;

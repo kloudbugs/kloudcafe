@@ -35,26 +35,63 @@ const GalacticNews: React.FC = () => {
     setBroadcastTime(futureDate.toLocaleDateString('en-US', options) + ' | COSMIC STANDARD TIME');
   }, []);
 
-  // Handle video playback
-  const togglePlayback = () => {
+  // Handle video playback with improved error handling
+  const playVideo = async () => {
     if (!videoRef.current) return;
     
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play().catch(e => {
-        console.error('Failed to play video:', e);
-      });
+    try {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+        setIsPlaying(true);
+        console.log('Video started playing successfully');
+      }
+    } catch (error) {
+      console.error('Error playing video:', error);
+      // In case of error, ensure UI stays in correct state
+      setIsPlaying(false);
+      // Try to reset the video player
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+      }
     }
+  };
+  
+  const pauseVideo = () => {
+    if (!videoRef.current) return;
     
-    setIsPlaying(!isPlaying);
+    videoRef.current.pause();
+    setIsPlaying(false);
+    console.log('Video paused');
+  };
+  
+  const togglePlayback = () => {
+    if (isPlaying) {
+      pauseVideo();
+    } else {
+      playVideo();
+    }
   };
 
   const handleVideoLoad = () => {
     setVideoLoaded(true);
+    console.log('Video loaded and ready to play');
+    if (videoRef.current) {
+      console.log('Video duration:', videoRef.current.duration);
+    }
   };
 
   const handleVideoEnd = () => {
+    setIsPlaying(false);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      console.log('Video ended and reset');
+    }
+  };
+  
+  const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    console.error('Video error:', e);
+    setVideoLoaded(false);
     setIsPlaying(false);
   };
 
@@ -115,12 +152,20 @@ const GalacticNews: React.FC = () => {
                 ref={videoRef}
                 onCanPlay={handleVideoLoad}
                 onEnded={handleVideoEnd}
+                onError={handleVideoError}
                 muted={isMuted}
                 playsInline
+                loop={false}
+                controls={false}
                 className={videoLoaded ? 'loaded' : ''}
+                poster="/images/news-poster.jpg"
+                style={{ background: '#000' }}
               >
-                <source src="/videos/news-broadcast.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
+                {/* Fallback content if video isn't available */}
+                <div className="video-fallback-content">
+                  <h3>HISTORICAL CONTENT RESTORATION IN PROGRESS</h3>
+                  <p>Our AI archivists are currently working to restore this historical footage.</p>
+                </div>
               </video>
               
               {/* Play button overlay */}
