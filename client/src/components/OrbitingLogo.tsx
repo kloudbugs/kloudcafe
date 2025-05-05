@@ -31,6 +31,7 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
   }, []);
   
   // Use only the specific PNG logo files you uploaded
+  // Removed the blue bean mining token as requested
   const logos = [
     { 
       image: '/attached_assets/146DFB52-35C2-46E6-966A-ABDA69B3A96A.png', 
@@ -45,15 +46,9 @@ const OrbitingLogo: React.FC<OrbitingLogoProps> = ({
       height: 0.2 
     },
     { 
-      image: '/attached_assets/DE2097B5-8651-4353-A8B0-58F7193A6A35.png', 
-      size: 0.75, 
-      offset: Math.PI * 1.33, 
-      height: -0.1 
-    },
-    { 
       image: '/attached_assets/F67167C2-A805-40EF-A76C-93BA70792E11.png', 
       size: 0.8, 
-      offset: Math.PI * 2, 
+      offset: Math.PI * 1.33, 
       height: 0.15 
     }
   ];
