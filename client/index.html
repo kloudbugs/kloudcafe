@@ -20,65 +20,19 @@
         position: absolute;
         bottom: 20px;
         left: 20px;
-        background: linear-gradient(135deg, rgba(10, 10, 42, 0.8), rgba(10, 10, 60, 0.6));
-        padding: 15px 20px;
-        border-radius: 12px;
+        background-color: rgba(10, 10, 42, 0.7);
+        padding: 10px 15px;
+        border-radius: 8px;
         z-index: 10;
         user-select: none;
         pointer-events: none;
-        border: 3px solid;
-        border-image: linear-gradient(to right, #9900ff, #00ffcc) 1;
-        box-shadow: 0 0 25px rgba(0, 255, 204, 0.6), 0 0 40px rgba(153, 0, 255, 0.4);
-        backdrop-filter: blur(5px);
-        min-width: 250px;
-        max-width: 400px;
+        border: 1px solid #9900ff;
+        box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
       }
       #info p {
         margin: 5px 0;
         font-size: 14px;
         color: #ffcc00;
-      }
-      #title {
-        font-size: 32px;
-        font-weight: 900; /* Extra bold */
-        color: #9900ff;
-        text-shadow: 0 0 10px rgba(153, 0, 255, 0.7), 0 0 15px rgba(0, 255, 204, 0.7);
-        letter-spacing: 3px;
-        margin-bottom: 8px;
-        animation: title-glow 1.5s infinite alternate;
-        line-height: 1.2;
-        text-transform: uppercase;
-        background: linear-gradient(to right, #9900ff, #00ffcc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      #subtitle {
-        font-size: 22px;
-        font-weight: bold;
-        color: #ffcc00;
-        text-shadow: 0 0 8px rgba(255, 204, 0, 0.7);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        animation: subtitle-pulse 2s infinite alternate;
-      }
-      @keyframes subtitle-pulse {
-        0% {
-          opacity: 0.7;
-          transform: scale(0.97);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-      @keyframes title-glow {
-        0% {
-          text-shadow: 0 0 5px rgba(153, 0, 255, 0.7), 0 0 10px rgba(0, 255, 204, 0.7);
-        }
-        100% {
-          text-shadow: 0 0 15px rgba(153, 0, 255, 1), 0 0 25px rgba(0, 255, 204, 1);
-        }
       }
       @media (max-width: 768px) {
         #info {
@@ -86,20 +40,13 @@
           bottom: 10px;
           left: 10px;
         }
-        #title {
-          font-size: 20px;
-        }
-        #subtitle {
-          font-size: 16px;
-        }
       }
     </style>
   </head>
   <body>
     <div id="root"></div>
     <div id="info">
-      <div id="title">KLOUDBUGS CAFE</div>
-      <div id="subtitle">ZIG-MINER</div>
+      <p>KLOUDBUGS CAFE ZIG-MINER</p>
       <p>Use mouse to rotate | Scroll to zoom</p>
     </div>
     <!-- PNG Loader for Orbiting Logos -->

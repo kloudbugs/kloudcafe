@@ -58,13 +58,6 @@ function App() {
 
   const controls = useControls();
 
-  // Debug
-  useEffect(() => {
-    console.log("App component mounted");
-    console.log("Is audio muted:", isMuted);
-    console.log("Color scheme:", controls.colorScheme);
-  }, []);
-
   return (
     <>
       {/* Twinkling stars background animation */}
@@ -81,9 +74,6 @@ function App() {
           alpha: false,
           stencil: false,
           depth: true
-        }}
-        onCreated={state => {
-          console.log("Canvas created, renderer:", state.gl);
         }}
       >
         {showPerformance && <Stats />}
