@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -23,180 +23,141 @@ const SpaceStorm: React.FC<SpaceStormProps> = ({
   intensity = 1,
   onComplete
 }) => {
-  const pointsRef = useRef<THREE.Points>(null);
   const stormGroupRef = useRef<THREE.Group>(null);
   const timeActive = useRef<number>(0);
   const active = useRef<boolean>(true);
   
-  // Create storm particles
-  const particles = useMemo(() => {
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
-    const lifetimes = new Float32Array(particleCount);
-
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
-      
-      // Random position in a sphere
-      const phi = Math.random() * Math.PI * 2;
-      const theta = Math.random() * Math.PI;
-      const r = radius * Math.cbrt(Math.random()); // Cube root for uniform distribution
-
-      positions[i3] = r * Math.sin(theta) * Math.cos(phi);
-      positions[i3 + 1] = r * Math.sin(theta) * Math.sin(phi);
-      positions[i3 + 2] = r * Math.cos(theta);
-      
-      // Velocity spirals outward with random variations
-      const vortexFactor = 5.0;
-      const spiralDirection = new THREE.Vector3(
-        -positions[i3 + 1] + (Math.random() - 0.5) * 0.3,
-        positions[i3] + (Math.random() - 0.5) * 0.3,
-        (Math.random() - 0.5) * 0.5
-      ).normalize();
-      
-      velocities[i3] = spiralDirection.x * vortexFactor * (0.5 + Math.random() * 0.5);
-      velocities[i3 + 1] = spiralDirection.y * vortexFactor * (0.5 + Math.random() * 0.5);
-      velocities[i3 + 2] = spiralDirection.z * vortexFactor * (0.5 + Math.random() * 0.5);
-      
-      // Random sizes
-      sizes[i] = 0.2 + Math.random() * 0.8;
-      
-      // Staggered lifetimes for continuous particles
-      lifetimes[i] = Math.random() * duration;
-    }
-    
-    return { positions, velocities, sizes, lifetimes };
-  }, [particleCount, radius, duration]);
+  // Create center glow
+  const coreRef = useRef<THREE.Mesh>(null);
   
-  // Create lightning bolts
-  const lightningBolts = useMemo(() => {
-    const boltCount = 15;
-    const bolts = [];
+  // Create lightning arcs
+  const arcs = useMemo(() => {
+    const arcCount = 8;
+    const arcsData = [];
     
-    for (let i = 0; i < boltCount; i++) {
-      // Create a central point with spikes radiating outward
-      const center = new THREE.Vector3(
-        THREE.MathUtils.randFloatSpread(radius * 0.5),
-        THREE.MathUtils.randFloatSpread(radius * 0.5),
-        THREE.MathUtils.randFloatSpread(radius * 0.5)
+    for (let i = 0; i < arcCount; i++) {
+      // Random start and end positions
+      const startRadius = radius * 0.1;
+      const endRadius = radius * (0.5 + Math.random() * 0.3);
+      
+      // Random angles to place the start and end points
+      const startAngle = Math.random() * Math.PI * 2;
+      const startHeight = THREE.MathUtils.randFloatSpread(radius * 0.2);
+      
+      const startPoint = new THREE.Vector3(
+        Math.cos(startAngle) * startRadius,
+        startHeight,
+        Math.sin(startAngle) * startRadius
       );
       
-      const spikeCount = 3 + Math.floor(Math.random() * 5);
+      // Create random end point
+      const endAngle = startAngle + (Math.random() * Math.PI * 0.5 - Math.PI * 0.25);
+      const endHeight = startHeight + THREE.MathUtils.randFloatSpread(radius * 0.5);
       
-      // Create spikes from the center
-      for (let j = 0; j < spikeCount; j++) {
-        const endPoint = new THREE.Vector3(
-          center.x + THREE.MathUtils.randFloatSpread(radius * 0.8),
-          center.y + THREE.MathUtils.randFloatSpread(radius * 0.8),
-          center.z + THREE.MathUtils.randFloatSpread(radius * 0.8)
-        );
+      const endPoint = new THREE.Vector3(
+        Math.cos(endAngle) * endRadius,
+        endHeight,
+        Math.sin(endAngle) * endRadius
+      );
+      
+      // Create points along the arc
+      const arcPoints = [];
+      const segmentCount = 8;
+      
+      for (let s = 0; s <= segmentCount; s++) {
+        const t = s / segmentCount;
         
-        // Create positions for the boxes that will form the lightning
-        const distance = center.distanceTo(endPoint);
-        const direction = endPoint.clone().sub(center).normalize();
-        const segmentCount = 3 + Math.floor(Math.random() * 5);
-        const segmentLength = distance / segmentCount;
+        // Interpolate between start and end, with some randomness
+        const midPoint = startPoint.clone().lerp(endPoint, t);
         
-        // Create lightning segments
-        const segments = [];
-        let currentPoint = center.clone();
-        
-        for (let k = 0; k < segmentCount; k++) {
-          // Add some randomness to the path
-          const jitter = new THREE.Vector3(
-            THREE.MathUtils.randFloatSpread(0.3),
-            THREE.MathUtils.randFloatSpread(0.3),
-            THREE.MathUtils.randFloatSpread(0.3)
-          );
-          
-          // Move along the direction with jitter
-          const nextPoint = currentPoint.clone().add(
-            direction.clone().multiplyScalar(segmentLength).add(jitter)
-          );
-          
-          // Store segment data
-          segments.push({
-            position: currentPoint.clone().lerp(nextPoint, 0.5),
-            scale: new THREE.Vector3(0.05, segmentLength, 0.05),
-            rotation: new THREE.Euler().setFromQuaternion(
-              new THREE.Quaternion().setFromUnitVectors(
-                new THREE.Vector3(0, 1, 0),
-                nextPoint.clone().sub(currentPoint).normalize()
-              )
-            )
-          });
-          
-          currentPoint = nextPoint;
+        // Add some randomness to intermediate points (not start/end)
+        if (s > 0 && s < segmentCount) {
+          const jitterAmount = radius * 0.1 * Math.sin(t * Math.PI);
+          midPoint.x += THREE.MathUtils.randFloatSpread(jitterAmount);
+          midPoint.y += THREE.MathUtils.randFloatSpread(jitterAmount);
+          midPoint.z += THREE.MathUtils.randFloatSpread(jitterAmount);
         }
         
-        bolts.push({
-          segments,
-          life: Math.random() * 2,
-          maxLife: 0.5 + Math.random() * 1.5,
-          hue: Math.random() * 0.1
-        });
+        arcPoints.push(midPoint);
       }
+      
+      arcsData.push({
+        points: arcPoints,
+        thickness: radius * (0.05 + Math.random() * 0.05),
+        phase: Math.random() * Math.PI * 2,
+        speed: 3 + Math.random() * 2,
+        color: color
+      });
     }
     
-    return bolts;
-  }, [radius]);
+    return arcsData;
+  }, [radius, color]);
   
-  // Animate the storm
+  // Create orbs - glowing spheres that move around the storm
+  const orbs = useMemo(() => {
+    const orbCount = 15;
+    const orbsData = [];
+    
+    for (let i = 0; i < orbCount; i++) {
+      const orbRadius = radius * (0.2 + Math.random() * 0.6);
+      const angle = Math.random() * Math.PI * 2;
+      const height = THREE.MathUtils.randFloatSpread(radius * 0.5);
+      
+      orbsData.push({
+        position: new THREE.Vector3(
+          Math.cos(angle) * orbRadius,
+          height,
+          Math.sin(angle) * orbRadius
+        ),
+        size: radius * (0.1 + Math.random() * 0.1),
+        speed: 0.2 + Math.random() * 0.3,
+        phase: Math.random() * Math.PI * 2,
+        orbitRadius: orbRadius,
+        orbitHeight: height,
+        color: color
+      });
+    }
+    
+    return orbsData;
+  }, [radius, color]);
+  
+  // Create central energy rings
+  const rings = useMemo(() => {
+    const ringCount = 3;
+    const ringsData = [];
+    
+    for (let i = 0; i < ringCount; i++) {
+      ringsData.push({
+        radius: radius * (0.2 + i * 0.1),
+        thickness: radius * 0.02,
+        speed: 0.5 - i * 0.1,
+        phase: Math.random() * Math.PI * 2,
+        color: color
+      });
+    }
+    
+    return ringsData;
+  }, [radius, color]);
+  
+  // Animation
   useFrame((_, delta) => {
     if (!active.current) return;
     
     timeActive.current += delta * speed;
     
-    // Update storm particles
-    if (pointsRef.current) {
-      const positions = pointsRef.current.geometry.attributes.position.array as Float32Array;
-      const positionAttribute = pointsRef.current.geometry.attributes.position;
-      const sizeAttribute = pointsRef.current.geometry.attributes.size as THREE.BufferAttribute;
-      
-      for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3;
-        
-        // Update particle position based on velocity
-        positions[i3] += particles.velocities[i3] * delta * speed * intensity;
-        positions[i3 + 1] += particles.velocities[i3 + 1] * delta * speed * intensity;
-        positions[i3 + 2] += particles.velocities[i3 + 2] * delta * speed * intensity;
-        
-        // Reset particles that go too far
-        const distSq = positions[i3] * positions[i3] +
-                       positions[i3 + 1] * positions[i3 + 1] +
-                       positions[i3 + 2] * positions[i3 + 2];
-        
-        // Update particle lifetime
-        particles.lifetimes[i] -= delta * speed;
-        
-        if (distSq > radius * radius * 4 || particles.lifetimes[i] <= 0) {
-          // Reset particle position to inside the core
-          const phi = Math.random() * Math.PI * 2;
-          const theta = Math.random() * Math.PI;
-          const r = radius * Math.random() * 0.3; // Closer to center
-          
-          positions[i3] = r * Math.sin(theta) * Math.cos(phi);
-          positions[i3 + 1] = r * Math.sin(theta) * Math.sin(phi);
-          positions[i3 + 2] = r * Math.cos(theta);
-          
-          // Reset lifetime
-          particles.lifetimes[i] = Math.random() * duration * 0.5 + 0.5;
-        }
-        
-        // Make particles pulse
-        sizeAttribute.array[i] = particles.sizes[i] * 
-          (0.5 + 0.5 * Math.sin(timeActive.current * 5 + i * 0.1));
-      }
-      
-      positionAttribute.needsUpdate = true;
-      sizeAttribute.needsUpdate = true;
-    }
-    
     // Rotate the entire storm
     if (stormGroupRef.current) {
       stormGroupRef.current.rotation.y += delta * 0.2 * speed;
-      stormGroupRef.current.rotation.z += delta * 0.1 * speed;
+    }
+    
+    // Pulse the core
+    if (coreRef.current) {
+      const scale = 1 + 0.2 * Math.sin(timeActive.current * 2);
+      coreRef.current.scale.set(scale, scale, scale);
+      
+      // Make the core opacity pulse too
+      const material = coreRef.current.material as THREE.MeshBasicMaterial;
+      material.opacity = 0.6 + 0.3 * Math.sin(timeActive.current * 3);
     }
     
     // Check if the storm should end
@@ -210,65 +171,99 @@ const SpaceStorm: React.FC<SpaceStormProps> = ({
   
   return (
     <group position={position} ref={stormGroupRef}>
-      {/* Storm particles */}
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={particleCount}
-            array={particles.positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={particleCount}
-            array={particles.sizes}
-            itemSize={1}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.1}
-          sizeAttenuation
-          transparent
-          depthWrite={false}
-          opacity={0.8}
-          color={color}
-          blending={THREE.AdditiveBlending}
-        />
-      </points>
-      
-      {/* Electric core - glowing sphere in the center */}
-      <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[radius * 0.15, 32, 32]} />
+      {/* Core glow */}
+      <mesh ref={coreRef}>
+        <sphereGeometry args={[radius * 0.2, 32, 32]} />
         <meshBasicMaterial 
           color={color} 
           transparent 
-          opacity={0.7} 
+          opacity={0.8} 
           blending={THREE.AdditiveBlending}
         />
       </mesh>
       
-      {/* Lightning bolts */}
-      {lightningBolts.map((bolt, boltIndex) => (
-        <group key={boltIndex}>
-          {bolt.segments.map((segment, segmentIndex) => (
-            <mesh 
-              key={segmentIndex} 
-              position={segment.position} 
-              rotation={segment.rotation}
-              scale={segment.scale}
-            >
-              <boxGeometry />
-              <meshBasicMaterial 
-                color={new THREE.Color(color).offsetHSL(bolt.hue, 0, 0)} 
-                transparent 
-                opacity={0.7 * Math.random()} 
-                blending={THREE.AdditiveBlending}
-              />
-            </mesh>
-          ))}
+      {/* Energy rings */}
+      {rings.map((ring, index) => (
+        <group key={`ring-${index}`} rotation={[Math.PI/2, 0, ring.phase]}>
+          <mesh>
+            <torusGeometry args={[ring.radius, ring.thickness, 16, 64]} />
+            <meshBasicMaterial 
+              color={ring.color} 
+              transparent 
+              opacity={0.7} 
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
         </group>
       ))}
+      
+      {/* Lightning arcs */}
+      {arcs.map((arc, arcIndex) => (
+        <group key={`arc-${arcIndex}`}>
+          {arc.points.map((point, pointIndex) => {
+            if (pointIndex < arc.points.length - 1) {
+              // Draw a cylinder between each pair of points
+              const nextPoint = arc.points[pointIndex + 1];
+              const midpoint = new THREE.Vector3().addVectors(point, nextPoint).multiplyScalar(0.5);
+              
+              // Calculate the direction and length
+              const direction = new THREE.Vector3().subVectors(nextPoint, point);
+              const length = direction.length();
+              
+              // Create quaternion from direction
+              const quaternion = new THREE.Quaternion();
+              const up = new THREE.Vector3(0, 1, 0);
+              quaternion.setFromUnitVectors(up, direction.normalize());
+              
+              return (
+                <mesh 
+                  key={`arc-segment-${arcIndex}-${pointIndex}`}
+                  position={midpoint}
+                  quaternion={quaternion}
+                >
+                  <cylinderGeometry 
+                    args={[arc.thickness, arc.thickness, length, 8]} 
+                  />
+                  <meshBasicMaterial 
+                    color={arc.color}
+                    transparent
+                    opacity={0.7}
+                    blending={THREE.AdditiveBlending}
+                  />
+                </mesh>
+              );
+            }
+            return null;
+          })}
+        </group>
+      ))}
+      
+      {/* Energy orbs */}
+      {orbs.map((orb, orbIndex) => (
+        <mesh 
+          key={`orb-${orbIndex}`}
+          position={orb.position}
+        >
+          <sphereGeometry args={[orb.size, 16, 16]} />
+          <meshBasicMaterial 
+            color={orb.color}
+            transparent
+            opacity={0.8}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      ))}
+      
+      {/* Outer glow */}
+      <mesh>
+        <sphereGeometry args={[radius * 0.8, 32, 32]} />
+        <meshBasicMaterial 
+          color={color}
+          transparent
+          opacity={0.1}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
     </group>
   );
 };

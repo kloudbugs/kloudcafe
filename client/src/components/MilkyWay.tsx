@@ -13,72 +13,83 @@ interface MilkyWayProps {
 const MilkyWay: React.FC<MilkyWayProps> = ({
   radius = 100,
   particleCount = 15000,
-  coreColor = '#9900ff',
-  outerColor = '#00ffff',
-  opacity = 0.7
+  coreColor = '#ffffff',
+  outerColor = '#ff1a75',
+  opacity = 0.8
 }) => {
-  const pointsRef = useRef<THREE.Points>(null);
   const galaxyRef = useRef<THREE.Group>(null);
   
-  // Generate galaxy particles in a spiral pattern
-  const particles = useMemo(() => {
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
-    const phases = new Float32Array(particleCount);
+  // Create galaxy using meshes for better visibility
+  const galaxyObjects = useMemo(() => {
+    const objects = [];
     
+    // Create a central bright core
+    objects.push({
+      type: 'core',
+      position: new THREE.Vector3(0, 0, 0),
+      scale: new THREE.Vector3(radius * 0.1, radius * 0.05, radius * 0.1),
+      color: coreColor,
+      intensity: 1.0
+    });
+    
+    // Create spiral arms using discs
     const armCount = 4;
-    const armWidth = 0.2;
-    const coreSize = 0.4; // Smaller core for more prominence of spiral arms
-    const spiralFactor = 4; // More pronounced spiral
     
-    const coreColorVec = new THREE.Color(coreColor);
-    const outerColorVec = new THREE.Color(outerColor);
-    const tempColor = new THREE.Color();
-    
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
+    for (let arm = 0; arm < armCount; arm++) {
+      const baseAngle = (arm / armCount) * Math.PI * 2;
+      const armLength = radius * 0.6;
+      const segments = 30;
       
-      // Calculate galaxy position
-      const armAngle = Math.random() * Math.PI * 2;
-      const armRadius = Math.random();
-      
-      // Create a spiral pattern
-      const radialDistance = armRadius * radius;
-      
-      // Random height based on distance
-      const height = THREE.MathUtils.randFloatSpread(radius * 0.15) * 
-        (armRadius < coreSize ? 0.2 : armRadius);
-      
-      // Add variance to create thickness
-      const spinAngle = armAngle + armRadius * spiralFactor;
-      
-      // Randomize points to create a messy galaxy
-      const offset = THREE.MathUtils.randFloatSpread(armWidth) * 
-        radialDistance * (armRadius < coreSize ? 0.5 : 1);
-      
-      // Calculate final position
-      positions[i3] = Math.cos(spinAngle) * radialDistance + 
-        Math.cos(spinAngle + Math.PI/2) * offset;
-      positions[i3 + 1] = height;
-      positions[i3 + 2] = Math.sin(spinAngle) * radialDistance + 
-        Math.sin(spinAngle + Math.PI/2) * offset;
-      
-      // Create colors (core to outer gradient)
-      const colorMix = Math.min(1, (armRadius / 0.8) + 0.2);
-      tempColor.copy(coreColorVec).lerp(outerColorVec, colorMix);
-      
-      colors[i3] = tempColor.r;
-      colors[i3 + 1] = tempColor.g;
-      colors[i3 + 2] = tempColor.b;
-      
-      // Random sizes and phases
-      sizes[i] = (armRadius < coreSize ? 3.0 : 1.5) * (Math.random() * 0.5 + 0.5);
-      phases[i] = Math.random() * Math.PI * 2;
+      for (let i = 0; i < segments; i++) {
+        const distanceRatio = i / segments;
+        const distance = radius * 0.12 + distanceRatio * armLength;
+        const spiralFactor = 4;
+        const angle = baseAngle + distanceRatio * spiralFactor;
+        
+        // Calculate position along spiral
+        const x = Math.cos(angle) * distance;
+        const z = Math.sin(angle) * distance;
+        const y = Math.sin(distanceRatio * Math.PI) * radius * 0.02;
+        
+        // Size decreases along the arm
+        const scale = radius * (0.1 - distanceRatio * 0.05);
+        
+        // Color transitions from core to outer
+        const colorMix = distanceRatio;
+        
+        objects.push({
+          type: 'arm',
+          position: new THREE.Vector3(x, y, z),
+          scale: new THREE.Vector3(scale, scale * 0.1, scale),
+          rotation: new THREE.Euler(0, angle, 0),
+          color: colorMix < 0.5 ? coreColor : outerColor,
+          intensity: 1 - distanceRatio * 0.7
+        });
+      }
     }
     
-    return { positions, colors, sizes, phases };
-  }, [particleCount, radius, coreColor, outerColor]);
+    // Add random stars for texture
+    for (let i = 0; i < 200; i++) {
+      const distance = radius * (0.1 + Math.random() * 0.6);
+      const angle = Math.random() * Math.PI * 2;
+      
+      const x = Math.cos(angle) * distance;
+      const z = Math.sin(angle) * distance;
+      const y = THREE.MathUtils.randFloatSpread(radius * 0.1);
+      
+      const scale = radius * 0.01 * (0.5 + Math.random() * 1.5);
+      
+      objects.push({
+        type: 'star',
+        position: new THREE.Vector3(x, y, z),
+        scale: new THREE.Vector3(scale, scale, scale),
+        color: Math.random() > 0.7 ? coreColor : outerColor,
+        intensity: 0.7 + Math.random() * 0.3
+      });
+    }
+    
+    return objects;
+  }, [radius, coreColor, outerColor]);
   
   // Animate the galaxy
   useFrame((_, delta) => {
@@ -86,54 +97,86 @@ const MilkyWay: React.FC<MilkyWayProps> = ({
       // Rotate slowly
       galaxyRef.current.rotation.y += delta * 0.03;
     }
-    
-    // Skip twinkling effect to save performance
   });
   
   return (
-    <group ref={galaxyRef} rotation={[Math.PI / 6, 0, 0]}>
-      {/* Purple haze effect to match reference image */}
-      <mesh>
-        <sphereGeometry args={[radius * 0.7, 32, 32]} />
+    <group ref={galaxyRef} rotation={[Math.PI / 5, 0, 0]}>
+      {/* Background haze */}
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[radius * 2, radius * 2]} />
         <meshBasicMaterial 
-          color="#8800cc" 
+          color="#9900ff" 
           transparent 
-          opacity={0.15} 
+          opacity={0.2} 
+          side={THREE.DoubleSide}
           blending={THREE.AdditiveBlending}
         />
       </mesh>
       
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={particleCount}
-            array={particles.positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-color"
-            count={particleCount}
-            array={particles.colors}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={particleCount}
-            array={particles.sizes}
-            itemSize={1}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.5}
-          sizeAttenuation
-          transparent
-          depthWrite={false}
-          opacity={opacity}
-          vertexColors
+      {/* Central intense glow */}
+      <mesh>
+        <sphereGeometry args={[radius * 0.2, 32, 32]} />
+        <meshBasicMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.3} 
           blending={THREE.AdditiveBlending}
         />
-      </points>
+      </mesh>
+      
+      {/* Galaxy objects */}
+      {galaxyObjects.map((obj, index) => {
+        if (obj.type === 'core') {
+          return (
+            <mesh 
+              key={`core-${index}`} 
+              position={obj.position}
+              scale={obj.scale}
+            >
+              <sphereGeometry args={[1, 32, 32]} />
+              <meshBasicMaterial 
+                color={obj.color}
+                transparent 
+                opacity={obj.intensity * opacity}
+                blending={THREE.AdditiveBlending}
+              />
+            </mesh>
+          );
+        } else if (obj.type === 'arm') {
+          return (
+            <mesh 
+              key={`arm-${index}`} 
+              position={obj.position}
+              scale={obj.scale}
+              rotation={obj.rotation}
+            >
+              <cylinderGeometry args={[1, 1, 1, 16]} />
+              <meshBasicMaterial 
+                color={obj.color}
+                transparent 
+                opacity={obj.intensity * opacity}
+                blending={THREE.AdditiveBlending}
+              />
+            </mesh>
+          );
+        } else {
+          return (
+            <mesh 
+              key={`star-${index}`} 
+              position={obj.position}
+              scale={obj.scale}
+            >
+              <sphereGeometry args={[1, 8, 8]} />
+              <meshBasicMaterial 
+                color={obj.color}
+                transparent 
+                opacity={obj.intensity * opacity}
+                blending={THREE.AdditiveBlending}
+              />
+            </mesh>
+          );
+        }
+      })}
     </group>
   );
 };
