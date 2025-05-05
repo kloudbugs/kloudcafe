@@ -4,6 +4,7 @@ import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { playWelcomeMessage } from '../lib/audio';
 import ElectricTendrils from './ElectricTendrils';
+import StarNotification from './StarNotification';
 
 interface BitcoinVoiceEffectProps {
   bitcoinPosition?: THREE.Vector3;
@@ -14,6 +15,7 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [tendrilsActive, setTendrilsActive] = useState(false);
+  const [showStarNotification, setShowStarNotification] = useState(false);
   const tendrilsRef = useRef<THREE.Group>(null);
   const effectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -21,6 +23,7 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
   const playEffect = () => {
     setIsPlaying(true);
     setTendrilsActive(true);
+    setShowStarNotification(false);
     
     // Stop the effect after the audio is done (approx 10 seconds)
     if (effectTimeoutRef.current) {
@@ -31,8 +34,17 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
       setTendrilsActive(false);
       setTimeout(() => {
         setIsPlaying(false);
+        // Show star notification when speech is done
+        setShowStarNotification(true);
       }, 1000); // Allow tendrils to fade out gracefully
     }, 10000);
+  };
+  
+  // Handle notification click
+  const handleStarClick = () => {
+    // Show features or tooltips when star is clicked
+    console.log('Star clicked - show features!');
+    setShowStarNotification(false);
   };
   
   // Clean up on unmount
@@ -68,17 +80,28 @@ const BitcoinVoiceEffect: React.FC<BitcoinVoiceEffectProps> = ({
   }, [isPlaying]);
 
   return (
-    <group position={bitcoinPosition} ref={tendrilsRef}>
-      {/* Place HTML elements outside the Canvas in App.tsx, not here */}
-      {tendrilsActive && (
-        <ElectricTendrils 
-          count={12}
-          length={5}
-          color="#00ffff"
-          width={0.15}
-        />
-      )}
-    </group>
+    <>
+      <group position={bitcoinPosition} ref={tendrilsRef}>
+        {tendrilsActive && (
+          <ElectricTendrils 
+            count={12}
+            length={5}
+            color="#00ffff"
+            width={0.15}
+          />
+        )}
+      </group>
+      
+      {/* Star notification that appears in the corner when speech ends */}
+      <StarNotification 
+        visible={showStarNotification}
+        position="top-right"
+        pulseColor="#ffcc00"
+        size={70}
+        message="DISCOVER FEATURES!"
+        onClick={handleStarClick}
+      />
+    </>
   );
 };
 
